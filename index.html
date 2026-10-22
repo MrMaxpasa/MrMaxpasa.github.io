@@ -686,7 +686,7 @@ const CONTENT={
     groups:[
       {title:'LENGUAJES',items:[['JavaScript',4,'Usado en: Diaria y FastBow (con TypeScript)'],['SQL',4,'Usado en: Diaria (SQLite, sin conexión)'],['Java',3,'Aplicaciones multiplataforma'],['Python',3,'Scripts e inteligencia artificial'],['Kotlin',3,'Usado en: Alfred, asistente de voz con IA'],['C#',3,'Aplicaciones .NET']]},
       {title:'INTELIGENCIA ARTIFICIAL',items:[['Claude',4,'Uso diario: Diaria, Alfred y FastBow']]},
-      {title:'FRAMEWORKS Y HERRAMIENTAS',example:true,items:[['React',3,'Ejemplo: interfaces web'],['Node.js',3,'Ejemplo: APIs y servidores'],['HTML · CSS',4,'Ejemplo: esta misma web'],['Git · GitHub',4,'Ejemplo: control de versiones']]},
+      {title:'FRAMEWORKS Y HERRAMIENTAS',items:[['React',3,'Interfaces web del bootcamp Full Stack'],['Node.js',3,'APIs y servidores'],['HTML · CSS',4,'Usado en: esta misma web'],['Git · GitHub',4,'Control de versiones en todos mis proyectos']]},
       {title:'IDIOMAS',items:[['Catalán',5,'Lengua materna'],['Castellano',5,'Lengua materna'],['Francés',5,'Lengua paterna'],['Inglés',2,'Comprensión media · conversación básica']]}
     ]
   },
@@ -750,8 +750,8 @@ const CONTENT={
     ],
     staysTitle:'ESTANCIAS FORMATIVAS',
     stays:[
-      {when:'Fecha',what:'Universidad de Andorra',where:'Técnico · tareas por detallar',pend:true},
-      {when:'Fecha',what:'Hospital de Andorra',where:'Técnico · tareas por detallar',pend:true}
+      {what:'Universidad de Andorra',where:'Estancia formativa como técnico'},
+      {what:'Hospital de Andorra',where:'Estancia formativa como técnico'}
     ],
     langTitle:'IDIOMAS',
     langs:[['Catalán','Lengua materna'],['Castellano','Lengua materna'],['Francés','Lengua paterna'],['Inglés','Comprensión media · conversación básica']],
@@ -800,7 +800,7 @@ collage($('#projects-title'),CONTENT.projects.title,false);
 /* expediente */
 (function renderDossier(){
   const D=CONTENT.dossier,P='<span class="pend">'+esc(CONTENT.ui.pending)+'</span>';
-  const tl=list=>'<ul class="tl">'+list.map(x=>'<li'+(x.now?' class="now"':'')+'><div class="when">'+esc(x.when)+(x.pend?P:'')+'</div><div class="what">'+esc(x.what)+'</div><div class="where">'+esc(x.where)+'</div></li>').join('')+'</ul>';
+  const tl=list=>'<ul class="tl">'+list.map(x=>'<li'+(x.now?' class="now"':'')+'>'+(x.when?'<div class="when">'+esc(x.when)+(x.pend?P:'')+'</div>':'')+'<div class="what">'+esc(x.what)+'</div><div class="where">'+esc(x.where)+'</div></li>').join('')+'</ul>';
   $('#sheet').innerHTML=
    '<div class="sh-top"><span>'+esc(D.court)+'</span><span class="no">'+esc(D.no)+'</span></div>'+
    '<div class="id"><figure class="photo"><div class="pic" role="img" aria-label="'+esc(D.photoPending)+'"></div>'+
