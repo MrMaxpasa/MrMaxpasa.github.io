@@ -323,6 +323,15 @@ button{font:inherit;color:inherit}
 .tcover.run .gl{position:absolute;left:0;right:0;bottom:22%;height:2px;background:var(--gold)}
 .tcover.run .hero{position:absolute;left:14%;bottom:21%;height:62%;aspect-ratio:218/299;background:url("juegos/anubis-atlas.webp") no-repeat 0.19% 2.94%/1085.8% 145.5%;filter:drop-shadow(0 0 6px rgba(245,200,66,.65));animation:heroBob .5s ease-in-out infinite}
 @keyframes heroBob{50%{transform:translateY(-4%)}}
+.tcover.felt{background:radial-gradient(ellipse at 50% 70%,#1d3f7a,#0b1a36 62%,#060d1c)}
+.tcover.felt .rail{position:absolute;left:6%;right:6%;top:46%;height:110%;border-radius:50%;border:3px solid #C9A227;box-shadow:0 0 0 4px #0A0A08,0 0 0 6px #7A5C1E}
+.tcover .mc{position:absolute;width:15%;aspect-ratio:5/7;background:var(--papyrus);border-radius:4px;box-shadow:0 0 0 1px var(--ink),3px 3px 0 rgba(10,10,8,.6);display:grid;place-items:center;font-family:var(--f-glyph);font-size:clamp(15px,2vw,28px);color:var(--ink);transform:rotate(var(--rt,0));transform-origin:50% 130%}
+.tcover .mc::before{content:attr(data-r);position:absolute;left:8%;top:5%;font:400 clamp(10px,1.1vw,15px)/1 var(--f-cond);color:var(--ink)}
+.tcover .mc.fc{background:linear-gradient(var(--ink),var(--ink)) padding-box,var(--papyrus);border:3px solid var(--papyrus);box-shadow:0 0 0 1px var(--ink),inset 0 0 0 1px var(--gold),3px 3px 0 rgba(10,10,8,.6);color:var(--gold-hi)}
+.tcover .mc.fc::before{color:var(--gold-hi)}
+.tcover .v21{position:absolute;left:66%;top:22%;font:400 clamp(18px,2.2vw,30px)/1 var(--f-cond);background:var(--gold-hi);color:var(--ink);padding:4px 8px 3px;transform:skewX(-10deg);box-shadow:3px 3px 0 var(--ink)}
+.tcover .ch{position:absolute;width:11%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#C9A227 0 46%,#0A0A08 46% 51%,transparent 51%),repeating-conic-gradient(#C9A227 0 22.5deg,#0A0A08 22.5deg 45deg);box-shadow:0 2px 0 rgba(0,0,0,.5)}
+.tcover .ch.b{background:radial-gradient(circle,#2456B8 0 46%,#F4EFE3 46% 51%,transparent 51%),repeating-conic-gradient(#2456B8 0 22.5deg,#F4EFE3 22.5deg 45deg)}
 .tcover.judge{display:grid;place-items:center;background:radial-gradient(circle,rgba(201,162,39,.16),transparent 65%),var(--coal)}
 .tcover.judge svg{width:46%;height:auto;opacity:.55}
 .tcard.sealed{cursor:not-allowed}
@@ -816,6 +825,10 @@ const CONTENT={
        short:'Empareja los jeroglíficos antes de que pase el tiempo. Encadena aciertos para multiplicar los puntos.'},
       {id:'carrera',name:'LA CARRERA DEL CHACAL',unit:'m',controls:'Espacio, ↑ o toque para saltar',
        short:'Corre por el desierto, salta escarabajos, cobras y trampas, y recoge todos los ankhs que puedas.'},
+      {id:'poker',name:'LA MESA DE LOS DIOSES',unit:'fichas',controls:'Ratón, toque o teclado (F · C · R · A)',deps:['cartas'],
+       short:'Póker Texas Hold\'em contra Sobek, Bastet y Thot. Lee a cada dios, farolea y quédate con todas sus fichas.'},
+      {id:'blackjack',name:'BLACKJACK DE ANUBIS',unit:'fichas',controls:'Ratón, toque o teclado (H · S · D · V)',deps:['cartas'],
+       short:'Planta cara a la banca de Anubis: pide, plántate, dobla o divide. El blackjack paga 3 a 2. Fichas virtuales, sin dinero real.'},
       {id:'juicio',name:'EL JUICIO DE LAS ALMAS',unit:'pts',controls:'Próximamente',sealed:true,
        short:'Pesa el corazón de cada alma: ¿código limpio o código con fallos? Decide antes de que se incline la balanza.'}
     ],
@@ -1141,6 +1154,8 @@ const TEMPLE=(function(){
     if(g.id==='memoria'){const gl=['𓂀','𓋹','𓆣','𓇳','𓊽','𓅓','𓆑','𓃭'],cls=['','b','ok','b','b','','b','ok','ok','b','','b','b','ok','b',''];
       return '<div class="tcover mem" aria-hidden="true">'+cls.map((c,i)=>'<span class="'+c+'">'+(c==='b'?'𓂀':gl[i%8])+'</span>').join('')+'</div>'}
     if(g.id==='carrera')return '<div class="tcover run" aria-hidden="true"><div class="moon"></div><div class="pyr" style="left:44%;width:30%;height:34%"></div><div class="pyr" style="left:66%;width:20%;height:22%"></div><div class="gl"></div><div class="hero"></div></div>';
+    if(g.id==='blackjack')return '<div class="tcover felt bj" aria-hidden="true"><i class="rail"></i><span class="mc" data-r="A" style="left:33%;top:24%;--rt:-12deg">𓋹</span><span class="mc fc" data-r="K" style="left:47%;top:20%;--rt:9deg">𓁢</span><b class="v21">21</b><i class="ch" style="right:14%;bottom:16%"></i><i class="ch b" style="right:19%;bottom:22%"></i></div>';
+    if(g.id==='poker')return '<div class="tcover felt pk" aria-hidden="true"><i class="rail"></i>'+['10','J','Q','K','A'].map((r,i)=>'<span class="mc'+(i>0&&i<4?' fc':'')+'" data-r="'+r+'" style="left:'+(29+i*8.5)+'%;top:22%;--rt:'+((i-2)*11)+'deg">'+(i>0&&i<4?['𓁢','𓁐','𓁚'][i-1]:'𓋹')+'</span>').join('')+'<i class="ch" style="left:12%;bottom:14%"></i><i class="ch" style="left:12%;bottom:20%"></i><i class="ch b" style="left:17%;bottom:12%"></i></div>';
     return '<div class="tcover judge" aria-hidden="true">'+SCALE+'</div>'}
   function render(){grid.textContent='';
     T.games.forEach((g,i)=>{const b=document.createElement('button');b.type='button';b.className='pcard tcard'+(g.sealed?' sealed':'');b.style.setProperty('--i',i);
@@ -1154,14 +1169,16 @@ const TEMPLE=(function(){
   function selT(i,sound){const cs=$$('.tcard',grid);if(i===tSel&&cs[i]&&cs[i].classList.contains('sel'))return;cs.forEach((c,k)=>c.classList.toggle('sel',k===i));tSel=i;if(sound&&i>=0)sfx.tick();
     if(i>=0&&cs[i])cs[i].scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'})}
   function playGame(i){const g=T.games[i];if(!g)return;if(g.sealed){sfx.back();return}sfx.confirm();go('arena',{game:g.id})}
-  function load(id){return new Promise((res,rej)=>{if(impls[id])return res(impls[id]);const src='juegos/'+id+'.js';
+  function script(name,ready){return new Promise((res,rej)=>{if(ready())return res();const src='juegos/'+name+'.js';
     const viaBlob=()=>fetch(src).then(r=>{if(!r.ok)throw new Error('http');return r.text()}).then(txt=>{const u=URL.createObjectURL(new Blob([txt],{type:'text/javascript'}));
-      const s2=document.createElement('script');s2.src=u;s2.onload=()=>impls[id]?res(impls[id]):rej();s2.onerror=rej;document.head.append(s2)}).catch(rej);
-    const s=document.createElement('script');s.src=src;s.onload=()=>impls[id]?res(impls[id]):viaBlob();s.onerror=viaBlob;document.head.append(s)})}
+      const s2=document.createElement('script');s2.src=u;s2.onload=()=>ready()?res():rej();s2.onerror=rej;document.head.append(s2)}).catch(rej);
+    const s=document.createElement('script');s.src=src;s.onload=()=>ready()?res():viaBlob();s.onerror=viaBlob;document.head.append(s)})}
+  function load(id){const g=T.games.find(x=>x.id===id)||{};
+    return Promise.all((g.deps||[]).map(d=>script(d,()=>!!(window.TEMPLO_LIB&&window.TEMPLO_LIB[d])))).then(()=>script(id,()=>!!impls[id])).then(()=>impls[id])}
   function enter(id){const g=T.games.find(x=>x.id===id);if(!g)return;$('#arena-name').textContent=g.name;$('#arena-exit').textContent=matchMedia('(hover:none) and (pointer:coarse)').matches?T.exitTouch:T.exit;$('#arena-score').textContent='';$('#results').hidden=true;
     const ld=$('#arena-loading');ld.querySelector('span').textContent=T.loading;ld.hidden=false;
     load(id).then(impl=>{if(app.dataset.screen!=='arena')return;ld.hidden=true;stopGame();
-      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,duck:()=>music.duck(),t:k=>(impl.texts&&impl.texts[k])||k,
+      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,collage,duck:()=>music.duck(),t:k=>(impl.texts&&impl.texts[k])||k,
         setScore:txt=>{$('#arena-score').innerHTML=esc(txt).replace(/𓋹/g,'<i class="g">𓋹</i>')},finish:r=>showResults(g,r)})})
       .catch(()=>{ld.querySelector('span').textContent=T.loadError})}
   function stopGame(){if(current){try{current.stop()}catch(e){}current=null}}
