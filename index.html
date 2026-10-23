@@ -182,6 +182,9 @@ button{font:inherit;color:inherit}
 .stamp{font:700 10px/1 var(--f-ui);letter-spacing:.22em;color:var(--lapis);border:2px solid var(--lapis);padding:5px 8px 4px;transform:rotate(-4deg);margin-bottom:10px;background:rgba(36,86,184,.08);color:#7FA2E8}
 .screen.enter .sec-head{animation:slideIn .45s cubic-bezier(.2,.9,.25,1.1) both}
 .stamp:empty{display:none}
+.tools{display:flex;flex-wrap:wrap;gap:8px;padding:4px 10px 8px}
+.tools .chip{font-size:10.5px;padding:6px 9px 5px}
+.screen.enter .tools{animation:fadeUp .4s ease-out 1.2s both}
 
 /* ---------- Habilidades ---------- */
 #scr-skills{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--bronze) transparent}
@@ -488,6 +491,7 @@ button{font:inherit;color:inherit}
   </ul>
   <h2>Habilidades</h2>
   <p>JavaScript, SQL, PHP, C#, Java, Python, Kotlin, React Native, Jetpack Compose e inteligencia artificial con Claude, Gemini y Gemma.</p>
+  <p>Herramientas: VS Code, Visual Studio, Android Studio, SQL Server y Oracle SQL Developer.</p>
   <h2>Idiomas</h2>
   <p>Catalán y castellano (lenguas maternas), francés (lengua paterna) e inglés (nivel básico).</p>
   <h2>Contacto</h2>
@@ -685,9 +689,10 @@ const CONTENT={
     title:'HABILIDADES',stamp:'',
     ranks:['','INICIADO','APRENDIZ','ESCRIBA','SACERDOTE','FARAÓN'],
     groups:[
-      {title:'LENGUAJES',items:[['JavaScript',4,'Usado en: Diaria y FastBow (con TypeScript)'],['SQL',4,'Usado en: Diaria (SQLite, sin conexión)'],['PHP',4,'Desarrollo web en el servidor'],['C#',4,'Aplicaciones .NET'],['Java',3,'Aplicaciones multiplataforma'],['Python',3,'Scripts e inteligencia artificial'],['Kotlin',3,'Usado en: Alfred, asistente de voz con IA']]},
+      {title:'LENGUAJES',items:[['JavaScript',4,'Usado en: Diaria y FastBow (con TypeScript)'],['SQL',4,'Usado en: Diaria (SQLite), SQL Server y Oracle'],['PHP',4,'Desarrollo web en el servidor'],['C#',4,'Aplicaciones .NET'],['Java',3,'Aplicaciones multiplataforma'],['Python',3,'Scripts e inteligencia artificial'],['Kotlin',3,'Usado en: Alfred, asistente de voz con IA']]},
       {title:'INTELIGENCIA ARTIFICIAL',items:[['Claude',4,'Uso diario: Diaria, Alfred y FastBow']]},
       {title:'FRAMEWORKS Y HERRAMIENTAS',items:[['React Native',4,'Usado en: Diaria y FastBow (con Expo)'],['HTML · CSS',4,'Usado en: esta misma web'],['Git · GitHub',4,'Control de versiones en todos mis proyectos'],['Jetpack Compose',3,'Usado en: Alfred, asistente de voz con IA'],['React',3,'Interfaces web del bootcamp Full Stack'],['Node.js',3,'APIs y servidores']]},
+      {title:'ENTORNO DE TRABAJO',tools:true,items:['VS Code','Visual Studio','Android Studio','SQL Server','Oracle SQL Developer']},
       {title:'IDIOMAS',items:[['Catalán',5,'Lengua materna'],['Castellano',5,'Lengua materna'],['Francés',5,'Lengua paterna'],['Inglés',2,'Comprensión media · conversación básica']]}
     ]
   },
@@ -972,6 +977,7 @@ const ROMAN=['','I','II','III','IV','V'],RANKS=CONTENT.skills.ranks;
 let d=0;const groupsEl=$('#groups');
 CONTENT.skills.groups.forEach((grp,gi)=>{const g=document.createElement('div');g.className='group';
   g.innerHTML='<div class="g-title" style="--g:'+gi+'">'+esc(grp.title)+(grp.example?' <span class="pend" style="vertical-align:3px">'+esc(CONTENT.ui.example)+'</span>':'')+'</div>';
+  if(grp.tools){g.insertAdjacentHTML('beforeend','<div class="tools">'+grp.items.map(t=>'<span class="chip">'+esc(t)+'</span>').join('')+'</div>');groupsEl.append(g);return}
   grp.items.forEach(([n,lv,use])=>{const r=document.createElement('div');r.className='row';r.style.setProperty('--d',d++);r.style.setProperty('--lv',lv);r.tabIndex=-1;
     r.innerHTML='<div class="r-name">'+esc(n)+'</div><div class="track"><div class="fill"></div></div><div class="rank"><span class="t">'+RANKS[lv]+'</span><span class="n">'+ROMAN[lv]+'</span></div><div class="use">'+esc(use)+'</div>';
     g.append(r)});
