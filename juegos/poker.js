@@ -41,6 +41,27 @@ function equity(hole,board,opp,iters){const used=new Set(hole.concat(board).map(
     if(!better)win+=1/(ties+1)}
   return win/iters}
 
+/* ---------- Rangos de manos ----------
+   Fuerza preflop con la fórmula de Chen y percentil de cada mano entre las 1.326 combinaciones posibles:
+   un rango del 0,3 = el 30 % de manos más fuertes. Sirve para que los rivales piensen qué puede llevar quien apuesta. */
+function chen(a,b){const hi=Math.max(a.v,b.v),lo=Math.min(a.v,b.v),pts=v=>v===14?10:v===13?8:v===12?7:v===11?6:v/2;
+  let s=pts(hi);if(hi===lo)return Math.max(5,s*2);if(a.s===b.s)s+=2;const gap=hi-lo-1;s-=gap<=0?0:gap===1?1:gap===2?2:gap===3?4:5;if(gap<=1&&hi<12)s+=1;return s}
+const FULL=[];['a','o','e','p'].forEach(su=>['2','3','4','5','6','7','8','9','10','J','Q','K','A'].forEach((r,i)=>FULL.push({r,s:su,v:i+2})));
+const PCT=(function(){const sc=[];for(let i=0;i<52;i++)for(let j=i+1;j<52;j++)sc.push(chen(FULL[i],FULL[j]));sc.sort((x,y)=>y-x);
+  const m=new Map();sc.forEach((v,k)=>{m.set(v,(k+1)/sc.length)});return m})();
+const handPct=(a,b)=>PCT.get(chen(a,b));
+/* Equidad contra rivales con rango: cada rival roba solo manos dentro de su porcentaje (1 = cualquier mano) */
+function equityR(hole,board,ranges,iters){const used=new Set(hole.concat(board).map(c=>c.r+c.s));const pool=FULL.filter(c=>!used.has(c.r+c.s)),n=pool.length;
+  const need=5-board.length;let win=0;
+  for(let it=0;it<iters;it++){let k=0;const opp=[];
+    for(const r of ranges){let a,b;for(let t=0;t<40;t++){const i=k+Math.floor(Math.random()*(n-k));let j=k+Math.floor(Math.random()*(n-k-1));if(j>=i)j++;a=i;b=j;if(r>=1||handPct(pool[i],pool[j])<=r)break}
+      const x=pool[a],y=pool[b];const ia=pool.indexOf(x);[pool[k],pool[ia]]=[pool[ia],pool[k]];const ib=pool.indexOf(y);[pool[k+1],pool[ib]]=[pool[ib],pool[k+1]];opp.push([pool[k],pool[k+1]]);k+=2}
+    const bd=board.slice();for(let q=0;q<need;q++){const i=k+Math.floor(Math.random()*(n-k));[pool[k],pool[i]]=[pool[i],pool[k]];bd.push(pool[k]);k++}
+    const me=best(hole.concat(bd)).score;let better=0,ties=0;
+    for(const o of opp){const sc=best(o.concat(bd)).score;if(sc>me){better=1;break}if(sc===me)ties++}
+    if(!better)win+=1/(ties+1)}
+  return win/iters}
+
 const CSS=`
 .pk-area{position:absolute;left:10px;right:10px;top:68px;bottom:calc(92px + var(--ab));container-type:size}
 .pk-table{left:50%;top:50%;width:min(86cqw,172cqh);aspect-ratio:2.05/1;transform:translate(-50%,-52%);border-radius:999px;--cw:clamp(38px,min(8.6cqw,15cqh),78px)}
@@ -147,7 +168,7 @@ function create(stage,api){
   const me=players[0];
   const DPOS=[[50,80],[13,33],[37,12],[87,67]],DPOS_P=[[30,90],[22,17],[30,12],[78,17]];
 
-  let deck,board,btn,level,handNo,currentBet,minRaise,raisesSt,street,gen=0,done=false,st,pendingAct=null,raiseTo=0,between=false;
+  let hStat={act:0,raise:0},lastAgg=null,deck,board,btn,level,handNo,currentBet,minRaise,raisesSt,street,gen=0,done=false,st,pendingAct=null,raiseTo=0,between=false;
   const live=()=>players.filter(p=>!p.out);
   const inHand=()=>players.filter(p=>!p.out&&!p.folded);
   const blinds=()=>LEVELS[Math.min(level,LEVELS.length-1)];
@@ -174,12 +195,12 @@ function create(stage,api){
 
   /* --- Acciones --- */
   function put(p,amt){amt=Math.max(0,Math.min(amt,p.chips));p.chips-=amt;p.bet+=amt;p.total+=amt;if(p.chips===0)p.allin=true;if(amt)S.chip(amt>200?3:1)}
-  function apply(p,a){
+  function apply(p,a){if(p.human&&a.t!=='fold'){hStat.act++;if(a.t==='raise')hStat.raise+=(a.to>=p.bet+p.chips)?2:1}
     if(a.t==='fold'){p.folded=true;bubble(p,T('aFold'),'x');p.holeEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add('dim'))}
     else if(a.t==='check'){bubble(p,T('aCheck'))}
     else if(a.t==='call'){const amt=Math.min(currentBet-p.bet,p.chips);put(p,amt);bubble(p,p.allin?T('aAllin'):T('aCall')+' '+fmt(amt),p.allin?'k':'')}
     else if(a.t==='raise'){const to=Math.min(a.to,p.bet+p.chips);const inc=to-currentBet;put(p,to-p.bet);
-      if(inc>=minRaise)minRaise=inc;const wasZero=currentBet===0;currentBet=Math.max(currentBet,to);raisesSt++;
+      if(inc>0)lastAgg=p;if(inc>=minRaise)minRaise=inc;const wasZero=currentBet===0;currentBet=Math.max(currentBet,to);raisesSt++;
       bubble(p,p.allin?T('aAllin'):(wasZero?T('aBet'):T('aRaise'))+' '+fmt(to),'k');return inc>0}
     return false}
 
@@ -193,11 +214,21 @@ function create(stage,api){
       if(canRaise&&rel>1.45-.35*s.agg&&Math.random()>s.slow)return{t:'raise',to:sizeTo(.45+.4*Math.random()+(rel>2.1?.35:0))};
       if(canRaise&&Math.random()<s.bluff)return{t:'raise',to:sizeTo(.5)};
       return{t:'check'}}
-    if(canRaise&&rel>1.8-.35*s.agg&&Math.random()>s.slow*.6)return{t:'raise',to:sizeTo(.7+.5*Math.random())};
-    const odds=toCall/(pot+toCall),need=odds*(1+.55*s.tight)+(toCall>=p.chips?.07:0);
-    if(eq>=need-.03||(toCall<=bb&&street===0&&rel>.75-s.agg*.3))return{t:'call'};
+    /* Ante una apuesta: equidad contra los rangos de quienes ya han puesto fichas (el que sube, más estrecho o más
+       amplio según lo agresivo que haya sido) y margen por cada rival que aún tiene que hablar. */
+    const facing=inHand().filter(q=>q!==p&&q.bet>0&&(q.bet>=currentBet||q.allin));
+    const behind=inHand().filter(q=>q!==p&&!q.allin&&q.bet<currentBet&&!facing.includes(q)).length;
+    const ranges=facing.length?facing.map(rangeOf):[1];
+    const eqF=equityR(p.hole,board,ranges,R?160:320)+(Math.random()-.5)*.06;
+    const odds=toCall/(pot+toCall),margin=.025*behind+.05*s.tight-.045*s.agg+(toCall>=p.chips?.02:0);
+    if(canRaise&&eqF>Math.max(.62,odds+.22)-.06*s.agg&&Math.random()>s.slow*.6)return{t:'raise',to:sizeTo(.7+.5*Math.random())};
+    if(eqF>=odds+margin||(toCall<=bb&&street===0&&rel>.75-s.agg*.3))return{t:'call'};
     if(canRaise&&street<3&&Math.random()<s.bluff*.35)return{t:'raise',to:sizeTo(.8)};
     return{t:'fold'}}
+  /* Rango estimado de un rival: el humano se lee por su historial (cuanto más sube o va all-in, más amplio) */
+  function rangeOf(q){if(q===lastAgg){if(q.human){const rate=(hStat.raise+1)/(hStat.act+5);return Math.min(1,Math.max(.12,.12+rate*1.1))}
+      return Math.min(1,.18+q.style.agg*.35+q.style.bluff)}
+    return lastAgg?.55:1}
 
   function humanTurn(){return new Promise(res=>{pendingAct=res;
     const toCall=currentBet-me.bet,bb=blinds()[1];
@@ -235,7 +266,7 @@ function create(stage,api){
     turn(null)}
   async function sweep(){const g=gen;const bets=players.filter(p=>p.bet>0);if(!bets.length)return;
     potEl.hidden=false;await Promise.all(bets.map(p=>{const s=p.betEl.firstElementChild;p.betEl.querySelector('span')&&p.betEl.querySelector('span').remove();return s?C.flyOut(s,potEl,R):0}));
-    if(g!==gen)return;players.forEach(p=>{p.bet=0});currentBet=0;minRaise=blinds()[1];raisesSt=0;S.chip(2);paintAll()}
+    if(g!==gen)return;players.forEach(p=>{p.bet=0});currentBet=0;lastAgg=null;minRaise=blinds()[1];raisesSt=0;S.chip(2);paintAll()}
   async function dealBoard(n){const g=gen;for(let k=0;k<n;k++){if(g!==gen)return;const c=deck.pop();board.push(c);const el=C.cardEl(c,false);slots[board.length-1].append(el);
     C.flyIn(el,dEl,0,R);S.deal();await D(200);C.reveal(el,c);S.flip();await D(n===3?110:260)}mine()}
 
@@ -251,7 +282,7 @@ function create(stage,api){
     const heads=live().length===2;
     const sbI=heads?btn:nextIdx(btn,p=>!p.out),bbI=nextIdx(sbI,p=>!p.out);
     put(players[sbI],sb);put(players[bbI],bb);bubble(players[sbI],T('sb'));bubble(players[bbI],T('bb'));
-    currentBet=bb;minRaise=bb;raisesSt=0;street=0;paintAll();mine();await D(450);
+    currentBet=bb;minRaise=bb;raisesSt=0;street=0;lastAgg=null;paintAll();mine();await D(450);
     for(let r=0;r<2;r++){let i=sbI;for(let k=0;k<4;k++){if(g!==gen)return;const p=players[i];
       if(!p.out){const c=deck.pop();p.hole.push(c);const el=C.cardEl(p.human?c:null,p.human);p.holeEl.append(el);C.flyIn(el,dEl,0,R);S.deal();await D(140)}
       i=(i+1)%4}}
@@ -316,7 +347,7 @@ function create(stage,api){
   addEventListener('keydown',kd);
   const ro=new ResizeObserver(()=>{if(btn>=0)placeD()});ro.observe(table);
 
-  function start(){gen++;done=false;pendingAct=null;handNo=0;level=0;btn=Math.floor(Math.random()*4);st={hands:0,won:0,best:-1,max:START};
+  function start(){gen++;done=false;pendingAct=null;hStat={act:0,raise:0};lastAgg=null;handNo=0;level=0;btn=Math.floor(Math.random()*4);st={hands:0,won:0,best:-1,max:START};
     players.forEach(p=>{p.chips=START;p.out=false;p.folded=false;p.hole=[];p.bet=0;p.total=0;p.holeEl.textContent='';bubble(p,'')});
     slots.forEach(s=>s.textContent='');paintAll();root.querySelectorAll('.tc-banner').forEach(x=>x.remove());
     C.banner(root,api,T('welcome'),T('welcomeSub'));setTimeout(()=>{if(!done)playHand()},R?300:1200)}
