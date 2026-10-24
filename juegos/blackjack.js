@@ -2,7 +2,7 @@
    Reglas: 4 barajas, la banca se planta en 17, blackjack paga 3 a 2, doblar con 2 cartas, dividir una vez. */
 (function(){
 'use strict';
-const START=1000,MIN=10;
+const MIN=10;
 const CSS=`
 .bj-table{left:50%;top:76px;bottom:calc(94px + var(--ab));width:min(94%,1120px);transform:translateX(-50%);border-radius:22px 22px 50% 50%/22px 22px 40% 40%;--cw:clamp(48px,min(15vw,11.5vh),104px)}
 .bj-rack{position:absolute;left:50%;top:-2px;transform:translateX(-50%);display:flex;gap:3px;padding:4px 8px 5px;background:#0A0A08;border:1px solid #7A5C1E;border-top:0;border-radius:0 0 8px 8px}
@@ -72,6 +72,8 @@ function create(stage,api){
   const bar=C.acts(root,api);
   const fmt=n=>Number(n).toLocaleString('es-ES');
   const D=ms=>C.wait(R?Math.min(ms,120):ms);
+  /* En el casino las fichas salen de tus ankhs (1 ankh = 10 fichas) y se guardan tras cada movimiento */
+  const START=api.casino?api.casino.chips:1000,persist=()=>{if(api.casino&&!done)api.casino.save(chips)};
 
   let shoe,chips,bet,lastBet,hands,dealer,active,phase,gen=0,done=false,st;
   function hud(){api.setScore(fmt(chips)+' '+T('unit'))}
@@ -111,7 +113,7 @@ function create(stage,api){
 
   /* --- Reparto --- */
   async function deal(){if(phase!=='bet'||bet<MIN||bet>chips)return;const g=++gen;phase='deal';
-    lastBet=bet;chips-=bet;hud();chipsEl.hidden=true;hint.hidden=true;bar.set([]);handsEl.classList.remove('betting');
+    lastBet=bet;chips-=bet;persist();hud();chipsEl.hidden=true;hint.hidden=true;bar.set([]);handsEl.classList.remove('betting');
     // las cartas anteriores ya se retiraron al empezar la apuesta; reiniciamos la banca
     dcEl.textContent='';dvEl.hidden=true;dvEl._bj=false;dealer={cards:[],holeEl:null};
     const h=hands[0];h.cards=[];h.cardsEl.textContent='';st.hands++;
@@ -137,10 +139,10 @@ function create(stage,api){
     await D(330);if(g!==gen)return;const t=val(h.cards).t;
     if(t>21){S.lose();next()}else if(t===21)next();else playActs()}
   function stand(){if(phase!=='play')return;next()}
-  async function dbl(){if(phase!=='play')return;const g=gen,h=hands[active];if(chips<h.bet)return;chips-=h.bet;h.bet*=2;h.doubled=true;paintBet(h);S.chip(2);hud();
+  async function dbl(){if(phase!=='play')return;const g=gen,h=hands[active];if(chips<h.bet)return;chips-=h.bet;persist();h.bet*=2;h.doubled=true;paintBet(h);S.chip(2);hud();
     const c=draw();h.cards.push(c);const el=addCard(h.cardsEl,c,true);el.style.setProperty('--rot','90deg');badge(h.valEl,h.cards);bar.set([]);
     await D(420);if(g!==gen)return;if(val(h.cards).t>21)S.lose();next()}
-  async function split(){if(phase!=='play')return;const g=gen,h=hands[0];if(chips<h.bet)return;chips-=h.bet;hud();S.chip(2);bar.set([]);
+  async function split(){if(phase!=='play')return;const g=gen,h=hands[0];if(chips<h.bet)return;chips-=h.bet;persist();hud();S.chip(2);bar.set([]);
     const c2=h.cards.pop();h.cards[0]&&(h.split=true);const h2={cards:[c2],bet:h.bet,split:true};hands.push(h2);
     const moved=h.cardsEl.lastElementChild;hbox(h2);h2.cardsEl.append(moved);badge(h.valEl,h.cards);badge(h2.valEl,h2.cards);
     const aces=h.cards[0].r==='A';
@@ -169,7 +171,7 @@ function create(stage,api){
       pay+=p;if(res==='w')anyWin=true;
       const tag=document.createElement('div');tag.className='bj-res '+res;tag.textContent=res==='w'?'+'+fmt(p-h.bet):res==='p'?(dBJ&&!isBJ(h)?T('refund'):T('push')):'−'+fmt(lost);h.el.append(tag);
       if(res!=='p')h.cardsEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add(res==='l'?'dim':'win'))});
-    chips+=pay;const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
+    chips+=pay;persist();const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
     if(bj){C.banner(root,api,'¡BLACKJACK!','+'+fmt(net)+' '+T('unit'),true);S.big()}
     else if(net>0){C.banner(root,api,dv>21?T('dealerBust'):T('youWin'),'+'+fmt(net)+' '+T('unit'),true);S.win();S.chip(3)}
     else if(net===0&&pay>0){C.banner(root,api,T('pushBig'));S.push()}
@@ -180,8 +182,7 @@ function create(stage,api){
     dvEl.hidden=true;await D(260);if(g!==gen)return;betPhase()}
 
   function end(reason){if(done)return;done=true;gen++;bar.set([]);chipsEl.hidden=true;hint.hidden=true;
-    const profit=Math.max(0,chips-START),ankhs=Math.floor(profit/100)+(st.hands>=3?1:0);
-    api.finish({score:chips,unit:T('unit'),ankhs,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.bj).replace('{m}',fmt(st.max))})}
+    api.finish({score:chips,chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.bj).replace('{m}',fmt(st.max))})}
 
   const kd=e=>{if(done||phase==='end')return;if(bar.key(e))return;
     if(phase==='bet'){const n='1234'.indexOf(e.key);if(n>=0){e.preventDefault();addBet([10,25,100,500][n])}}};
@@ -189,7 +190,7 @@ function create(stage,api){
 
   function start(){gen++;done=false;chips=START;lastBet=50;st={hands:0,won:0,bj:0,max:START};newShoe();dcEl.textContent='';dvEl.hidden=true;root.querySelectorAll('.tc-banner').forEach(x=>x.remove());betPhase()}
   start();
-  return{restart:start,stop(){gen++;done=true;removeEventListener('keydown',kd);root.remove()}};
+  return{restart:start,cashout:()=>chips,stop(){gen++;done=true;removeEventListener('keydown',kd);root.remove()}};
 }
 window.TEMPLO.register('blackjack',{create,texts:{
   unit:'fichas',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',hit:'PEDIR',stand:'PLANTARSE',double:'DOBLAR',split:'DIVIDIR',

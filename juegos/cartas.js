@@ -56,9 +56,36 @@ const BACK_SVG='<svg viewBox="0 0 100 140" aria-hidden="true"><rect x="1" y="1" 
   '<rect x="9" y="9" width="82" height="122" rx="2" fill="none" stroke="#7A5C1E" stroke-width=".9"/><path d="M50 30 80 70 50 110 20 70z" fill="#0A0A08" stroke="#C9A227" stroke-width="1.6"/><path d="M50 37 74.5 70 50 103 25.5 70z" fill="none" stroke="#7A5C1E" stroke-width=".8"/>'+
   '<svg x="33" y="53" width="34" height="34" viewBox="0 0 24 24" style="color:#F5C842"><g fill="currentColor">'+SYM.o+'</g></svg>'+
   '<g fill="#C9A227"><path d="M50 14l3 4-3 4-3-4zM50 118l3 4-3 4-3-4z"/></g></svg>';
+
+/* ---------- Estética del bazar: reversos y tapetes ---------- */
+const sv=(k,x,y,sz,col)=>'<svg x="'+x+'" y="'+y+'" width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" style="color:'+col+'"><g fill="currentColor">'+SYM[k]+'</g></svg>';
+const frame=(bg,line,inner)=>'<rect x="1" y="1" width="98" height="138" rx="7" fill="'+bg+'"/><rect x="5" y="5" width="90" height="130" rx="4" fill="none" stroke="'+line+'" stroke-width="1.6"/><rect x="9" y="9" width="82" height="122" rx="2" fill="none" stroke="'+inner+'" stroke-width=".9"/>';
+const RAYS=(()=>{let r='';for(let i=0;i<24;i++){const a=i*Math.PI/12;r+='<path d="M'+(50+Math.cos(a)*15).toFixed(1)+' '+(70+Math.sin(a)*15).toFixed(1)+'L'+(50+Math.cos(a)*(i%2?24:31)).toFixed(1)+' '+(70+Math.sin(a)*(i%2?24:31)).toFixed(1)+'" stroke="#F5C842" stroke-width="'+(i%2?1:1.8)+'"/>'}return r})();
+const BACKS={
+  horus:{name:'Ojo de Horus',price:0,svg:BACK_SVG},
+  lapis:{name:'Lapislázuli',price:60,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('#173a7c','#C9A227','rgba(245,200,66,.45)')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcLat)"/><circle cx="50" cy="70" r="22" fill="#0e2657" stroke="#C9A227" stroke-width="1.8"/><circle cx="50" cy="70" r="18" fill="none" stroke="rgba(245,200,66,.5)" stroke-width=".8" stroke-dasharray="2 2"/>'+sv('e',35,55,30,'#F5C842')+'</svg>'},
+  papiro:{name:'Papiro real',price:90,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('#E6D7B3','#0A0A08','#A8361C')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcPap)"/><path d="M50 26 78 70 50 114 22 70z" fill="none" stroke="#0A0A08" stroke-width="1.4"/>'+sv('o',31,51,38,'#A8361C')+sv('a',14,13,12,'#0A0A08')+sv('a',74,115,12,'#0A0A08')+'</svg>'},
+  obsidiana:{name:'Obsidiana',price:140,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcObs)','#C9A227','#7A5C1E')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcAnkh)"/><path d="M50 36 70 48 70 92 50 104 30 92 30 48z" fill="#0A0A08" stroke="#F5C842" stroke-width="1.6"/>'+sv('a',34,52,32,'#F5C842')+'</svg>'},
+  sol:{name:'Sol de Ra',price:200,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcSun)','#F5C842','rgba(245,200,66,.4)')+RAYS+'<circle cx="50" cy="70" r="13" fill="#F5C842"/><circle cx="50" cy="70" r="9" fill="none" stroke="#6b1d12" stroke-width="1.2"/><path d="M50 14l3 4-3 4-3-4zM50 118l3 4-3 4-3-4z" fill="#F5C842"/></svg>'},
+  oro:{name:'Oro del faraón',price:350,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcGold)','#0A0A08','rgba(10,10,8,.5)')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcDotsInk)"/><path d="M50 30 80 70 50 110 20 70z" fill="#0A0A08" stroke="#0A0A08" stroke-width="1.6"/><path d="M50 37 74.5 70 50 103 25.5 70z" fill="none" stroke="#C9A227" stroke-width=".9"/>'+sv('o',33,53,34,'#F5C842')+'</svg>'}};
+const FELTS={
+  lapis:{name:'Lapislázuli',price:0,c:['#1d3f7a','#122a55','#0b1a36','#060d1c']},
+  malaquita:{name:'Malaquita',price:50,c:['#1f6e52','#145040','#0b3026','#051812']},
+  granate:{name:'Granate',price:90,c:['#7a2424','#5a1818','#350d0d','#190505']},
+  nilo:{name:'Aguas del Nilo',price:120,c:['#14666b','#0e4b50','#082f33','#031719']},
+  obsidiana:{name:'Obsidiana',price:180,c:['#34302a','#211e1a','#141210','#080706']}};
+let cos={back:'horus',felt:'lapis'};
+function setCos(c){if(c&&BACKS[c.back])cos.back=c.back;if(c&&FELTS[c.felt])cos.felt=c.felt}
+function feltVars(el,id){const f=(FELTS[id]||FELTS.lapis).c;['--fa','--fb','--fc','--fd'].forEach((v,i)=>el.style.setProperty(v,f[i]))}
 const DEFS='<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>'+
   '<pattern id="tcPap" width="100" height="6" patternUnits="userSpaceOnUse"><rect width="100" height="1.4" fill="rgba(122,92,30,.07)"/></pattern>'+
-  '<pattern id="tcDots" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#0A0A08"/><circle cx="3" cy="3" r=".9" fill="rgba(201,162,39,.35)"/></pattern></defs></svg>';
+  '<pattern id="tcDots" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#0A0A08"/><circle cx="3" cy="3" r=".9" fill="rgba(201,162,39,.35)"/></pattern>'+
+  '<pattern id="tcDotsInk" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="rgba(10,10,8,.28)"/></pattern>'+
+  '<pattern id="tcLat" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H10M0 0V10" stroke="rgba(245,200,66,.22)" stroke-width=".8"/></pattern>'+
+  '<pattern id="tcAnkh" width="12" height="14" patternUnits="userSpaceOnUse"><svg width="7" height="7" x="2.5" y="3.5" viewBox="0 0 24 24"><g fill="rgba(201,162,39,.28)">'+SYM.a+'</g></svg></pattern>'+
+  '<linearGradient id="tcGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F5C842"/><stop offset=".55" stop-color="#C9A227"/><stop offset="1" stop-color="#8a6a22"/></linearGradient>'+
+  '<radialGradient id="tcSun" cx=".5" cy=".5" r=".7"><stop offset="0" stop-color="#8a2a18"/><stop offset="1" stop-color="#3a0d08"/></radialGradient>'+
+  '<linearGradient id="tcObs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2620"/><stop offset=".5" stop-color="#0A0A08"/><stop offset="1" stop-color="#1c1814"/></linearGradient></defs></svg>';
 
 /* ---------- CSS compartido ---------- */
 const CSS=`
@@ -75,6 +102,7 @@ const CSS=`
 .tc-chip{--c:#F4EFE3;--e:#0A0A08;position:relative;width:var(--chw,34px);height:var(--chw,34px);border-radius:50%;flex:none;
   background:radial-gradient(circle,var(--c) 0 47%,var(--e) 47% 51%,transparent 51%),repeating-conic-gradient(var(--c) 0 22.5deg,var(--e) 22.5deg 45deg);
   box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 2px 0 rgba(0,0,0,.45);display:grid;place-items:center;font:400 calc(var(--chw,34px)*.32)/1 var(--f-cond);color:var(--e)}
+.tc-chip[data-v="5"]{--c:#A8361C;--e:#F4EFE3}
 .tc-chip[data-v="10"]{--c:#F4EFE3;--e:#0A0A08}
 .tc-chip[data-v="25"]{--c:#2456B8;--e:#F4EFE3}
 .tc-chip[data-v="100"]{--c:#C9A227;--e:#0A0A08}
@@ -83,7 +111,7 @@ const CSS=`
 .tc-stack{position:relative;display:flex;flex-direction:column-reverse;align-items:center}
 .tc-stack .tc-chip{margin-top:calc(var(--chw,34px)*-.84)}
 .tc-stack .tc-chip:last-child{margin-top:0}
-.tc-felt{position:absolute;background:radial-gradient(ellipse at 50% 42%,#1d3f7a 0%,#122a55 38%,#0b1a36 70%,#060d1c 100%);
+.tc-felt{position:absolute;background:radial-gradient(ellipse at 50% 42%,var(--fa,#1d3f7a) 0%,var(--fb,#122a55) 38%,var(--fc,#0b1a36) 70%,var(--fd,#060d1c) 100%);
   box-shadow:0 0 0 3px #0A0A08,0 0 0 9px #7A5C1E,0 0 0 11px #C9A227,0 0 0 14px #0A0A08,0 0 0 17px #3a2a0e,0 18px 50px rgba(0,0,0,.7),inset 0 0 60px rgba(0,0,0,.6)}
 .tc-felt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0 2px,transparent 2px 5px)}
 .tc-arc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
@@ -131,11 +159,11 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function deck(n){const d=[];for(let k=0;k<(n||1);k++)SUITS.forEach(s=>RANKS.forEach((r,i)=>d.push({r,s:s.k,v:i+2})));return shuffle(d)}
 function cardName(c){const n={J:'jota',Q:'reina',K:'rey',A:'as'}[c.r]||c.r;return n+' de '+SUITS.find(s=>s.k===c.s).name}
 function cardEl(c,up){const el=document.createElement('div');el.className='tc-card'+(up?' up':'');
-  el.innerHTML='<div class="tc-in"><div class="tc-f tc-back">'+BACK_SVG+'</div><div class="tc-f tc-front">'+(c?frontSVG(c):'')+'</div></div>';
+  el.innerHTML='<div class="tc-in"><div class="tc-f tc-back">'+BACKS[cos.back].svg+'</div><div class="tc-f tc-front">'+(c?frontSVG(c):'')+'</div></div>';
   el.setAttribute('role','img');el.setAttribute('aria-label',up&&c?cardName(c):'carta boca abajo');el._c=c;return el}
 function reveal(el,c){if(c&&!el._c){el._c=c;el.querySelector('.tc-front').innerHTML=frontSVG(c)}el.classList.add('up');if(el._c)el.setAttribute('aria-label',cardName(el._c))}
 function chipEl(v){const d=document.createElement('div');d.className='tc-chip';d.dataset.v=v;d.textContent=v>=1000?(v/1000)+'K':v;return d}
-function chipBreak(n){const out=[];[1000,500,100,25,10].forEach(v=>{let k=Math.floor(n/v);if(out.length+k>8)k=Math.min(k,Math.max(1,8-out.length));for(let i=0;i<k&&out.length<8;i++){out.push(v);n-=v}});return out}
+function chipBreak(n){const out=[];[1000,500,100,25,10,5].forEach(v=>{let k=Math.floor(n/v);if(out.length+k>8)k=Math.min(k,Math.max(1,8-out.length));for(let i=0;i<k&&out.length<8;i++){out.push(v);n-=v}});return out}
 function stackEl(n){const s=document.createElement('div');s.className='tc-stack';chipBreak(n).forEach(v=>s.append(chipEl(v)));return s}
 /* Vuelo desde un origen (FLIP) */
 function flyIn(el,fromEl,delay,reduced){if(reduced||!fromEl){return}
@@ -194,16 +222,16 @@ function acts(root,api){
   function key(e){if(!list.length||bar.hidden)return false;const k=e.key;
     if(k==='ArrowRight'||k==='ArrowLeft'){e.preventDefault();const d=k==='ArrowRight'?1:-1;let i=sel;
       for(let n=0;n<list.length;n++){i=(i+d+list.length)%list.length;if(valid(i))break}if(valid(i))pick(i,true);return true}
-    if(k==='Enter'||k===' '){if(valid(sel)){e.preventDefault();api.sfx.confirm();list[sel].on();return true}return false}
-    const low=k.length===1?k.toLowerCase():k;const hit=list.find(a=>a.key&&(a.key===low||(a.keys&&a.keys.includes(low))));
+    if((k==='Enter'||k===' ')&&valid(sel)){e.preventDefault();api.sfx.confirm();list[sel].on();return true}
+    const low=k.toLowerCase();const hit=list.find(a=>a.key&&(a.key===low||(a.keys&&a.keys.includes(low))));
     if(hit&&!hit.el.disabled&&!hit.el.hidden){e.preventDefault();api.sfx.confirm();hit.on();return true}return false}
   function hide(h){bar.hidden=h;bar.style.visibility=h?'hidden':''}
   return{set,key,hide,bar}}
 
 let cssDone=false;
-function mount(stage,extraCss){const root=document.createElement('div');root.className='tc-root';
+function mount(stage,extraCss){const root=document.createElement('div');root.className='tc-root';feltVars(root,cos.felt);
   const st=document.createElement('style');st.textContent=CSS+(extraCss||'');root.append(st);
   root.insertAdjacentHTML('beforeend',DEFS);stage.append(root);return root}
 
-L.cartas={SUITS,RANKS,deck,shuffle,cardEl,reveal,cardName,chipEl,stackEl,chipBreak,flyIn,flyOut,wait,sounds,banner,acts,mount,suitSVG,frontSVG};
+L.cartas={BACKS,FELTS,setCos,feltVars,DEFS,get cos(){return Object.assign({},cos)},SUITS,RANKS,deck,shuffle,cardEl,reveal,cardName,chipEl,stackEl,chipBreak,flyIn,flyOut,wait,sounds,banner,acts,mount,suitSVG,frontSVG};
 })();

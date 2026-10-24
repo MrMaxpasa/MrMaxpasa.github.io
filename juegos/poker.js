@@ -2,7 +2,6 @@
    Torneo: todos empiezan con 1.000 fichas y las ciegas suben cada 6 manos. */
 (function(){
 'use strict';
-const START=1000;
 const LEVELS=[[10,20],[15,30],[25,50],[50,100],[75,150],[100,200],[150,300],[200,400],[300,600],[500,1000]];
 const HANDS_PER_LEVEL=6;
 const RIVALS=[
@@ -171,7 +170,9 @@ function create(stage,api){
   let hStat={act:0,raise:0},lastAgg=null,deck,board,btn,level,handNo,currentBet,minRaise,raisesSt,street,gen=0,done=false,st,pendingAct=null,raiseTo=0,between=false;
   const live=()=>players.filter(p=>!p.out);
   const inHand=()=>players.filter(p=>!p.out&&!p.folded);
-  const blinds=()=>LEVELS[Math.min(level,LEVELS.length-1)];
+  /* En el casino el montón inicial sale de la entrada en ankhs; las ciegas escalan con él */
+  const START=api.casino?api.casino.chips:1000,K=START/1000;
+  const blinds=()=>{const l=LEVELS[Math.min(level,LEVELS.length-1)];const r5=x=>Math.round(x/5)*5,bb=Math.max(10,r5(l[1]*K));return[Math.max(5,r5(bb/2)),bb]};
   const potTotal=()=>players.reduce((a,p)=>a+p.total,0);
   const nextIdx=(i,f)=>{for(let k=1;k<=4;k++){const j=(i+k)%4;if(f(players[j]))return j}return -1};
   function hud(){api.setScore(fmt(me.chips)+' '+T('unit'))}
@@ -194,7 +195,7 @@ function create(stage,api){
     if(board.length){me.mineEl.textContent=handName(best(me.hole.concat(board)).score)}else me.mineEl.textContent=me.hole[0].v===me.hole[1].v?HAND_NAMES[1]:''}
 
   /* --- Acciones --- */
-  function put(p,amt){amt=Math.max(0,Math.min(amt,p.chips));p.chips-=amt;p.bet+=amt;p.total+=amt;if(p.chips===0)p.allin=true;if(amt)S.chip(amt>200?3:1)}
+  function put(p,amt){amt=Math.max(0,Math.min(amt,p.chips));p.chips-=amt;p.bet+=amt;p.total+=amt;if(p.human&&api.casino&&!done)api.casino.save(p.chips);if(p.chips===0)p.allin=true;if(amt)S.chip(amt>200?3:1)}
   function apply(p,a){if(p.human&&a.t!=='fold'){hStat.act++;if(a.t==='raise')hStat.raise+=(a.to>=p.bet+p.chips)?2:1}
     if(a.t==='fold'){p.folded=true;bubble(p,T('aFold'),'x');p.holeEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add('dim'))}
     else if(a.t==='check'){bubble(p,T('aCheck'))}
@@ -329,7 +330,7 @@ function create(stage,api){
       if(gains.size>1&&gains.has(me)){title=T('split');sub=hn+' · +'+fmt(meWon);gold=true;S.push()}
       else if(gains.has(me)){title=T('youWin');sub=hn+' · +'+fmt(meWon);gold=true;catOf(res.get(me).score)>=5?S.big():S.win()}
       else{title=gains.size>1?T('splitOthers'):T('wins').replace('{n}',topW.name);sub=hn;S.lose()}}
-    potEl.hidden=true;eqKey='done';me.el.querySelector('.pk-eq').hidden=true;players.forEach(p=>{p.total=0});paintAll();st.max=Math.max(st.max,me.chips);
+    potEl.hidden=true;eqKey='done';me.el.querySelector('.pk-eq').hidden=true;players.forEach(p=>{p.total=0});paintAll();if(api.casino&&!done)api.casino.save(me.chips);st.max=Math.max(st.max,me.chips);
     C.banner(root,api,title,sub,gold);
     players.forEach(p=>{if(!p.out&&p.chips<=0){p.out=true;if(!p.human)setTimeout(()=>{if(g===gen)bubble(p,T('elim'),'x')},900)}});paintAll();
     await D(1700);if(g!==gen)return;
@@ -338,9 +339,8 @@ function create(stage,api){
     between=true;bar.set([{label:T('nextHand'),key:'enter',keyLabel:'ENTER',on:()=>{if(between)playHand()}},{label:T('leave'),key:'l',on:()=>end(false,true),alt:true}])}
 
   function end(champ,left){if(done)return;done=true;gen++;bar.set([]);raiseEl.hidden=true;pendingAct=null;
-    const profit=Math.max(0,me.chips-START),ankhs=Math.floor(profit/100)+(champ?10:0)+(st.hands>=3?1:0);
     const reason=champ?T('rChamp'):left?T('rLeft'):T('rOut');
-    api.finish({score:me.chips,unit:T('unit'),ankhs,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.best>=0?handName(st.best):'—')})}
+    api.finish({score:me.chips,chips:me.chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.best>=0?handName(st.best):'—')})}
 
   const kd=e=>{if(done)return;if(bar.key(e))return;
     if(pendingAct&&!raiseEl.hidden){if(e.key==='ArrowUp'||e.key==='+'){e.preventDefault();raiseEl._step('+')}else if(e.key==='ArrowDown'||e.key==='-'){e.preventDefault();raiseEl._step('-')}}};
@@ -350,9 +350,9 @@ function create(stage,api){
   function start(){gen++;done=false;pendingAct=null;hStat={act:0,raise:0};lastAgg=null;handNo=0;level=0;btn=Math.floor(Math.random()*4);st={hands:0,won:0,best:-1,max:START};
     players.forEach(p=>{p.chips=START;p.out=false;p.folded=false;p.hole=[];p.bet=0;p.total=0;p.holeEl.textContent='';bubble(p,'')});
     slots.forEach(s=>s.textContent='');paintAll();root.querySelectorAll('.tc-banner').forEach(x=>x.remove());
-    C.banner(root,api,T('welcome'),T('welcomeSub'));setTimeout(()=>{if(!done)playHand()},R?300:1200)}
+    C.banner(root,api,T('welcome'),T('welcomeSub').replace('{n}',fmt(START)));setTimeout(()=>{if(!done)playHand()},R?300:1200)}
   start();
-  return{restart:start,stop(){gen++;done=true;pendingAct=null;ro.disconnect();removeEventListener('keydown',kd);root.remove()}};
+  return{restart:start,cashout:()=>me.chips,stop(){gen++;done=true;pendingAct=null;ro.disconnect();removeEventListener('keydown',kd);root.remove()}};
 }
 window.TEMPLO.register('poker',{create,texts:{
   unit:'fichas',you:'TÚ',eqLabel:'PROB. DE GANAR',eqVs1:'CONTRA 1 RIVAL',eqVs:'CONTRA {n} RIVALES',fold:'NO IR',check:'PASAR',call:'IGUALAR',raise:'SUBIR',bet:'APOSTAR',allin:'TODO',allSub:'TODO',
@@ -360,7 +360,7 @@ window.TEMPLO.register('poker',{create,texts:{
   youTake:'¡TE LLEVAS EL BOTE!',takes:'{n} SE LLEVA EL BOTE',youWin:'¡GANAS LA MANO!',wins:'GANA {n}',split:'BOTE DIVIDIDO',splitOthers:'BOTE DIVIDIDO',
   blindsUp:'SUBEN LAS CIEGAS',level:'CIEGAS {s}/{b} · MANO {n}',elim:'ELIMINADO',
   busted:'ELIMINADO',bustedSub:'TE HAS QUEDADO SIN FICHAS',champion:'¡CAMPEÓN DE LA MESA!',
-  nextHand:'SIGUIENTE MANO',leave:'LEVANTARSE',welcome:'¡A LA MESA!',welcomeSub:'TEXAS HOLD\'EM · 1.000 FICHAS CADA UNO',
+  nextHand:'SIGUIENTE MANO',leave:'LEVANTARSE',welcome:'¡A LA MESA!',welcomeSub:'TEXAS HOLD\'EM · {n} FICHAS CADA UNO',
   rChamp:'Campeón de la mesa',rLeft:'Te levantas de la mesa',rOut:'Eliminado',
   detail:'{h} manos · {w} botes ganados · mejor jugada: {b}'}});
 })();
