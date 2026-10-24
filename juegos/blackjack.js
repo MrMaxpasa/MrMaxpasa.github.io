@@ -24,6 +24,8 @@ const CSS=`
 .bj-arcbox text{font-family:var(--f-egypt);font-weight:700;fill:rgba(201,162,39,.6);letter-spacing:.14em}
 .bj-arcbox text.s{fill:rgba(244,239,227,.32);font-family:var(--f-ui);letter-spacing:.4em}
 .bj-hands{position:absolute;left:0;right:0;top:52%;display:flex;justify-content:center;gap:clamp(16px,5vw,70px)}
+.bj-hands.betting .bj-row{min-height:0}
+.bj-hands.betting .tc-val{display:none}
 .bj-hbox{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .3s}
 .bj-hbox.idle{opacity:.5}
 .bj-hbox.act::after{content:"𓋹";position:absolute;left:50%;top:-30px;transform:translateX(-50%);font-family:var(--f-glyph);font-size:22px;color:var(--gold-hi);text-shadow:0 0 10px rgba(245,200,66,.8);animation:bjBob .7s ease-in-out infinite}
@@ -93,7 +95,7 @@ function create(stage,api){
     cardsEl.append(el);C.flyIn(el,shoeEl,20,R);S.deal();return el}
 
   /* --- Fase de apuesta --- */
-  function betPhase(){phase='bet';hands=[{cards:[],bet:Math.min(lastBet,chips)}];handsEl.textContent='';hbox(hands[0]);
+  function betPhase(){phase='bet';handsEl.classList.add('betting');hands=[{cards:[],bet:Math.min(lastBet,chips)}];handsEl.textContent='';hbox(hands[0]);
     if(hands[0].bet<MIN)hands[0].bet=0;paintBet(hands[0]);bet=hands[0].bet;
     if(chips<MIN){return end(T('broke'))}
     chipsEl.hidden=false;hint.hidden=false;hint.textContent=T('betHint');renderChips();betActs();hud()}
@@ -109,7 +111,7 @@ function create(stage,api){
 
   /* --- Reparto --- */
   async function deal(){if(phase!=='bet'||bet<MIN||bet>chips)return;const g=++gen;phase='deal';
-    lastBet=bet;chips-=bet;hud();chipsEl.hidden=true;hint.hidden=true;bar.set([]);
+    lastBet=bet;chips-=bet;hud();chipsEl.hidden=true;hint.hidden=true;bar.set([]);handsEl.classList.remove('betting');
     // las cartas anteriores ya se retiraron al empezar la apuesta; reiniciamos la banca
     dcEl.textContent='';dvEl.hidden=true;dvEl._bj=false;dealer={cards:[],holeEl:null};
     const h=hands[0];h.cards=[];h.cardsEl.textContent='';st.hands++;
@@ -119,8 +121,6 @@ function create(stage,api){
       else{dealer.cards.push(c);const el=addCard(dcEl,c,up);if(!up)dealer.holeEl=el;badge(dvEl,dealer.cards,true)}
       await D(300)}
     if(g!==gen)return;
-    const up=dealer.cards[0],dBJ=val(dealer.cards).t===21;
-    if((up.r==='A'||ten(up))&&dBJ){await D(250);if(g!==gen)return;revealHole();dvEl._bj=true;badge(dvEl,dealer.cards);await D(450);return settle(g)}
     if(isBJ(h)){h.valEl._bj=true;badge(h.valEl,h.cards);await D(300);revealHole();badge(dvEl,dealer.cards);await D(350);return settle(g)}
     phase='play';active=0;focusHand();playActs()}
   function revealHole(){if(dealer.holeEl){C.reveal(dealer.holeEl,dealer.cards[1]);S.flip();dealer.holeEl=null}}
@@ -151,28 +151,29 @@ function create(stage,api){
   function next(){active++;while(active<hands.length&&val(hands[active].cards).t===21)active++;
     if(active<hands.length){focusHand();playActs()}else dealerTurn()}
   async function dealerTurn(){const g=gen;phase='dealer';focusHand();bar.set([]);await D(250);if(g!==gen)return;
-    revealHole();badge(dvEl,dealer.cards);await D(520);
+    revealHole();if(val(dealer.cards).t===21)dvEl._bj=true;badge(dvEl,dealer.cards);await D(520);
     const live=hands.some(h=>val(h.cards).t<=21);
     while(live&&val(dealer.cards).t<17){if(g!==gen)return;const c=draw();dealer.cards.push(c);addCard(dcEl,c,true);badge(dvEl,dealer.cards);await D(560)}
     if(g!==gen)return;settle(g)}
 
   /* --- Liquidación --- */
   async function settle(g){phase='settle';const dv=val(dealer.cards).t,dBJ=dealer.cards.length===2&&dv===21;let pay=0,staked=0,bj=false,anyWin=false;
-    hands.forEach(h=>{staked+=h.bet;const pv=val(h.cards).t;let res,p=0;
-      if(pv>21){res='l'}
+    let lossLeft=lastBet;/* con blackjack de la banca solo se pierde la apuesta inicial: lo doblado o dividido se devuelve */
+    hands.forEach(h=>{staked+=h.bet;const pv=val(h.cards).t;let res,p=0,lost=h.bet;
+      if(dBJ&&!isBJ(h)){lost=Math.min(h.bet,lossLeft);lossLeft-=lost;p=h.bet-lost;res=lost>0?'l':'p'}
+      else if(pv>21){res='l'}
       else if(isBJ(h)){if(dBJ){res='p';p=h.bet}else{res='w';p=h.bet+Math.floor(h.bet*1.5);bj=true}}
-      else if(dBJ){res='l'}
       else if(dv>21||pv>dv){res='w';p=h.bet*2}
       else if(pv===dv){res='p';p=h.bet}
       else res='l';
       pay+=p;if(res==='w')anyWin=true;
-      const tag=document.createElement('div');tag.className='bj-res '+res;tag.textContent=res==='w'?'+'+fmt(p-h.bet):res==='p'?T('push'):'−'+fmt(h.bet);h.el.append(tag);
+      const tag=document.createElement('div');tag.className='bj-res '+res;tag.textContent=res==='w'?'+'+fmt(p-h.bet):res==='p'?(dBJ&&!isBJ(h)?T('refund'):T('push')):'−'+fmt(lost);h.el.append(tag);
       if(res!=='p')h.cardsEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add(res==='l'?'dim':'win'))});
     chips+=pay;const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
     if(bj){C.banner(root,api,'¡BLACKJACK!','+'+fmt(net)+' '+T('unit'),true);S.big()}
     else if(net>0){C.banner(root,api,dv>21?T('dealerBust'):T('youWin'),'+'+fmt(net)+' '+T('unit'),true);S.win();S.chip(3)}
     else if(net===0&&pay>0){C.banner(root,api,T('pushBig'));S.push()}
-    else{const allBust=hands.every(h=>val(h.cards).t>21);C.banner(root,api,allBust?T('busted'):T('houseWins'),'−'+fmt(-net)+' '+T('unit'));S.lose()}
+    else{const allBust=hands.every(h=>val(h.cards).t>21);C.banner(root,api,dBJ?T('dealerBJ'):allBust?T('busted'):T('houseWins'),'−'+fmt(-net)+' '+T('unit'));S.lose()}
     await D(1700);if(g!==gen)return;
     // retirar cartas al descarte
     const old=[...root.querySelectorAll('.bj-cards .tc-card')];old.forEach(el=>C.flyOut(el,discard,R));root.querySelectorAll('.bj-res').forEach(x=>x.remove());
@@ -192,7 +193,7 @@ function create(stage,api){
 }
 window.TEMPLO.register('blackjack',{create,texts:{
   unit:'fichas',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',hit:'PEDIR',stand:'PLANTARSE',double:'DOBLAR',split:'DIVIDIR',
-  bust:'TE PASAS',dOver:'SE PASA',push:'EMPATE',pushBig:'EMPATE',youWin:'¡GANAS!',dealerBust:'¡LA BANCA SE PASA!',houseWins:'GANA LA BANCA',busted:'TE HAS PASADO',
+  bust:'TE PASAS',dOver:'SE PASA',refund:'DEVUELTA',dealerBJ:'¡BLACKJACK DE LA BANCA!',push:'EMPATE',pushBig:'EMPATE',youWin:'¡GANAS!',dealerBust:'¡LA BANCA SE PASA!',houseWins:'GANA LA BANCA',busted:'TE HAS PASADO',
   betHint:'ELIGE TU APUESTA Y REPARTE',addChip:'Añadir {v} fichas a la apuesta',
   broke:'Te has quedado sin fichas',left:'Te retiras de la mesa',
   detail:'{h} manos · {w} ganadas · {b} blackjacks · máximo {m} fichas'}});

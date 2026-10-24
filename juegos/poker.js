@@ -77,6 +77,14 @@ const CSS=`
 .pk-seat .tc-bubble{left:50%;top:-30px;transform:translateX(-50%) skewX(-10deg)}
 .pk-seat.s2 .tc-bubble{top:50%;left:calc(100% + 12px);transform:translateY(-50%) skewX(-10deg)}
 .pk-seat.s0 .tc-bubble{top:auto;bottom:calc(100% + 6px)}
+.pk-eq{position:absolute;left:calc(100% + 14px);top:38%;transform:translateY(-50%) skewX(-8deg);background:var(--ink);border:1px solid var(--gold);box-shadow:4px 4px 0 rgba(201,162,39,.35);padding:7px 11px 8px;display:flex;flex-direction:column;gap:5px;min-width:92px;animation:tcPop .3s ease both}
+.pk-eq[hidden]{display:none}
+.pk-eq small{font:700 9px/1.2 var(--f-ui);letter-spacing:.2em;color:rgba(244,239,227,.7);white-space:nowrap}
+.pk-eq b{font:400 clamp(22px,2.6cqw,30px)/1 var(--f-cond);color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.pk-eq b.calc{opacity:.45}
+.pk-eq i{display:block;height:4px;background:rgba(244,239,227,.15);position:relative}
+.pk-eq i::after{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--p,0%);background:var(--gold-hi);transition:width .5s ease}
+.pk-eq em{font:600 10px/1 var(--f-ui);font-style:normal;letter-spacing:.14em;color:rgba(244,239,227,.5);white-space:nowrap}
 .pk-mine{font:400 clamp(14px,1.6cqw,18px)/1 var(--f-cond);letter-spacing:.1em;color:var(--gold-hi);text-shadow:0 1px 0 #000}
 .pk-mine:empty{display:none}
 .pk-d{position:absolute;z-index:4;width:22px;height:22px;border-radius:50%;background:var(--ivory);color:var(--ink);font:400 12px/22px var(--f-cond);text-align:center;box-shadow:0 0 0 2px var(--ink),0 0 0 3px var(--gold),0 2px 0 3px rgba(0,0,0,.4);transition:left .5s cubic-bezier(.3,1.2,.5,1),top .5s cubic-bezier(.3,1.2,.5,1);transform:translate(-50%,-50%)}
@@ -104,6 +112,7 @@ const CSS=`
   .pk-hole{--cw:clamp(24px,7cqw,40px)}
   .pk-seat.s0 .pk-hole{--cw:clamp(52px,17cqw,90px)}
   .pk-plate{min-width:0;padding:4px 7px 3px}
+  .pk-eq{left:calc(100% + 8px);min-width:0;padding:6px 8px 7px}
   .pk-bet.b0{top:71%}.pk-bet.b1{left:22%;top:40%}.pk-bet.b2{top:23%}.pk-bet.b3{left:78%;top:40%}
 }
 @media (max-width:700px){.pk-area{bottom:calc(150px + var(--ab))}.pk-raise{left:50%;right:auto;bottom:calc(104px + var(--ab));transform:translateX(-50%) skewX(-8deg)}}
@@ -132,7 +141,7 @@ function create(stage,api){
   /* --- Asientos --- */
   const players=[{name:T('you'),glyph:'',human:true}].concat(RIVALS.map(r=>Object.assign({},r))).map((p,i)=>{
     const el=document.createElement('div');el.className='pk-seat s'+i;
-    el.innerHTML=p.human?'<div class="pk-plate"><b>'+p.name+'</b><span>0</span></div><div class="pk-mine"></div><div class="pk-hole"></div>':'<div class="pk-av" aria-hidden="true">'+p.glyph+'</div><div class="pk-plate"><b>'+p.name+'</b><span>0</span></div><div class="pk-hole"></div>';
+    el.innerHTML=p.human?'<div class="pk-plate"><b>'+p.name+'</b><span>0</span></div><div class="pk-mine"></div><div class="pk-hole"></div><div class="pk-eq" hidden aria-live="polite"><small>'+T('eqLabel')+'</small><b>—</b><i></i><em></em></div>':'<div class="pk-av" aria-hidden="true">'+p.glyph+'</div><div class="pk-plate"><b>'+p.name+'</b><span>0</span></div><div class="pk-hole"></div>';
     table.append(el);const bet=document.createElement('div');bet.className='pk-bet b'+i;table.append(bet);
     return Object.assign(p,{i,el,betEl:bet,holeEl:el.querySelector('.pk-hole'),chipsEl:el.querySelector('.pk-plate span'),mineEl:el.querySelector('.pk-mine')})});
   const me=players[0];
@@ -151,7 +160,16 @@ function create(stage,api){
   function bubble(p,txt,cls){p.el.querySelectorAll('.tc-bubble').forEach(x=>x.remove());if(!txt)return;const b=document.createElement('div');b.className='tc-bubble'+(cls?' '+cls:'');b.textContent=txt;p.el.append(b)}
   function turn(p){players.forEach(q=>q.el.classList.toggle('turn',q===p))}
   function placeD(){const port=table.getBoundingClientRect().width<table.getBoundingClientRect().height;const pos=(port?DPOS_P:DPOS)[btn];dEl.style.left=pos[0]+'%';dEl.style.top=pos[1]+'%'}
-  function mine(){if(me.folded||!me.hole.length){me.mineEl.textContent='';return}
+  /* Probabilidad de ganar del jugador contra las manos posibles de los rivales que siguen en la mano */
+  let eqKey='',eqTimer=0;
+  function updEq(){const box=me.el.querySelector('.pk-eq');const opp=inHand().length-1;
+    if(done||me.folded||me.hole.length<2||opp<1){box.hidden=true;eqKey='';return}
+    const key=me.hole.map(c=>c.r+c.s).join('')+'|'+board.length+'|'+opp;if(key===eqKey)return;eqKey=key;
+    box.hidden=false;const b=box.querySelector('b');b.classList.add('calc');box.querySelector('em').textContent=T(opp===1?'eqVs1':'eqVs').replace('{n}',opp);
+    clearTimeout(eqTimer);eqTimer=setTimeout(()=>{if(key!==eqKey)return;const e=equity(me.hole,board,opp,board.length===5?500:900);
+      const pc=Math.round(e*100);b.textContent=pc+' %';b.classList.remove('calc');box.querySelector('i').style.setProperty('--p',pc+'%');
+      box.setAttribute('aria-label',T('eqLabel')+' '+pc+' %')},30)}
+  function mine(){updEq();if(me.folded||!me.hole.length){me.mineEl.textContent='';return}
     if(board.length){me.mineEl.textContent=handName(best(me.hole.concat(board)).score)}else me.mineEl.textContent=me.hole[0].v===me.hole[1].v?HAND_NAMES[1]:''}
 
   /* --- Acciones --- */
@@ -211,7 +229,7 @@ function create(stage,api){
         const reopened=apply(p,a);need.delete(i);
         if(reopened)inHand().forEach(q=>{if(q!==p&&!q.allin)need.add(q.i)});
         if(p.allin)need.delete(i);
-        paintAll();if(p.human){mine();if(p.folded)fast=true}
+        paintAll();mine();if(p.human&&p.folded)fast=true
         await D(240)}
       i=(i+1)%4}
     turn(null)}
@@ -280,7 +298,7 @@ function create(stage,api){
       if(gains.size>1&&gains.has(me)){title=T('split');sub=hn+' · +'+fmt(meWon);gold=true;S.push()}
       else if(gains.has(me)){title=T('youWin');sub=hn+' · +'+fmt(meWon);gold=true;catOf(res.get(me).score)>=5?S.big():S.win()}
       else{title=gains.size>1?T('splitOthers'):T('wins').replace('{n}',topW.name);sub=hn;S.lose()}}
-    potEl.hidden=true;players.forEach(p=>{p.total=0});paintAll();st.max=Math.max(st.max,me.chips);
+    potEl.hidden=true;eqKey='done';me.el.querySelector('.pk-eq').hidden=true;players.forEach(p=>{p.total=0});paintAll();st.max=Math.max(st.max,me.chips);
     C.banner(root,api,title,sub,gold);
     players.forEach(p=>{if(!p.out&&p.chips<=0){p.out=true;if(!p.human)setTimeout(()=>{if(g===gen)bubble(p,T('elim'),'x')},900)}});paintAll();
     await D(1700);if(g!==gen)return;
@@ -306,7 +324,7 @@ function create(stage,api){
   return{restart:start,stop(){gen++;done=true;pendingAct=null;ro.disconnect();removeEventListener('keydown',kd);root.remove()}};
 }
 window.TEMPLO.register('poker',{create,texts:{
-  unit:'fichas',you:'TÚ',fold:'NO IR',check:'PASAR',call:'IGUALAR',raise:'SUBIR',bet:'APOSTAR',allin:'TODO',allSub:'TODO',
+  unit:'fichas',you:'TÚ',eqLabel:'PROB. DE GANAR',eqVs1:'CONTRA 1 RIVAL',eqVs:'CONTRA {n} RIVALES',fold:'NO IR',check:'PASAR',call:'IGUALAR',raise:'SUBIR',bet:'APOSTAR',allin:'TODO',allSub:'TODO',
   aFold:'NO VA',aCheck:'PASA',aCall:'IGUALA',aRaise:'SUBE A',aBet:'APUESTA',aAllin:'¡ALL-IN!',sb:'CIEGA PEQUEÑA',bb:'CIEGA GRANDE',
   youTake:'¡TE LLEVAS EL BOTE!',takes:'{n} SE LLEVA EL BOTE',youWin:'¡GANAS LA MANO!',wins:'GANA {n}',split:'BOTE DIVIDIDO',splitOthers:'BOTE DIVIDIDO',
   blindsUp:'SUBEN LAS CIEGAS',level:'CIEGAS {s}/{b} · MANO {n}',elim:'ELIMINADO',

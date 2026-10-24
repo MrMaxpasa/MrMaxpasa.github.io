@@ -88,8 +88,9 @@ const CSS=`
 .tc-felt::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0 2px,transparent 2px 5px)}
 .tc-arc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .tc-arc text{font-family:var(--f-egypt);font-weight:700;fill:rgba(201,162,39,.55);letter-spacing:.18em}
-.tc-acts{position:absolute;left:0;right:0;bottom:var(--ab);z-index:5;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px clamp(8px,2.4vw,30px);padding:10px max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));
-  background:linear-gradient(transparent,rgba(10,10,8,.88) 38%)}
+.tc-acts{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px clamp(10px,2.4vw,30px);padding:12px max(14px,env(safe-area-inset-right,0px)) calc(12px + var(--ab) + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));
+  background:rgba(10,10,8,.95);box-shadow:0 -2px 0 rgba(201,162,39,.6),0 -16px 30px rgba(0,0,0,.55)}
+.tc-acts:empty{box-shadow:0 -2px 0 rgba(201,162,39,.35)}
 .tc-act{position:relative;isolation:isolate;display:flex;align-items:center;gap:.3em;background:none;border:0;padding:.08em .35em .06em .15em;cursor:pointer;--fs:clamp(22px,2.7vw,36px);font-size:var(--fs);line-height:1;color:var(--ivory)}
 .tc-act::before{content:"";position:absolute;inset:4% -8% 4% -6%;background:var(--gold);transform:skewX(-18deg) scaleX(0);transform-origin:left;transition:transform .18s cubic-bezier(.3,1.5,.5,1);z-index:-1;box-shadow:4px 4px 0 var(--ink),5px 5px 0 var(--ivory)}
 .tc-act.sel::before{transform:skewX(-18deg) scaleX(1)}
@@ -101,7 +102,7 @@ const CSS=`
 .tc-act.sel kbd{color:var(--ink);border-color:var(--ink)}
 .tc-act .tc-sub{font:700 11px/1 var(--f-ui);letter-spacing:.12em;color:var(--gold-hi);margin-left:.1em;transform:translateY(-.3em)}
 .tc-act.sel .tc-sub{color:var(--ink)}
-.tc-act[disabled]{opacity:.28;cursor:default;pointer-events:none}
+.tc-act[disabled]{opacity:.32;cursor:default;pointer-events:none}
 .tc-act[hidden]{display:none}
 .tc-banner{position:absolute;left:0;right:0;top:44%;z-index:8;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;transform:translateY(-50%)}
 .tc-band{position:relative;padding:10px 6vw 8px;font-size:clamp(34px,6vw,76px);line-height:1;transform:skewY(-4deg);animation:tcBand 1.5s cubic-bezier(.2,.9,.3,1) both}
@@ -119,8 +120,8 @@ const CSS=`
 .tc-val{font:400 clamp(15px,1.8vw,20px)/1 var(--f-cond);letter-spacing:.06em;background:var(--ink);color:var(--gold-hi);padding:4px 8px 3px;box-shadow:0 0 0 1.5px var(--gold);transform:skewX(-10deg);white-space:nowrap}
 .tc-val.over{color:rgba(244,239,227,.6);box-shadow:0 0 0 1.5px rgba(244,239,227,.4)}
 .tc-val.top{background:var(--gold-hi);color:var(--ink)}
-@media (min-width:1100px){.tc-acts{padding-left:250px;padding-right:250px}}
-@media (max-width:1099px){.tc-root{--ab:48px}.tc-acts{background:linear-gradient(transparent,rgba(10,10,8,.9) 30%)}}
+@media (min-width:1100px){.tc-acts{padding-left:130px;padding-right:130px}}
+@media (max-width:1099px){.tc-root{--ab:46px}}
 @media (hover:none) and (pointer:coarse){.tc-act kbd{display:none}}
 @media (prefers-reduced-motion:reduce){.tc-in,.tc-card{transition:none}.tc-band,.tc-bsub{animation-duration:1.6s;animation-name:tcFade}@keyframes tcFade{0%,100%{opacity:0}15%,85%{opacity:1}}}
 `;

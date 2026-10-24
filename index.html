@@ -53,6 +53,7 @@ body{margin:0}
   color-scheme:dark;
 }
 html,body{height:100%;background:var(--ink);color:var(--ivory)}
+@supports (height:100dvh){html,body{height:100dvh}}
 body{overflow:hidden;font-family:var(--f-ui);-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
@@ -370,6 +371,9 @@ button{font:inherit;color:inherit}
 .res-btn.alt:hover{background:var(--ink);color:var(--ivory)}
 .res-btn kbd{font:700 10px/1 var(--f-ui);letter-spacing:.12em;margin-left:8px;opacity:.65}
 #app[data-screen="temple"] #anubis,#app[data-screen="arena"] #anubis{opacity:0}
+#app[data-screen="arena"] .hud.bottom{background:none;padding-block:0 10px}
+#app[data-screen="arena"] .snd .lbl{display:none}
+#app[data-screen="arena"] .snd{padding:8px 10px}
 #app[data-screen="arena"] .hud.top,#app[data-screen="arena"] .keys,#app[data-screen="arena"] .decor,#app[data-screen="arena"] #dust{display:none}
 @media (hover:none) and (pointer:coarse){.res-btn kbd{display:none}}
 
