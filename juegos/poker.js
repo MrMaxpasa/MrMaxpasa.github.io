@@ -305,7 +305,7 @@ function create(stage,api){
 
   async function finishHand(g){const alive=inHand();let meWon=0,title,sub,gold=false;
     if(alive.length===1){const w=alive[0],amt=potTotal();w.chips+=amt;
-      if(w.human){meWon=amt;st.won++;title=T('youTake');gold=true;S.win()}else{title=T('takes').replace('{n}',w.name);S.lose()}
+      if(w.human){meWon=amt;st.won++;title=T('youTake');gold=true;S.win();api.ach&&api.ach('pk-pot')}else{title=T('takes').replace('{n}',w.name);S.lose()}
       sub='+'+fmt(amt)+' '+T('unit');bubble(w,'+'+fmt(amt),'k')}
     else{
       // revelar cartas
@@ -326,7 +326,7 @@ function create(stage,api){
       const mark=el=>{const c=el._c;if(!c)return;el.classList.toggle('win',winSet.has(c));el.classList.toggle('dim',!winSet.has(c))};
       boardEl.querySelectorAll('.tc-card').forEach(mark);topW.holeEl.querySelectorAll('.tc-card').forEach(mark);
       const hn=handName(res.get(topW).score);
-      if(gains.has(me)){meWon=gains.get(me);st.won++}
+      if(gains.has(me)){meWon=gains.get(me);st.won++;if(api.ach){api.ach('pk-pot');if(catOf(res.get(me).score)>=5)api.ach('pk-flush')}}
       if(gains.size>1&&gains.has(me)){title=T('split');sub=hn+' · +'+fmt(meWon);gold=true;S.push()}
       else if(gains.has(me)){title=T('youWin');sub=hn+' · +'+fmt(meWon);gold=true;catOf(res.get(me).score)>=5?S.big():S.win()}
       else{title=gains.size>1?T('splitOthers'):T('wins').replace('{n}',topW.name);sub=hn;S.lose()}}
@@ -339,6 +339,7 @@ function create(stage,api){
     between=true;bar.set([{label:T('nextHand'),key:'enter',keyLabel:'ENTER',on:()=>{if(between)playHand()}},{label:T('leave'),key:'l',on:()=>end(false,true),alt:true}])}
 
   function end(champ,left){if(done)return;done=true;gen++;bar.set([]);raiseEl.hidden=true;pendingAct=null;
+    if(champ&&api.ach)api.ach('pk-champ');
     const reason=champ?T('rChamp'):left?T('rLeft'):T('rOut');
     api.finish({score:me.chips,chips:me.chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.best>=0?handName(st.best):'—')})}
 
@@ -354,7 +355,13 @@ function create(stage,api){
   start();
   return{restart:start,cashout:()=>me.chips,stop(){gen++;done=true;pendingAct=null;ro.disconnect();removeEventListener('keydown',kd);root.remove()}};
 }
-window.TEMPLO.register('poker',{create,texts:{
+window.TEMPLO.register('poker',{create,help:[
+  {t:'OBJETIVO',p:'Texas Hold\'em contra Sobek, Bastet y Thot. Todos empezáis con las mismas fichas y las ciegas suben cada 6 manos. Ganas la mesa si dejas a los tres sin fichas.'},
+  {t:'LA MANO',p:'Recibes dos cartas propias. Luego salen cinco comunes en tres fases: flop (3), turn (1) y river (1). Gana la mejor combinación de cinco cartas entre las tuyas y las comunes.'},
+  {t:'TUS ACCIONES',p:'NO IR: abandonas la mano. PASAR: sigues sin apostar si nadie ha apostado. IGUALAR: pones lo mismo que la apuesta más alta. SUBIR o APOSTAR: aumentas la apuesta (ajústala con − y + o con ½ BOTE y BOTE). TODO: apuestas todas tus fichas.'},
+  {t:'JUGADAS, DE MAYOR A MENOR',p:'Escalera real · Escalera de color · Póker (cuatro iguales) · Full (trío + pareja) · Color (cinco del mismo palo) · Escalera (cinco seguidas) · Trío · Doble pareja · Pareja · Carta alta.'},
+  {t:'PROBABILIDAD DE GANAR',p:'El marcador junto a tus cartas calcula, en cada fase, cuántas veces ganarías contra las manos que podrían tener los rivales que siguen en juego.'},
+  {t:'LOS PALOS DEL TEMPLO',p:'Ankhs (negro), ojos (azul), escarabajos (verde) y plumas (rojo). Funcionan igual que picas, corazones, tréboles y diamantes.'}],texts:{
   unit:'fichas',you:'TÚ',eqLabel:'PROB. DE GANAR',eqVs1:'CONTRA 1 RIVAL',eqVs:'CONTRA {n} RIVALES',fold:'NO IR',check:'PASAR',call:'IGUALAR',raise:'SUBIR',bet:'APOSTAR',allin:'TODO',allSub:'TODO',
   aFold:'NO VA',aCheck:'PASA',aCall:'IGUALA',aRaise:'SUBE A',aBet:'APUESTA',aAllin:'¡ALL-IN!',sb:'CIEGA PEQUEÑA',bb:'CIEGA GRANDE',
   youTake:'¡TE LLEVAS EL BOTE!',takes:'{n} SE LLEVA EL BOTE',youWin:'¡GANAS LA MANO!',wins:'GANA {n}',split:'BOTE DIVIDIDO',splitOthers:'BOTE DIVIDIDO',

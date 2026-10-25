@@ -337,6 +337,25 @@ button{font:inherit;color:inherit}
 .tcover.rl .whs svg{display:block;width:100%;animation:whSpin 16s linear infinite;will-change:transform}
 .tcover.rl .wh{position:absolute;left:14%;top:10%;width:40%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#0A0A08 0 20%,#C9A227 20% 23%,#2a2010 23% 60%,#C9A227 60% 62%,transparent 62%),repeating-conic-gradient(#0A0A08 0 9.73deg,#A8361C 9.73deg 19.46deg);box-shadow:0 0 0 4px #C9A227,0 8px 18px rgba(0,0,0,.6);animation:whSpin 16s linear infinite}
 .tcover.rl .rn{position:absolute;width:11%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:400 clamp(12px,1.4vw,18px)/1 var(--f-cond);color:var(--ivory);box-shadow:0 0 0 2px var(--gold)}
+.tcover.sn{display:grid;place-items:center;background:radial-gradient(circle at 70% 20%,rgba(201,206,214,.18),transparent 55%),var(--coal)}
+.tcover.sn .snb{width:78%;aspect-ratio:10/3.1;display:grid;grid-template-columns:repeat(10,1fr);gap:2px;padding:5px;background:#3a2a14;box-shadow:0 0 0 2px var(--ivory),5px 5px 0 rgba(201,162,39,.85);transform:perspective(500px) rotateX(18deg)}
+.tcover.sn .snb i{background:#E6D7B3;box-shadow:inset 0 0 0 1px #0A0A08;display:grid;place-items:center;font-style:normal;font-family:var(--f-glyph);font-size:clamp(9px,1vw,14px);color:var(--ink)}
+.tcover.sn .snb i.g{background:#F5C842}.tcover.sn .snb i.w{background:#2a5ea8;color:#BFD3F2}
+.tcover.sn .cn,.tcover.sn .spl{position:absolute;width:6.5%;aspect-ratio:1;transform:translate(-50%,-50%);filter:drop-shadow(0 2px 0 rgba(0,0,0,.5))}
+.tcover.sn .cn{background:#F5C842;clip-path:polygon(50% 0,100% 100%,0 100%);box-shadow:inset 0 0 0 2px #0A0A08}
+.tcover.sn .spl{background:linear-gradient(#EEF1F5 0 22%,#C9CED6 22% 40%,#9EA6B3 40% 60%,#C9CED6 60% 78%,#EEF1F5 78%);clip-path:polygon(0 0,100% 0,72% 40%,72% 60%,100% 100%,0 100%,28% 60%,28% 40%)}
+.tcover.sn .stk{position:absolute;right:8%;bottom:9%;display:flex;gap:4px}
+.tcover.sn .stk b{width:9px;height:42px;border-radius:5px;background:repeating-linear-gradient(0deg,#E6D7B3 0 8px,#cdbb91 8px 10px);box-shadow:inset 0 0 0 1.5px #0A0A08;transform:rotate(-8deg)}
+.tcover.sn .stk b.d{background:#1c140a;transform:rotate(6deg)}
+.tcard.sel .tcover.sn .stk b{animation:gcFlip .5s ease both}.tcard.sel .tcover.sn .stk b:nth-child(2){animation-delay:.06s}.tcard.sel .tcover.sn .stk b:nth-child(3){animation-delay:.12s}
+.tcover.jc{background:radial-gradient(ellipse at 50% 30%,rgba(245,200,66,.2),transparent 60%),var(--coal)}
+.tcover.jc .aj{position:absolute;left:2%;bottom:0;height:98%;filter:drop-shadow(0 0 10px rgba(0,0,0,.7))}
+.tcover.jc .am{position:absolute;right:2%;bottom:0;height:70%;filter:drop-shadow(0 0 10px rgba(0,0,0,.7));transform-origin:50% 100%;transition:transform .3s}
+.tcover.jc .sc{position:absolute;left:50%;top:14%;width:28%;transform:translateX(-50%)}.tcover.jc .sc svg{width:100%;height:auto}
+.tcover.jc .cd{position:absolute;left:50%;bottom:12%;transform:translateX(-50%) rotate(-3deg);font:500 clamp(10px,1vw,13px)/1 var(--f-mono);color:var(--ink);background:var(--papyrus);padding:5px 8px;box-shadow:3px 3px 0 var(--gold);white-space:nowrap}
+.tcard.sel .tcover.jc .am{animation:jcCov .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes jcCov{40%{transform:translateX(-8%) scale(1.1) rotate(-5deg)}}
+.tcard.sel .tcover.jc .sc svg{animation:gcSway 1.2s ease-in-out infinite}
 .tcover.judge{display:grid;place-items:center;background:radial-gradient(circle,rgba(201,162,39,.16),transparent 65%),var(--coal)}
 .tcover.judge svg{width:46%;height:auto;opacity:.55}
 .tcard.sealed{cursor:not-allowed}
@@ -384,6 +403,55 @@ button{font:inherit;color:inherit}
 #casino-stage{position:absolute;inset:0}
 #app[data-screen="casino"] .hud.bottom{left:auto;right:0;justify-content:flex-end}
 
+
+/* Logros */
+.ach-btn{margin:0 0 8px auto;display:inline-flex;align-items:center;gap:7px;font:400 17px/1 var(--f-cond);letter-spacing:.08em;color:var(--ivory);background:var(--ink);border:1.5px solid var(--gold);padding:7px 12px 5px;transform:skewX(-10deg);box-shadow:4px 4px 0 var(--gold);cursor:pointer}
+.ach-btn i{font-style:normal;font-family:var(--f-glyph);color:var(--gold-hi)}
+.ach-btn:hover,.ach-btn:focus-visible{background:var(--gold-hi);color:var(--ink)}
+.ach-btn:hover i,.ach-btn:focus-visible i{color:var(--ink)}
+.ach-btn+.ankh-count{margin-left:10px}
+.am-medal{position:relative;flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#3a3328,#151210 70%);box-shadow:0 0 0 3px #2a241b,0 0 0 5px #0A0A08,inset 0 0 0 2px rgba(244,239,227,.08)}
+.am-medal i{font-style:normal;font-family:var(--f-glyph);font-size:24px;color:rgba(244,239,227,.25)}
+.am-medal.on{background:radial-gradient(circle at 35% 30%,#FFE58A,#F5C842 35%,#C9A227 65%,#7A5C1E);box-shadow:0 0 0 3px #7A5C1E,0 0 0 5px #0A0A08,0 0 16px rgba(245,200,66,.45)}
+.am-medal.on i{color:var(--ink)}
+.am-medal.on::before,.am-medal.on::after{content:"";position:absolute;bottom:-12px;width:14px;height:18px;background:var(--lapis);z-index:-1;clip-path:polygon(0 0,100% 0,100% 100%,50% 75%,0 100%)}
+.am-medal.on::before{left:9px;transform:rotate(14deg)}.am-medal.on::after{right:9px;transform:rotate(-14deg);background:#A8361C}
+.ach-panel,.help{position:absolute;inset:0;z-index:9;display:grid;place-items:center;padding:70px 16px 24px;background:rgba(5,4,3,.78);backdrop-filter:blur(3px)}
+.ach-panel[hidden],.help[hidden]{display:none!important}
+.ach-card,.help-card{box-sizing:border-box;width:min(860px,100%);max-height:100%;display:flex;flex-direction:column;background:var(--ink);border:1.5px solid var(--gold);box-shadow:8px 8px 0 rgba(201,162,39,.4);padding:20px 22px;animation:sheetIn .32s cubic-bezier(.2,.9,.3,1.1) both}
+.ach-head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.ach-head h3,.help-card h3{margin:2px 0 0;font:400 clamp(28px,4vw,42px)/1 var(--f-cond);letter-spacing:.04em;color:var(--ivory)}
+.ach-k{font:700 10px/1.3 var(--f-ui);letter-spacing:.3em;color:var(--gold)}
+.ach-count{margin-left:auto;font:400 26px/1 var(--f-cond);color:var(--ink);background:var(--gold-hi);padding:6px 12px 4px;transform:skewX(-10deg);box-shadow:4px 4px 0 var(--ivory)}
+.ach-head .esc{margin:0 0 4px}
+.ach-bar{height:6px;background:rgba(244,239,227,.12);margin:14px 0 12px;transform:skewX(-20deg)}
+.ach-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-hi))}
+.ach-grid{list-style:none;margin:0;padding:6px 4px 14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--bronze) transparent}
+.ach-it{display:flex;align-items:center;gap:14px;padding:10px 12px 14px;background:rgba(244,239,227,.03);box-shadow:inset 0 0 0 1px rgba(201,162,39,.2)}
+.ach-it.on{background:rgba(201,162,39,.08);box-shadow:inset 0 0 0 1px rgba(245,200,66,.5)}
+.ach-tx{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.ach-tx b{font:400 18px/1 var(--f-cond);letter-spacing:.04em;color:var(--ivory)}
+.ach-it:not(.on) .ach-tx b{color:rgba(244,239,227,.55)}
+.ach-tx em{font:500 12.5px/1.35 var(--f-ui);font-style:normal;color:rgba(244,239,227,.65)}
+.ach-rw{font:400 16px/1 var(--f-cond);color:var(--gold-hi);white-space:nowrap}
+.ach-rw i,.achv-r i{font-style:normal;font-family:var(--f-glyph);margin-right:4px}
+.ach-it:not(.on) .ach-rw{color:rgba(244,239,227,.35)}
+.achv{position:absolute;right:16px;top:70px;z-index:14;display:flex;align-items:center;gap:14px;max-width:min(420px,calc(100% - 32px));box-sizing:border-box;padding:12px 16px 14px 14px;background:var(--ink);border:1.5px solid var(--gold-hi);box-shadow:6px 6px 0 rgba(201,162,39,.55);transform:translateX(calc(100% + 60px)) skewX(-6deg);visibility:hidden;transition:transform .45s cubic-bezier(.2,.9,.3,1.15),visibility 0s .45s;pointer-events:none}
+.achv.on{transform:translateX(0) skewX(-6deg);visibility:visible;transition:transform .45s cubic-bezier(.2,.9,.3,1.15),visibility 0s}
+.achv>*{transform:skewX(6deg)}
+.achv-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.achv-t small{font:700 9.5px/1 var(--f-ui);letter-spacing:.3em;color:var(--gold-hi)}
+.achv-t b{font:400 21px/1 var(--f-cond);letter-spacing:.04em;color:var(--ivory)}
+.achv-t em{font:500 12px/1.3 var(--f-ui);font-style:normal;color:rgba(244,239,227,.7)}
+.achv-r{margin-left:auto;font:400 22px/1 var(--f-cond);color:var(--ink);background:var(--gold-hi);padding:6px 9px 4px;white-space:nowrap}
+.help-card{width:min(640px,100%);overflow:auto;gap:2px}
+.help-card section{border-top:1px dashed rgba(244,239,227,.2);padding:10px 0 4px;margin-top:6px}
+.help-card h4{margin:0 0 4px;font:400 17px/1 var(--f-cond);letter-spacing:.08em;color:var(--gold-hi)}
+.help-card p{margin:0;font:500 14.5px/1.5 var(--f-ui);color:rgba(244,239,227,.86)}
+.help-card .res-btn{align-self:flex-start;margin-top:14px}
+.help-btn[hidden]{display:none}
+.arena-hud .help-btn{margin-left:4px}
+@media (max-width:720px){.ach-grid{grid-template-columns:1fr}.achv{top:auto;bottom:90px;right:12px}.ach-btn{font-size:14px}}
 /* Tarjetas de juego con estética de selección de videojuego */
 .tcard:not(.wide){overflow:visible}
 .tcard:not(.wide) .tcover{transition:filter .25s}
@@ -475,6 +543,10 @@ button{font:inherit;color:inherit}
 .p-sec{display:flex;flex-direction:column;gap:6px;min-width:0}
 .feat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:6px 8px 8px 4px}
 #temple-grid{gap:30px 26px;padding:16px 10px 10px 14px}
+.gc-sep{grid-column:1/-1;display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;margin:14px 0 -6px}
+.gc-sep-k{font:400 clamp(18px,2vw,24px)/1 var(--f-cond);letter-spacing:.06em;color:var(--ink);background:var(--gold);padding:6px 14px 5px;transform:skewX(-8deg);box-shadow:4px 4px 0 rgba(0,0,0,.6)}
+.gc-sep-line{flex:1;min-width:40px;height:2px;background:linear-gradient(90deg,var(--gold),rgba(201,162,39,0))}
+.gc-sep-s{flex-basis:100%;font:500 13px/1.3 var(--f-ui);letter-spacing:.04em;color:rgba(244,236,216,.62)}
 .other-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:920px;padding:6px 8px 8px 4px}
 .pcard{position:relative;display:flex;flex-direction:column;text-align:left;border:0;padding:0;cursor:pointer;min-width:0;
   background:var(--ink);color:var(--ivory);outline:1px solid rgba(244,239,227,.7);box-shadow:7px 7px 0 var(--gold);transform:rotate(var(--rot,0deg));transition:transform .18s cubic-bezier(.3,1.4,.5,1),box-shadow .18s,outline-color .18s}
@@ -748,11 +820,13 @@ button{font:inherit;color:inherit}
       <div class="sec-head">
         <div class="word" id="temple-title"></div>
         <button class="esc" data-back data-t="ui.back"></button>
+        <button class="ach-btn" type="button" id="ach-open"></button>
         <span class="ankh-count" id="ankh-count"></span>
       </div>
       <p class="temple-sub" data-t="temple.sub"></p>
       <div class="feat-grid" id="temple-grid"></div>
     </div>
+    <div class="ach-panel" id="ach-panel" hidden></div>
   </section>
 
   <!-- CASINO -->
@@ -767,8 +841,10 @@ button{font:inherit;color:inherit}
     <div class="arena-hud">
       <span class="tag" id="arena-name"></span>
       <span class="arena-score" id="arena-score"></span>
+      <button class="esc help-btn" id="arena-help" type="button" hidden></button>
       <button class="esc" id="arena-exit" type="button" data-t="temple.exit"></button>
     </div>
+    <div class="help" id="help" hidden></div>
     <div class="arena-loading" id="arena-loading" hidden><span data-t="temple.loading"></span></div>
     <div class="results" id="results" hidden></div>
   </section>
@@ -837,6 +913,7 @@ button{font:inherit;color:inherit}
   <div id="wipe" aria-hidden="true"><i></i><i></i><i></i><span class="wipe-eye">𓂀</span></div>
   <div class="flash" id="flash" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="achv" id="achv" role="status" aria-live="polite"></div>
 </div>
 
 <script>
@@ -921,8 +998,34 @@ const CONTENT={
   },
   temple:{
     title:'TEMPLO',sub:'Minijuegos con la temática del portfolio. Gana ankhs en cada prueba y bate tus récords: se guardan en este navegador.',
-    tag:'MINIJUEGO',practiceTag:'PRÁCTICA',casinoTag:'CASINO',casinoWord:'CASINO',casinoKick:'ZONA DE APUESTAS · ABIERTO TODA LA NOCHE',
-    casinoBand:'PÓKER ✦ BLACKJACK ✦ RULETA ✦ BAZAR DE BASTET ✦ ',casinoGames:[{n:'PÓKER'},{n:'BLACKJACK'},{n:'RULETA'},{n:'SENET',soon:true}],wallet:'TU CARTERA',enterCasino:'ENTRAR AL CASINO ▸',
+    achBtn:'LOGROS',achTitle:'VITRINA DE LOGROS',achSub:'CADA LOGRO DA ANKHS UNA SOLA VEZ',achUnlocked:'LOGRO DESBLOQUEADO',achClose:'ESC · CERRAR',
+    helpBtn:'? REGLAS',helpTitle:'CÓMO SE JUEGA',helpOk:'ENTENDIDO',
+    ach:[
+      {id:'mem-first',name:'Escriba aprendiz',desc:'Completa una partida de Memoria.',glyph:'𓂀',reward:10},
+      {id:'mem-2000',name:'Memoria de elefante',desc:'Consigue 2.000 puntos en Memoria.',glyph:'𓃰',reward:30},
+      {id:'run-500',name:'Patas de chacal',desc:'Recorre 500 m en la Carrera.',glyph:'𓃥',reward:15},
+      {id:'run-1000',name:'Viento del desierto',desc:'Recorre 1.000 m en la Carrera.',glyph:'𓇳',reward:40},
+      {id:'pk-pot',name:'Primer bote',desc:'Gana un bote en la mesa de los dioses.',glyph:'𓆋',reward:10},
+      {id:'pk-flush',name:'Mano divina',desc:'Gana un bote con color o una jugada mejor.',glyph:'𓅝',reward:30},
+      {id:'pk-champ',name:'Campeón de la mesa',desc:'Deja sin fichas a Sobek, Bastet y Thot.',glyph:'𓃠',reward:60},
+      {id:'bj-bj',name:'¡Blackjack!',desc:'Consigue un blackjack contra Anubis.',glyph:'𓁢',reward:15},
+      {id:'bj-double',name:'Doble o nada',desc:'Gana una mano doblando la apuesta.',glyph:'𓍢',reward:15},
+      {id:'bj-2000',name:'La banca tiembla',desc:'Llega a 2.000 fichas en una partida de blackjack.',glyph:'𓋹',reward:40},
+      {id:'rl-pleno',name:'Pleno de Thot',desc:'Acierta un pleno en la ruleta.',glyph:'𓅞',reward:30},
+      {id:'rl-zero',name:'El cero dorado',desc:'Gana una apuesta en la que salga el cero.',glyph:'𓊽',reward:30},
+      {id:'rl-big',name:'Noche de suerte',desc:'Gana 500 fichas o más en una sola tirada.',glyph:'𓆣',reward:40},
+      {id:'sn-win',name:'Revancha negada',desc:'Gana una partida de senet a Jonsu.',glyph:'𓇹',reward:25},
+      {id:'sn-perfect',name:'Eclipse total',desc:'Gana al senet sin que Jonsu saque ninguna pieza.',glyph:'𓇯',reward:60},
+      {id:'cs-first',name:'Bienvenido al casino',desc:'Juega una mesa con ankhs en el casino.',glyph:'𓉐',reward:10},
+      {id:'cs-profit',name:'Te levantas ganando',desc:'Sal de una mesa del casino con 100 ankhs o más de beneficio.',glyph:'𓎛',reward:50},
+      {id:'shop-first',name:'Cliente de Bastet',desc:'Compra algo en el bazar.',glyph:'𓃠',reward:10},
+      {id:'shop-backs',name:'Coleccionista',desc:'Consigue todos los reversos del bazar.',glyph:'𓆓',reward:80},
+      {id:'jc-first',name:'Juez del Duat',desc:'Termina un juicio de las almas.',glyph:'𓁢',reward:15},
+      {id:'jc-perfect',name:'Balanza perfecta',desc:'Acierta las 12 almas de un juicio sin fallar ninguna.',glyph:'𓆄',reward:80},
+      {id:'jc-lines',name:'Ojo de halcón',desc:'Señala 5 líneas exactas con fallo en un mismo juicio.',glyph:'𓂀',reward:40},
+      {id:'all',name:'Peregrino del templo',desc:'Juega a todos los juegos del Templo.',glyph:'𓉗',reward:50}],
+    tag:'MINIJUEGO',practiceTag:'PRÁCTICA',trainHead:'SALA DE ENTRENAMIENTO',trainSub:'Las mesas del casino con fichas gratis: practica sin jugarte ankhs',casinoTag:'CASINO',casinoWord:'CASINO',casinoKick:'ZONA DE APUESTAS · ABIERTO TODA LA NOCHE',
+    casinoBand:'PÓKER ✦ BLACKJACK ✦ RULETA ✦ SENET ✦ BAZAR DE BASTET ✦ ',casinoGames:[{n:'PÓKER'},{n:'BLACKJACK'},{n:'RULETA'},{n:'SENET'}],wallet:'TU CARTERA',enterCasino:'ENTRAR AL CASINO ▸',
     recovered:'Tus fichas de la última mesa ya son ankhs otra vez: +{n} 𓋹',
     sealed:'SELLADO',soon:'SE ABRE PRÓXIMAMENTE',record:'RÉCORD',play:'JUGAR ▸',ankhLabel:'ANKHS',
     exit:'ESC · SALIR',exitTouch:'SALIR',loading:'ABRIENDO LA SALA…',loadError:'NO SE HA PODIDO CARGAR EL JUEGO',
@@ -933,14 +1036,16 @@ const CONTENT={
        short:'Empareja los jeroglíficos antes de que pase el tiempo. Encadena aciertos para multiplicar los puntos.'},
       {id:'carrera',name:'LA CARRERA DEL CHACAL',unit:'m',controls:'Espacio, ↑ o toque para saltar',
        short:'Corre por el desierto, salta escarabajos, cobras y trampas, y recoge todos los ankhs que puedas.'},
+      {id:'juicio',name:'EL JUICIO DE LAS ALMAS',unit:'pts',controls:'Ratón, toque o teclado (L · F · ↑ ↓)',deps:['cartas'],
+       short:'Pesa el corazón de cada alma: ¿código limpio o código con fallos? Decide antes de que se incline la balanza.'},
       {id:'poker',name:'LA MESA DE LOS DIOSES',unit:'fichas',controls:'Ratón, toque o teclado (F · C · R · A)',deps:['cartas'],practice:true,
        short:'Póker Texas Hold\'em contra Sobek, Bastet y Thot. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
       {id:'blackjack',name:'BLACKJACK DE ANUBIS',unit:'fichas',controls:'Ratón, toque o teclado (H · S · D · V)',deps:['cartas'],practice:true,
        short:'Planta cara a la banca de Anubis: pide, plántate, dobla o divide. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
       {id:'ruleta',name:'LA RUEDA DE THOT',unit:'fichas',controls:'Ratón o toque · Enter para girar',deps:['cartas'],practice:true,
        short:'Ruleta europea de un solo cero con Thot de crupier: pleno, docenas, columnas, rojo o negro. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
-      {id:'juicio',name:'EL JUICIO DE LAS ALMAS',unit:'pts',controls:'Próximamente',sealed:true,
-       short:'Pesa el corazón de cada alma: ¿código limpio o código con fallos? Decide antes de que se incline la balanza.'}
+      {id:'senet',name:'EL SENET DE JONSU',unit:'fichas',controls:'Ratón, toque o teclado · Enter para lanzar',deps:['cartas'],practice:true,
+       short:'El juego de mesa de los faraones contra el dios de la Luna: lanza las tablillas, salta casillas sagradas y saca tus piezas antes que Jonsu. Modo práctica con fichas gratis.'}
     ],
     results:{title:'FIN DE LA PRUEBA',newRecord:'¡NUEVO RÉCORD!',best:'RÉCORD',ankhs:'ANKHS GANADOS',retry:'REINTENTAR',exit:'SALIR',practice:'MODO PRÁCTICA',practiceNote:'SIN ANKHS',
       casinoTitle:'TE LEVANTAS DE LA MESA',casinoWin:'¡SALES GANANDO!',buyIn:'ENTRADA',cashOut:'COBRAS',balance:'BALANCE',toCasino:'VOLVER AL CASINO'}
@@ -1256,11 +1361,42 @@ function chanAction(){const c=chans[chanSel];if(!c||c.classList.contains('pendin
 const TEMPLE=(function(){
   const T=CONTENT.temple,KEY='anubis-templo',RATE=10,GIFT=25,DEF_EQ={back:'horus',felt:'lapis'};
   /* Guardado local: ankhs, récords, objetos del bazar y la sesión de casino en curso (si se cierra la página a mitad de mesa) */
-  let data={records:{},ankhs:0,owned:[],equip:Object.assign({},DEF_EQ),gift:'',session:null};
+  let data={records:{},ankhs:0,owned:[],equip:Object.assign({},DEF_EQ),gift:'',session:null,ach:{},played:[]};
   try{const j=JSON.parse(localStorage.getItem(KEY)||'null');if(j&&typeof j==='object')data={records:(j.records&&typeof j.records==='object')?j.records:{},ankhs:Math.max(0,Math.floor(+j.ankhs||0)),
     owned:Array.isArray(j.owned)?j.owned.filter(x=>typeof x==='string'):[],equip:Object.assign({},DEF_EQ,(j.equip&&typeof j.equip==='object')?j.equip:{}),gift:typeof j.gift==='string'?j.gift:'',
-    session:(j.session&&typeof j.session==='object')?{game:String(j.session.game||''),chips:Math.max(0,Math.floor(+j.session.chips||0)),buy:Math.max(0,Math.floor(+j.session.buy||0))}:null}}catch(e){}
+    session:(j.session&&typeof j.session==='object')?{game:String(j.session.game||''),chips:Math.max(0,Math.floor(+j.session.chips||0)),buy:Math.max(0,Math.floor(+j.session.buy||0))}:null,
+    ach:(j.ach&&typeof j.ach==='object')?j.ach:{},played:Array.isArray(j.played)?j.played.filter(x=>typeof x==='string'):[]}}catch(e){}
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}};
+  /* --- Logros --- */
+  const ACH=T.ach,achQ=[];let achBusy=false;
+  function unlock(id){const a=ACH.find(x=>x.id===id);if(!a||data.ach[id])return;data.ach[id]=Date.now();data.ankhs+=a.reward;save();achQ.push(a);nextAch();paintAnkhs();paintAchBtn()}
+  function nextAch(){if(achBusy||!achQ.length)return;achBusy=true;const a=achQ.shift(),el=$('#achv');
+    el.innerHTML='<span class="am-medal on"><i>'+a.glyph+'</i></span><span class="achv-t"><small>'+esc(T.achUnlocked)+'</small><b>'+esc(a.name)+'</b><em>'+esc(a.desc)+'</em></span><span class="achv-r"><i>𓋹</i>+'+a.reward+'</span>';
+    el.classList.remove('on');void el.offsetWidth;el.classList.add('on');sfx.start();
+    setTimeout(()=>{el.classList.remove('on');setTimeout(()=>{achBusy=false;nextAch()},450)},3600)}
+  function markPlayed(id){if(!data.played.includes(id)){data.played.push(id);save()}if(T.games.filter(g=>!g.casino&&!g.sealed).every(g=>data.played.includes(g.id)))unlock('all')}
+  function paintAchBtn(){const b=$('#ach-open');if(b)b.innerHTML='<i>𓋹</i>'+esc(T.achBtn)+' · '+Object.keys(data.ach).filter(k=>ACH.some(a=>a.id===k)).length+'/'+ACH.length}
+  function openAch(){const box=$('#ach-panel');const got=ACH.filter(a=>data.ach[a.id]).length;
+    box.innerHTML='<div class="ach-card" role="dialog" aria-label="'+esc(T.achTitle)+'"><div class="ach-head"><div><div class="ach-k">'+esc(T.achSub)+'</div><h3>'+esc(T.achTitle)+'</h3></div><span class="ach-count">'+got+' / '+ACH.length+'</span><button class="esc" type="button" id="ach-close">'+esc(touchUI()?T.exitTouch:T.achClose)+'</button></div>'+
+      '<div class="ach-bar"><i style="width:'+(got/ACH.length*100).toFixed(1)+'%"></i></div><ul class="ach-grid">'+ACH.map(a=>{const on=!!data.ach[a.id];
+        return '<li class="ach-it'+(on?' on':'')+'"><span class="am-medal'+(on?' on':'')+'"><i>'+(on?a.glyph:'?')+'</i></span><span class="ach-tx"><b>'+esc(a.name)+'</b><em>'+esc(a.desc)+'</em></span><span class="ach-rw"><i>𓋹</i>'+a.reward+'</span></li>'}).join('')+'</ul></div>';
+    box.hidden=false;sfx.confirm();$('#ach-close').addEventListener('click',closeAch);setTimeout(()=>{const c=$('#ach-close');c&&c.focus({preventScroll:true})},50)}
+  function closeAch(){$('#ach-panel').hidden=true;sfx.back()}
+  $('#ach-panel').addEventListener('click',e=>{if(e.target.id==='ach-panel')closeAch()});
+  /* --- Ayuda de los juegos --- */
+  let helpImpl=null;
+  function openHelp(){const g=T.games.find(x=>x.id===(current&&current._id));if(!helpImpl||!helpImpl.help)return;const box=$('#help');
+    box.innerHTML='<div class="help-card" role="dialog" aria-label="'+esc(T.helpTitle)+'"><div class="ach-k">'+esc(T.helpTitle)+'</div><h3>'+esc(g?g.name:'')+'</h3>'+
+      helpImpl.help.map(h=>'<section><h4>'+esc(h.t)+'</h4><p>'+esc(h.p)+'</p></section>').join('')+
+      '<button class="res-btn" type="button" id="help-ok">'+esc(T.helpOk)+'<kbd>ESC</kbd></button></div>';
+    box.hidden=false;sfx.confirm();$('#help-ok').addEventListener('click',closeHelp);setTimeout(()=>{const b=$('#help-ok');b&&b.focus({preventScroll:true})},50)}
+  function closeHelp(){$('#help').hidden=true;sfx.back()}
+  $('#arena-help').addEventListener('click',openHelp);
+  $('#ach-open').addEventListener('click',openAch);
+  $('#help').addEventListener('click',e=>{if(e.target.id==='help')closeHelp()});
+  addEventListener('keydown',e=>{const h=$('#help'),a=$('#ach-panel');
+    if(!h.hidden){e.stopImmediatePropagation();if(e.key==='Escape'||e.key==='Enter'||e.key==='Backspace'){e.preventDefault();closeHelp()}return}
+    if(!a.hidden){e.stopImmediatePropagation();if(e.key==='Escape'||e.key==='Enter'||e.key==='Backspace'){e.preventDefault();closeAch()}else if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();a.querySelector('.ach-grid').scrollBy({top:e.key==='ArrowDown'?120:-120})}}},true);
   let recovered=0;if(data.session){recovered=Math.floor(data.session.chips/RATE);data.ankhs+=recovered;data.session=null;save()}
   const impls={};window.TEMPLO={register(id,impl){impls[id]=impl}};
   const fmtN=n=>Number(n||0).toLocaleString('es-ES');
@@ -1283,7 +1419,10 @@ const TEMPLE=(function(){
     if(g.id==='carrera')return '<div class="tcover run" aria-hidden="true"><div class="moon"></div><div class="pyr" style="left:44%;width:30%;height:34%"></div><div class="pyr" style="left:66%;width:20%;height:22%"></div><div class="gl"></div><div class="hero"></div></div>';
     if(g.id==='blackjack')return '<div class="tcover felt bj" aria-hidden="true"><i class="rail"></i><span class="mc" data-r="A" style="left:33%;top:24%;--rt:-12deg">𓋹</span><span class="mc fc" data-r="K" style="left:47%;top:20%;--rt:9deg">𓁢</span><b class="v21">21</b><i class="ch" style="right:14%;bottom:16%"></i><i class="ch b" style="right:19%;bottom:22%"></i></div>';
     if(g.id==='poker')return '<div class="tcover felt pk" aria-hidden="true"><i class="rail"></i>'+['10','J','Q','K','A'].map((r,i)=>'<span class="mc'+(i>0&&i<4?' fc':'')+'" data-r="'+r+'" style="left:'+(29+i*8.5)+'%;top:22%;--rt:'+((i-2)*11)+'deg">'+(i>0&&i<4?['𓁢','𓁐','𓁚'][i-1]:'𓋹')+'</span>').join('')+'<i class="ch" style="left:12%;bottom:14%"></i><i class="ch" style="left:12%;bottom:20%"></i><i class="ch b" style="left:17%;bottom:12%"></i></div>';
+    if(g.id==='senet'){let sq='';for(let i=0;i<30;i++){const sp={14:'𓋹',25:'𓄤',26:'𓈗',29:'𓇳'}[i];sq+='<i class="'+(sp?(i===26?'w':'g'):'')+'">'+(sp||'')+'</i>'}
+      return '<div class="tcover sn" aria-hidden="true"><div class="snb">'+sq+'</div><span class="cn" style="left:23%;top:30%"></span><span class="cn" style="left:47%;top:51%"></span><span class="spl" style="left:35%;top:30%"></span><span class="spl" style="left:65%;top:72%"></span><div class="stk"><b></b><b class="d"></b><b></b><b></b></div></div>'}
     if(g.id==='ruleta')return '<div class="tcover felt rl" aria-hidden="true"><i class="rail"></i><span class="whs">'+miniWheel('')+'</span><span class="rn" style="left:62%;top:20%;background:#A8361C">17</span><span class="rn" style="left:70%;top:34%;background:#0A0A08">8</span><span class="rn" style="left:61%;top:48%;background:#B8901F">0</span><i class="ch" style="left:76%;bottom:14%"></i><i class="ch b" style="left:80%;bottom:20%"></i></div>';
+    if(g.id==='juicio')return '<div class="tcover jc" aria-hidden="true"><img class="aj" src="juegos/juicio/anubis-juez.webp" alt="" decoding="async" loading="lazy"><div class="sc">'+SCALE+'</div><img class="am" src="juegos/juicio/ammit.webp" alt="" decoding="async" loading="lazy"><span class="cd">if (a == b)</span></div>';
     return '<div class="tcover judge" aria-hidden="true">'+SCALE+'</div>'}
   function casinoBanner(g){const crew=[['jonsu','s'],['thot','s'],['anubis','a'],['bastet','s']];
     return '<span class="p-tag">'+esc(T.casinoTag)+'</span><div class="cbn"><div class="cbn-bg" aria-hidden="true"></div><div class="cbn-ht" aria-hidden="true"></div>'+
@@ -1293,7 +1432,10 @@ const TEMPLE=(function(){
       '<p class="cbn-p">'+esc(g.short)+'</p><div class="cbn-games">'+T.casinoGames.map(x=>'<span'+(x.soon?' class="soon"':'')+'>'+esc(x.n)+'</span>').join('')+'</div>'+
       '<div class="cbn-foot"><span class="cbn-go">'+esc(T.enterCasino)+'</span><span class="cbn-wallet"><i>𓋹</i>'+fmtN(data.ankhs)+' '+esc(T.ankhLabel)+'</span></div></div></div>'}
   function render(){grid.textContent='';
-    T.games.forEach((g,i)=>{const b=document.createElement('button');b.type='button';b.className='pcard tcard'+(g.sealed?' sealed':'')+(g.casino?' wide':'');b.style.setProperty('--i',i);
+    let sep=false;
+    T.games.forEach((g,i)=>{if(g.practice&&!sep){sep=true;const d=document.createElement('div');d.className='gc-sep';d.setAttribute('role','presentation');
+        d.innerHTML='<span class="gc-sep-k">'+esc(T.trainHead)+'</span><span class="gc-sep-line" aria-hidden="true"></span><span class="gc-sep-s">'+esc(T.trainSub)+'</span>';grid.append(d)}
+      const b=document.createElement('button');b.type='button';b.className='pcard tcard'+(g.sealed?' sealed':'')+(g.casino?' wide':'');b.style.setProperty('--i',i);
       const rec=data.records[g.id],tag=g.sealed?T.sealed:g.casino?T.casinoTag:g.practice?T.practiceTag:T.tag;
       const foot=g.casino?'<span class="p-status">'+esc(T.wallet)+' · 𓋹 '+fmtN(data.ankhs)+'</span><span class="p-go">'+esc(T.enterCasino)+'</span>':
         '<span class="p-status'+(g.sealed?' dev':'')+'">'+(g.sealed?esc(T.soon):esc(T.record)+' · '+(rec?fmtN(rec)+' '+esc(g.unit):'—'))+'</span><span class="p-go">'+(g.sealed?'':esc(T.play))+'</span>';
@@ -1304,9 +1446,9 @@ const TEMPLE=(function(){
         '<div class="gc-foot"><span class="gc-rec'+(g.sealed?' dev':'')+'">'+recTxt+'</span>'+(g.sealed?'':'<span class="gc-play">'+esc(T.play)+'</span>')+'</div></div>';
       if(g.sealed)b.setAttribute('aria-disabled','true');
       b.addEventListener('mouseenter',()=>selT(i,true));b.addEventListener('click',()=>playGame(i));grid.append(b)});
-    paintAnkhs();
+    paintAnkhs();paintAchBtn();
     if(recovered){const n=recovered;recovered=0;setTimeout(()=>showToast(T.recovered.replace('{n}',n)),700)}}
-  function paintAnkhs(){$('#ankh-count').innerHTML='<i>𓋹</i>'+fmtN(data.ankhs)+' '+esc(T.ankhLabel)}
+  function paintAnkhs(){$('#ankh-count').innerHTML='<i>𓋹</i>'+fmtN(data.ankhs)+' '+esc(T.ankhLabel);const w=$('.cbn-wallet');if(w)w.innerHTML='<i>𓋹</i>'+fmtN(data.ankhs)+' '+esc(T.ankhLabel)}
   function selT(i,sound){const cs=$$('.tcard',grid);if(i===tSel&&cs[i]&&cs[i].classList.contains('sel'))return;cs.forEach((c,k)=>c.classList.toggle('sel',k===i));tSel=i;if(sound&&i>=0)sfx.tick();
     if(i>=0&&cs[i])cs[i].scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'})}
   function playGame(i){const g=T.games[i];if(!g)return;if(g.sealed){sfx.back();return}sfx.confirm();if(g.casino){go('casino');return}go('arena',{game:g.id})}
@@ -1322,16 +1464,18 @@ const TEMPLE=(function(){
   function enter(id,cas){const g=T.games.find(x=>x.id===id);if(!g)return;casino=cas&&data.session?{game:id,buy:data.session.buy}:null;
     $('#arena-name').textContent=g.name+(casino?' · '+T.casinoTag:'');$('#arena-exit').textContent=touchUI()?T.exitTouch:T.exit;$('#arena-score').textContent='';$('#results').hidden=true;
     const ld=$('#arena-loading');ld.querySelector('span').textContent=T.loading;ld.hidden=false;
-    load(id).then(impl=>{if(app.dataset.screen!=='arena')return;ld.hidden=true;stopGame();applyCos();
+    $('#arena-help').hidden=true;$('#help').hidden=true;helpImpl=null;
+    load(id).then(impl=>{if(app.dataset.screen!=='arena')return;ld.hidden=true;stopGame();applyCos();helpImpl=impl;$('#arena-help').hidden=!impl.help;$('#arena-help').textContent=touchUI()?'?':T.helpBtn;$('#arena-help').setAttribute('aria-label',T.helpTitle);
       const cApi=casino?{chips:data.session.chips,buy:casino.buy,rate:RATE,save:c=>{if(data.session){data.session.chips=Math.max(0,Math.floor(c));save()}}}:null;
-      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,collage,casino:cApi,duck:()=>music.duck(),t:k=>(impl.texts&&impl.texts[k])||k,
-        setScore:txt=>{$('#arena-score').innerHTML=esc(txt).replace(/𓋹/g,'<i class="g">𓋹</i>')},finish:r=>casino?casinoResults(g,r):showResults(g,r)})})
+      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,collage,casino:cApi,ach:unlock,duck:()=>music.duck(),t:k=>(impl.texts&&impl.texts[k])||k,
+        setScore:txt=>{$('#arena-score').innerHTML=esc(txt).replace(/𓋹/g,'<i class="g">𓋹</i>')},finish:r=>casino?casinoResults(g,r):showResults(g,r)});current._id=id})
       .catch(()=>{ld.querySelector('span').textContent=T.loadError;if(casino)settle(data.session?data.session.chips:0)})}
   function stopGame(){if(current){try{current.stop()}catch(e){}current=null}}
   function settle(chips){if(!data.session)return null;const cash=Math.floor(Math.max(0,chips)/RATE),buy=data.session.buy;data.ankhs+=cash;data.session=null;save();return{cash,buy}}
   function playCasino(id,buy){buy=Math.floor(buy);if(busy||!(buy>=1)||buy>data.ankhs||data.session)return false;
     data.ankhs-=buy;data.session={game:id,chips:buy*RATE,buy};save();go('arena',{game:id,casino:true});return true}
   function showResults(g,r){const R=T.results,prev=+data.records[g.id]||0,isNew=r.score>prev,earned=Math.max(0,r.ankhs|0);resCasino=false;
+    markPlayed(g.id);if(g.id==='memoria'){unlock('mem-first');if(r.score>=2000)unlock('mem-2000')}if(g.id==='carrera'){if(r.score>=500)unlock('run-500');if(r.score>=1000)unlock('run-1000')}
     if(isNew)data.records[g.id]=r.score;data.ankhs+=earned;save();
     if(isNew)sfx.start();else sfx.confirm();
     let portrait='';if(isNew&&r.portrait){const p=r.portrait,bx=p.x/(p.sheetW-p.w)*100,by=p.y/(p.sheetH-p.h)*100;
@@ -1346,6 +1490,7 @@ const TEMPLE=(function(){
       '<div class="res-btns"><button class="res-btn" type="button" id="res-retry">'+esc(R.retry)+'<kbd>ENTER</kbd></button><button class="res-btn alt" type="button" id="res-exit">'+esc(R.exit)+'<kbd>ESC</kbd></button></div></div>';
     box.hidden=false;$('#res-retry').addEventListener('click',retry);$('#res-exit').addEventListener('click',exit);setTimeout(()=>{const b=$('#res-retry');b&&b.focus({preventScroll:true})},50)}
   function casinoResults(g,r){const R=T.results,s=settle(r.chips)||{cash:0,buy:casino?casino.buy:0},bal=s.cash-s.buy;resCasino=true;
+    markPlayed(g.id);unlock('cs-first');if(bal>=100)unlock('cs-profit');
     if(bal>0)sfx.start();else sfx.confirm();
     const box=$('#results');
     box.innerHTML='<div class="res-card" role="dialog" aria-label="'+esc(R.casinoTitle)+'"><div class="res-k"><span>'+esc(R.casinoTitle)+'</span>'+(bal>0?'<span class="res-new">'+esc(R.casinoWin)+'</span>':'')+'</div>'+
@@ -1365,7 +1510,8 @@ const TEMPLE=(function(){
   const host={base:'juegos/',reduced,sfx,tone,noise,collage,esc,
     get ankhs(){return data.ankhs},get equip(){return Object.assign({},data.equip)},
     owned:k=>data.owned.includes(k),
-    buy(k,price){price=Math.floor(price);if(data.owned.includes(k)||!(price>0)||price>data.ankhs)return false;data.ankhs-=price;data.owned.push(k);save();return true},
+    buy(k,price){price=Math.floor(price);if(data.owned.includes(k)||!(price>0)||price>data.ankhs)return false;data.ankhs-=price;data.owned.push(k);save();unlock('shop-first');
+      const C=window.TEMPLO_LIB&&window.TEMPLO_LIB.cartas;if(C&&Object.keys(C.BACKS).filter(b=>C.BACKS[b].price>0).every(b=>data.owned.includes('back:'+b)))unlock('shop-backs');return true},
     equipSet(slot,id){if(slot!=='back'&&slot!=='felt')return;data.equip[slot]=id;save();applyCos()},
     giftAvailable:()=>data.ankhs<10&&data.gift!==today(),
     takeGift(){if(!(data.ankhs<10&&data.gift!==today()))return 0;data.ankhs+=GIFT;data.gift=today();save();return GIFT},
@@ -1376,7 +1522,7 @@ const TEMPLE=(function(){
     lib('cartas').then(()=>script('casino',()=>!!window.TEMPLO_CASINO)).then(()=>{ld.hidden=true;applyCos();casinoUI=window.TEMPLO_CASINO.mount($('#casino-stage'),host)})
       .catch(()=>{ld.querySelector('span').textContent=T.loadError})}
   function casinoKey(e){if(casinoUI)return casinoUI.key(e);if(e.key==='Escape'||e.key==='Backspace'){e.preventDefault();host.back();return true}return false}
-  return{render,selT,playGame,enter,exit,retry,openCasino,casinoKey,get sel(){return tSel},get count(){return T.games.length},get resultsOpen(){return !$('#results').hidden}};
+  return{render,selT,playGame,enter,exit,retry,openCasino,casinoKey,openAch,unlock,get sel(){return tSel},get count(){return T.games.length},get resultsOpen(){return !$('#results').hidden}};
 })();
 
 /* ---------- Navegación entre pantallas ---------- */

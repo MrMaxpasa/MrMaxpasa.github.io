@@ -168,10 +168,10 @@ function create(stage,api){
       else if(dv>21||pv>dv){res='w';p=h.bet*2}
       else if(pv===dv){res='p';p=h.bet}
       else res='l';
-      pay+=p;if(res==='w')anyWin=true;
+      pay+=p;if(res==='w'){anyWin=true;if(h.doubled&&api.ach)api.ach('bj-double')}
       const tag=document.createElement('div');tag.className='bj-res '+res;tag.textContent=res==='w'?'+'+fmt(p-h.bet):res==='p'?(dBJ&&!isBJ(h)?T('refund'):T('push')):'−'+fmt(lost);h.el.append(tag);
       if(res!=='p')h.cardsEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add(res==='l'?'dim':'win'))});
-    chips+=pay;persist();const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
+    chips+=pay;persist();if(api.ach){if(bj)api.ach('bj-bj');if(chips>=2000)api.ach('bj-2000')}const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
     if(bj){C.banner(root,api,'¡BLACKJACK!','+'+fmt(net)+' '+T('unit'),true);S.big()}
     else if(net>0){C.banner(root,api,dv>21?T('dealerBust'):T('youWin'),'+'+fmt(net)+' '+T('unit'),true);S.win();S.chip(3)}
     else if(net===0&&pay>0){C.banner(root,api,T('pushBig'));S.push()}
@@ -192,7 +192,12 @@ function create(stage,api){
   start();
   return{restart:start,cashout:()=>chips,stop(){gen++;done=true;removeEventListener('keydown',kd);root.remove()}};
 }
-window.TEMPLO.register('blackjack',{create,texts:{
+window.TEMPLO.register('blackjack',{create,help:[
+  {t:'OBJETIVO',p:'Acercarte a 21 más que Anubis sin pasarte. Las figuras valen 10 y el as vale 1 u 11, lo que más te convenga.'},
+  {t:'LA MANO',p:'Eliges tu apuesta y recibes dos cartas boca arriba. La banca recibe una boca arriba y otra boca abajo, que solo destapa cuando terminas.'},
+  {t:'TUS ACCIONES',p:'PEDIR: otra carta. PLANTARSE: te quedas como estás. DOBLAR: doblas la apuesta y recibes una sola carta más. DIVIDIR: con dos cartas del mismo valor, las separas en dos manos con la misma apuesta cada una.'},
+  {t:'LA BANCA',p:'Anubis pide carta hasta tener 17 o más y entonces se planta. Si se pasa de 21, ganan todas tus manos que sigan en juego.'},
+  {t:'PAGOS',p:'Ganar paga 1 a 1. Blackjack (as + figura o 10 con las dos primeras cartas) paga 3 a 2. Empate: recuperas la apuesta. Si la banca tiene blackjack, solo pierdes la apuesta inicial: lo doblado o dividido se te devuelve.'}],texts:{
   unit:'fichas',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',hit:'PEDIR',stand:'PLANTARSE',double:'DOBLAR',split:'DIVIDIR',
   bust:'TE PASAS',dOver:'SE PASA',refund:'DEVUELTA',dealerBJ:'¡BLACKJACK DE LA BANCA!',push:'EMPATE',pushBig:'EMPATE',youWin:'¡GANAS!',dealerBust:'¡LA BANCA SE PASA!',houseWins:'GANA LA BANCA',busted:'TE HAS PASADO',
   betHint:'ELIGE TU APUESTA Y REPARTE',addChip:'Añadir {v} fichas a la apuesta',

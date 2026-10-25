@@ -247,7 +247,8 @@ function create(stage,api){
     st.spins++;
     let pay=0,stake=0,bestWin=0,topPay=0;const winIds=[];
     Object.entries(bets).forEach(([id,v])=>{stake+=v;if(BETS[id].nums.includes(n)){const p=v*(BETS[id].pay+1);pay+=p;bestWin=Math.max(bestWin,p-v);topPay=Math.max(topPay,BETS[id].pay);winIds.push(id)}});
-    const net=pay-stake;chips+=pay;st.max=Math.max(st.max,chips);if(pay>0)st.hits++;st.best=Math.max(st.best,bestWin);
+    const net=pay-stake;chips+=pay;st.max=Math.max(st.max,chips);
+    if(api.ach&&pay>0){if(winIds.some(id=>BETS[id].pay===35))api.ach('rl-pleno');if(n===0)api.ach('rl-zero');if(net>=500)api.ach('rl-big')}if(pay>0)st.hits++;st.best=Math.max(st.best,bestWin);
     const col=colorOf(n),cname=col==='g'?T('zero'):col==='r'?T('red'):T('black');
     const dot=document.createElement('i');dot.style.background=FILL[col];dot.textContent=n;hist.prepend(dot);while(hist.children.length>12)hist.lastChild.remove();
     await C.wait(big?650:250);if(g!==gen)return;
@@ -277,7 +278,13 @@ function create(stage,api){
   start();
   return{restart:start,cashout:()=>chips+(phase==='bet'?tableTotal():0),stop(){gen++;done=true;cancelAnimationFrame(raf);clearTimeout(flashT);removeEventListener('keydown',kd);root.remove()}};
 }
-window.TEMPLO.register('ruleta',{create,texts:{
+window.TEMPLO.register('ruleta',{create,help:[
+  {t:'OBJETIVO',p:'Adivinar dónde caerá la bola. Es una ruleta europea: 37 casillas (del 0 al 36) y un solo cero.'},
+  {t:'CÓMO APOSTAR',p:'Elige una ficha y toca el tapete. Puedes apostar en un número, en el borde entre dos, en el cruce de cuatro, en el borde exterior de una fila o en las apuestas de fuera. Al pasar por encima verás qué números cubre y cuánto paga. Con el botón derecho quitas una ficha.'},
+  {t:'APUESTAS Y PAGOS',p:'Pleno (1 número) 35:1 · Caballo (2) 17:1 · Transversal (3) 11:1 · Cuadro (4) 8:1 · Seisena (6) 5:1 · Docena y columna (12) 2:1 · Rojo/negro, par/impar, 1-18/19-36 (18) 1:1.'},
+  {t:'EL CERO',p:'Si sale el cero, pierden las apuestas sencillas (rojo/negro, par/impar, 1-18/19-36). Ganan las que incluyan el 0.'},
+  {t:'BOTONES',p:'GIRAR lanza la bola. DESHACER quita la última ficha. BORRAR quita todas. REPETIR vuelve a poner la apuesta de la tirada anterior.'},
+  {t:'JUEGO LIMPIO',p:'Cada número sale con la misma probabilidad, con el generador aleatorio seguro del navegador. La ventaja de la casa es la de cualquier ruleta europea: un 2,7 %.'}],texts:{
   unit:'fichas',spin:'GIRAR',undo:'DESHACER',clear:'BORRAR',repeat:'REPETIR',leave:'RETIRARSE',onTable:'EN LA MESA',tag:'TAPETE · RULETA EUROPEA',
   red:'ROJO',black:'NEGRO',zero:'CERO',noWin:'SIN PREMIO',pays:'PAGA {p} A 1',
   legend:'PLENO 35:1 · CABALLO 17:1 · TRANSVERSAL 11:1 · CUADRO 8:1 · SEISENA 5:1 · DOCENA Y COLUMNA 2:1 · SENCILLAS 1:1',

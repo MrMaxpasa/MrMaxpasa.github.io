@@ -37,6 +37,8 @@ const PIPS={2:[[50,30],[50,110]],3:[[50,30],[50,70],[50,110]],4:[[30,30],[70,30]
   7:[[30,30],[70,30],[50,50],[30,70],[70,70],[30,110],[70,110]],8:[[30,30],[70,30],[50,50],[30,70],[70,70],[50,90],[30,110],[70,110]],
   9:[[30,30],[70,30],[30,56.7],[70,56.7],[50,70],[30,83.3],[70,83.3],[30,110],[70,110]],
   10:[[30,30],[70,30],[50,43],[30,56.7],[70,56.7],[30,83.3],[70,83.3],[50,97],[30,110],[70,110]]};
+const IMG='juegos/cartas/';
+const FIG={K:{img:'k-horus.webp',name:'HORUS'},Q:{img:'q-isis.webp',name:'ISIS'},J:{img:'j-sobek.webp',name:'SOBEK'}};
 const FRONT_CACHE={};
 function frontSVG(c){const key=c.r+c.s;if(FRONT_CACHE[key])return FRONT_CACHE[key];
   const S=SUITS.find(x=>x.k===c.s),col=S.color,sym='<g fill="currentColor">'+SYM[c.s]+'</g>';
@@ -45,9 +47,13 @@ function frontSVG(c){const key=c.r+c.s;if(FRONT_CACHE[key])return FRONT_CACHE[ke
   let mid='';
   if(PIPS[c.r])mid=PIPS[c.r].map(([x,y])=>use(x,y,20,y>75)).join('');
   else if(c.r==='A')mid='<ellipse cx="50" cy="70" rx="27" ry="37" fill="none" stroke="#C9A227" stroke-width="2.4"/><ellipse cx="50" cy="70" rx="23" ry="33" fill="none" stroke="#0A0A08" stroke-width=".8" stroke-dasharray="2 2.6"/><path d="M38 113h24" stroke="#C9A227" stroke-width="2.4"/>'+use(50,68,40);
-  else mid='<rect x="19" y="13" width="62" height="114" rx="3" fill="#0A0A08"/><rect x="22.5" y="16.5" width="55" height="107" rx="2" fill="none" stroke="#C9A227" stroke-width="1.2"/>'+
-    '<svg x="20" y="27" width="60" height="90" viewBox="0 0 60 90"><g fill="#C9A227">'+FACES[c.r]+COLLAR+'</g></svg>'+
-    '<g style="color:'+(c.s==='a'?'#F5C842':col)+'">'+use(30,24,11)+'</g><text x="68" y="28" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="13" fill="#F5C842">'+c.r+'</text>';
+  else{const F=FIG[c.r];/* figura ilustrada dentro de un marco de tinta con su nombre */
+    mid='<rect x="19" y="13" width="62" height="114" rx="3" fill="#0A0A08"/><svg x="20.5" y="14.5" width="59" height="111" viewBox="0 0 59 111" preserveAspectRatio="none"><rect width="59" height="111" fill="url(#tcFig)"/>'+
+    '<image href="'+IMG+F.img+'" x="-6" y="2" width="71" height="109" preserveAspectRatio="xMidYMin slice"/></svg>'+
+    '<rect x="22.5" y="16.5" width="55" height="107" rx="2" fill="none" stroke="#C9A227" stroke-width="1.2"/>'+
+    '<rect x="19" y="112" width="62" height="15" fill="#0A0A08"/><path d="M19 112h62" stroke="#C9A227" stroke-width="1.2"/>'+
+    '<text x="50" y="123.5" text-anchor="middle" font-family="Anton,Impact,sans-serif" font-size="9.5" letter-spacing="1.6" fill="#F5C842">'+F.name+'</text>'+
+    '<g style="color:'+(c.s==='a'?'#F5C842':col)+'">'+use(73,21,10)+'</g>'}
   const svg='<svg viewBox="0 0 100 140" style="color:'+col+'" aria-hidden="true"><rect x="1" y="1" width="98" height="138" rx="7" fill="#EEE4CB"/>'+
     '<rect x="1" y="1" width="98" height="138" rx="7" fill="url(#tcPap)"/><rect x="4.5" y="4.5" width="91" height="131" rx="4.5" fill="none" stroke="#C9A227" stroke-width="1.1" opacity=".75"/>'+
     mid+corner+'<g transform="rotate(180 50 70)">'+corner+'</g></svg>';
@@ -63,10 +69,12 @@ const frame=(bg,line,inner)=>'<rect x="1" y="1" width="98" height="138" rx="7" f
 const RAYS=(()=>{let r='';for(let i=0;i<24;i++){const a=i*Math.PI/12;r+='<path d="M'+(50+Math.cos(a)*15).toFixed(1)+' '+(70+Math.sin(a)*15).toFixed(1)+'L'+(50+Math.cos(a)*(i%2?24:31)).toFixed(1)+' '+(70+Math.sin(a)*(i%2?24:31)).toFixed(1)+'" stroke="#F5C842" stroke-width="'+(i%2?1:1.8)+'"/>'}return r})();
 const BACKS={
   horus:{name:'Ojo de Horus',price:0,svg:BACK_SVG},
-  lapis:{name:'Lapislázuli',price:60,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('#173a7c','#C9A227','rgba(245,200,66,.45)')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcLat)"/><circle cx="50" cy="70" r="22" fill="#0e2657" stroke="#C9A227" stroke-width="1.8"/><circle cx="50" cy="70" r="18" fill="none" stroke="rgba(245,200,66,.5)" stroke-width=".8" stroke-dasharray="2 2"/>'+sv('e',35,55,30,'#F5C842')+'</svg>'},
-  papiro:{name:'Papiro real',price:90,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('#E6D7B3','#0A0A08','#A8361C')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcPap)"/><path d="M50 26 78 70 50 114 22 70z" fill="none" stroke="#0A0A08" stroke-width="1.4"/>'+sv('o',31,51,38,'#A8361C')+sv('a',14,13,12,'#0A0A08')+sv('a',74,115,12,'#0A0A08')+'</svg>'},
-  obsidiana:{name:'Obsidiana',price:140,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcObs)','#C9A227','#7A5C1E')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcAnkh)"/><path d="M50 36 70 48 70 92 50 104 30 92 30 48z" fill="#0A0A08" stroke="#F5C842" stroke-width="1.6"/>'+sv('a',34,52,32,'#F5C842')+'</svg>'},
-  sol:{name:'Sol de Ra',price:200,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcSun)','#F5C842','rgba(245,200,66,.4)')+RAYS+'<circle cx="50" cy="70" r="13" fill="#F5C842"/><circle cx="50" cy="70" r="9" fill="none" stroke="#6b1d12" stroke-width="1.2"/><path d="M50 14l3 4-3 4-3-4zM50 118l3 4-3 4-3-4z" fill="#F5C842"/></svg>'},
+  lapis:{name:'Anubis lapislázuli',price:60,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-lapis.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
+  papiro:{name:'Anubis de papiro',price:90,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-papiro.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
+  nilo:{name:'Jardín del Nilo',price:120,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-nilo.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
+  obsidiana:{name:'Anubis de obsidiana',price:140,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-obsidiana.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
+  sol:{name:'Sol de Ra',price:200,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-sol.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
+  luna:{name:'Noche de Jonsu',price:240,svg:'<svg viewBox="0 0 100 140" aria-hidden="true"><rect width="100" height="140" rx="7" fill="#0A0A08"/><image href="'+IMG+'back-luna.webp" width="100" height="140" preserveAspectRatio="xMidYMid slice"/></svg>'},
   oro:{name:'Oro del faraón',price:350,svg:'<svg viewBox="0 0 100 140" aria-hidden="true">'+frame('url(#tcGold)','#0A0A08','rgba(10,10,8,.5)')+'<rect x="9" y="9" width="82" height="122" fill="url(#tcDotsInk)"/><path d="M50 30 80 70 50 110 20 70z" fill="#0A0A08" stroke="#0A0A08" stroke-width="1.6"/><path d="M50 37 74.5 70 50 103 25.5 70z" fill="none" stroke="#C9A227" stroke-width=".9"/>'+sv('o',33,53,34,'#F5C842')+'</svg>'}};
 const FELTS={
   lapis:{name:'Lapislázuli',price:0,c:['#1d3f7a','#122a55','#0b1a36','#060d1c']},
@@ -83,6 +91,7 @@ const DEFS='<svg width="0" height="0" style="position:absolute" aria-hidden="tru
   '<pattern id="tcDotsInk" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".8" fill="rgba(10,10,8,.28)"/></pattern>'+
   '<pattern id="tcLat" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H10M0 0V10" stroke="rgba(245,200,66,.22)" stroke-width=".8"/></pattern>'+
   '<pattern id="tcAnkh" width="12" height="14" patternUnits="userSpaceOnUse"><svg width="7" height="7" x="2.5" y="3.5" viewBox="0 0 24 24"><g fill="rgba(201,162,39,.28)">'+SYM.a+'</g></svg></pattern>'+
+  '<radialGradient id="tcFig" cx=".5" cy=".3" r=".8"><stop offset="0" stop-color="#3a2c12"/><stop offset="1" stop-color="#0A0A08"/></radialGradient>'+
   '<linearGradient id="tcGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F5C842"/><stop offset=".55" stop-color="#C9A227"/><stop offset="1" stop-color="#8a6a22"/></linearGradient>'+
   '<radialGradient id="tcSun" cx=".5" cy=".5" r=".7"><stop offset="0" stop-color="#8a2a18"/><stop offset="1" stop-color="#3a0d08"/></radialGradient>'+
   '<linearGradient id="tcObs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2620"/><stop offset=".5" stop-color="#0A0A08"/><stop offset="1" stop-color="#1c1814"/></linearGradient></defs></svg>';
@@ -95,6 +104,7 @@ const CSS=`
 .tc-card.up .tc-in{transform:rotateY(180deg)}
 .tc-f{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:calc(var(--cw,72px)*.07);box-shadow:0 3px 0 rgba(0,0,0,.35),0 6px 14px rgba(0,0,0,.45)}
 .tc-f>svg{display:block;width:100%;height:100%}
+.tc-f{overflow:hidden}
 .tc-front{transform:rotateY(180deg)}
 .tc-card.win .tc-front{box-shadow:0 0 0 2px var(--gold-hi),0 0 18px rgba(245,200,66,.75)}
 .tc-card.win{transform:translateY(-8%)}

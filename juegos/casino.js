@@ -18,8 +18,8 @@ const TX={
   close:'ESC · CERRAR',closeTouch:'CERRAR'};
 
 const STATIONS=[
-  {id:'senet',sealed:true,name:'SENET',sub:'EL JUEGO DE LOS FARAONES',crup:'JONSU',head:'croc',w:14,x:13,y:56,px:22,py:60,pw:34,
-   line:'«Thot me ganó una partida y se llevó parte de la luz de la Luna. Estoy tallando el tablero para la revancha.»'},
+  {id:'senet',game:'senet',buys:[10,25,50,100,'all'],name:'SENET',sub:'EL JUEGO DE LOS FARAONES',crup:'JONSU',head:'croc',w:14,x:13,y:56,px:22,py:60,pw:34,
+   line:'«Thot me ganó una partida y se llevó parte de la luz de la Luna. ¿Te atreves con la revancha?»'},
   {id:'ruleta',game:'ruleta',buys:[10,25,50,100,'all'],name:'LA RUEDA DE THOT',sub:'RULETA EGIPCIA',crup:'THOT',head:'ibis',w:14,x:87,y:56,px:78,py:60,pw:34,
    line:'«He calculado cada giro de la rueda. Hagan juego… si se atreven con las probabilidades.»'},
   {id:'bazar',shop:true,name:'BAZAR DE BASTET',sub:'REVERSOS Y TAPETES',crup:'BASTET',head:'cat',w:18,x:50,y:54,px:50,py:41,pw:42,
