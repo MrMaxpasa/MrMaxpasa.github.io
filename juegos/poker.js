@@ -326,7 +326,7 @@ function create(stage,api){
       const mark=el=>{const c=el._c;if(!c)return;el.classList.toggle('win',winSet.has(c));el.classList.toggle('dim',!winSet.has(c))};
       boardEl.querySelectorAll('.tc-card').forEach(mark);topW.holeEl.querySelectorAll('.tc-card').forEach(mark);
       const hn=handName(res.get(topW).score);
-      if(gains.has(me)){meWon=gains.get(me);st.won++;if(api.ach){api.ach('pk-pot');if(catOf(res.get(me).score)>=5)api.ach('pk-flush')}}
+      if(gains.has(me)){meWon=gains.get(me);st.won++;if(api.ach){api.ach('pk-pot');if(catOf(res.get(me).score)>=5)api.ach('pk-flush');if(catOf(res.get(me).score)>=7)api.ach('pk-quads')}}
       if(gains.size>1&&gains.has(me)){title=T('split');sub=hn+' · +'+fmt(meWon);gold=true;S.push()}
       else if(gains.has(me)){title=T('youWin');sub=hn+' · +'+fmt(meWon);gold=true;catOf(res.get(me).score)>=5?S.big():S.win()}
       else{title=gains.size>1?T('splitOthers'):T('wins').replace('{n}',topW.name);sub=hn;S.lose()}}

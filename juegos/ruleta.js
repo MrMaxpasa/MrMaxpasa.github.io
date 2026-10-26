@@ -237,6 +237,7 @@ function create(stage,api){
       {label:T('leave'),key:'l',on:()=>end(T('left')),alt:true}])}
 
   function rand37(){try{const u=new Uint32Array(1);let x;do{crypto.getRandomValues(u);x=u[0]}while(x>=4294967296-4294967296%37);return x%37}catch(e){return Math.floor(Math.random()*37)}}
+  let prevP=false;
   async function spin(){if(phase!=='bet'||!tableTotal())return;const g=++gen;phase='spin';lastBets=Object.assign({},bets);persist(true);
     renderBar();acts();talk(T('noMore'));S.turn();Object.keys(cells).forEach(id=>cover(id,false));
     Object.values(cells).forEach(c=>c.classList.remove('win','hit'));
@@ -248,7 +249,8 @@ function create(stage,api){
     let pay=0,stake=0,bestWin=0,topPay=0;const winIds=[];
     Object.entries(bets).forEach(([id,v])=>{stake+=v;if(BETS[id].nums.includes(n)){const p=v*(BETS[id].pay+1);pay+=p;bestWin=Math.max(bestWin,p-v);topPay=Math.max(topPay,BETS[id].pay);winIds.push(id)}});
     const net=pay-stake;chips+=pay;st.max=Math.max(st.max,chips);
-    if(api.ach&&pay>0){if(winIds.some(id=>BETS[id].pay===35))api.ach('rl-pleno');if(n===0)api.ach('rl-zero');if(net>=500)api.ach('rl-big')}if(pay>0)st.hits++;st.best=Math.max(st.best,bestWin);
+    const hitP=winIds.some(id=>BETS[id].pay===35);if(hitP&&prevP&&api.ach)api.ach('rl-double');prevP=hitP;
+    if(api.ach&&pay>0){if(hitP)api.ach('rl-pleno');if(n===0)api.ach('rl-zero');if(net>=500)api.ach('rl-big')}if(pay>0)st.hits++;st.best=Math.max(st.best,bestWin);
     const col=colorOf(n),cname=col==='g'?T('zero'):col==='r'?T('red'):T('black');
     const dot=document.createElement('i');dot.style.background=FILL[col];dot.textContent=n;hist.prepend(dot);while(hist.children.length>12)hist.lastChild.remove();
     await C.wait(big?650:250);if(g!==gen)return;

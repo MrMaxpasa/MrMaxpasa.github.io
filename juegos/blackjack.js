@@ -159,6 +159,7 @@ function create(stage,api){
     if(g!==gen)return;settle(g)}
 
   /* --- Liquidación --- */
+  let wstreak=0;
   async function settle(g){phase='settle';const dv=val(dealer.cards).t,dBJ=dealer.cards.length===2&&dv===21;let pay=0,staked=0,bj=false,anyWin=false;
     let lossLeft=lastBet;/* con blackjack de la banca solo se pierde la apuesta inicial: lo doblado o dividido se devuelve */
     hands.forEach(h=>{staked+=h.bet;const pv=val(h.cards).t;let res,p=0,lost=h.bet;
@@ -168,10 +169,10 @@ function create(stage,api){
       else if(dv>21||pv>dv){res='w';p=h.bet*2}
       else if(pv===dv){res='p';p=h.bet}
       else res='l';
-      pay+=p;if(res==='w'){anyWin=true;if(h.doubled&&api.ach)api.ach('bj-double')}
+      pay+=p;if(res==='w'){anyWin=true;if(h.doubled&&api.ach)api.ach('bj-double');if(h.cards.length>=5&&api.ach)api.ach('bj-five')}
       const tag=document.createElement('div');tag.className='bj-res '+res;tag.textContent=res==='w'?'+'+fmt(p-h.bet):res==='p'?(dBJ&&!isBJ(h)?T('refund'):T('push')):'−'+fmt(lost);h.el.append(tag);
       if(res!=='p')h.cardsEl.querySelectorAll('.tc-card').forEach(c=>c.classList.add(res==='l'?'dim':'win'))});
-    chips+=pay;persist();if(api.ach){if(bj)api.ach('bj-bj');if(chips>=2000)api.ach('bj-2000')}const net=pay-staked;st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
+    chips+=pay;persist();if(api.ach){if(bj)api.ach('bj-bj');if(chips>=2000)api.ach('bj-2000')}const net=pay-staked;if(net>0)wstreak++;else if(net<0)wstreak=0;if(wstreak>=5&&api.ach)api.ach('bj-streak');st.max=Math.max(st.max,chips);if(anyWin)st.won++;if(bj)st.bj++;hud();
     if(bj){C.banner(root,api,'¡BLACKJACK!','+'+fmt(net)+' '+T('unit'),true);S.big()}
     else if(net>0){C.banner(root,api,dv>21?T('dealerBust'):T('youWin'),'+'+fmt(net)+' '+T('unit'),true);S.win();S.chip(3)}
     else if(net===0&&pay>0){C.banner(root,api,T('pushBig'));S.push()}

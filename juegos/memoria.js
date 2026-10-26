@@ -57,7 +57,7 @@ function create(stage,api){
     api.tone(900,.05,'triangle',.06);api.noise(.06,2500,5000,.05);
     open.push(i);
     if(open.length===2){moves++;const [a,b]=open.map(k=>cards[k]);
-      if(a.g===b.g){streak++;const gain=100*streak;points+=gain;matched+=2;open=[];
+      if(a.g===b.g){streak++;if(streak>=5&&api.ach)api.ach('mem-combo');const gain=100*streak;points+=gain;matched+=2;open=[];
         setTimeout(()=>{a.ok=b.ok=true;a.el.classList.add('ok');b.el.classList.add('ok')},180);
         api.tone(660,.07,'square',.07);api.tone(990,.08,'square',.07,.06);api.tone(1320,.16,'triangle',.06,.12);
         if(streak>1){combo.textContent='COMBO ×'+streak+'  +'+gain;combo.classList.remove('show');void combo.offsetWidth;combo.classList.add('show')}
@@ -67,6 +67,7 @@ function create(stage,api){
         setTimeout(()=>{[a,b].forEach(x=>{x.up=false;x.el.classList.remove('up','no');x.el.setAttribute('aria-label',api.t('cardHidden'))});open=[];lock=false},900)}}
   }
   function win(){clearInterval(timer);const s=secs(),bonus=Math.max(0,900-s*10),score=points+bonus;
+    if(api.ach){if(moves<=cards.length/2)api.ach('mem-perfect');if(s<35)api.ach('mem-fast')}
     api.finish({score,unit:'pts',ankhs:1+Math.floor(score/150),
       detail:api.t('detail').replace('{m}',moves).replace('{t}',fmt(s)).replace('{b}',bonus)})}
   const kd=e=>{const k=e.key;let d=0;
