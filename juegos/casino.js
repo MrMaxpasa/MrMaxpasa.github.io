@@ -15,7 +15,7 @@ const TX={
   giftTitle:'INVITA LA CASA',giftLine:'«Te veo con los bolsillos vacíos. Toma, para que vuelvas a la mesa.»',
   shopTitle:'BAZAR DE BASTET',tabBacks:'REVERSOS',tabFelts:'TAPETES',buy:'COMPRAR',equip:'EQUIPAR',equipped:'EQUIPADO',owned:'TUYO',free:'DE SERIE',
   shopLine:'«Todo lo bonito tiene un precio. Lo que se compra aquí se queda en tu navegador.»',noMoney:'TE FALTAN {n} ANKHS',bought:'¡COMPRADO!',
-  close:'ESC · CERRAR',closeTouch:'CERRAR'};
+  close:'ESC · CERRAR',closeTouch:'CERRAR',signA:'DE ANUBIS',titleRa:'SALÓN',signRa:'DE RA',goRoom:'CRUZAR ▸'};
 
 const STATIONS=[
   {id:'senet',game:'senet',buys:[10,25,50,100,'all'],name:'SENET',sub:'EL JUEGO DE LOS FARAONES',crup:'JONSU',head:'croc',w:14,x:13,y:56,px:22,py:60,pw:34,
@@ -27,10 +27,21 @@ const STATIONS=[
   {id:'poker',game:'poker',name:'LA MESA DE LOS DIOSES',sub:'PÓKER · TEXAS HOLD\'EM',crup:'SOBEK · BASTET · THOT',w:25,x:29,y:81,px:27,py:91,pw:47,buys:[50,100,250],
    line:'«Siéntate. Los dioses no tenemos prisa… pero sí hambre de fichas.»'},
   {id:'blackjack',game:'blackjack',name:'BLACKJACK DE ANUBIS',sub:'LA BANCA PAGA 3 A 2',crup:'ANUBIS',head:'jackal',w:23,x:71,y:82,px:73,py:91,pw:45,buys:[10,25,50,100,'all'],
-   line:'«La banca paga 3 a 2. Y la banca, querido, soy yo.»'}];
-const ORDER=['senet','bazar','ruleta','poker','blackjack'];
+   line:'«La banca paga 3 a 2. Y la banca, querido, soy yo.»'},
+  {id:'toRa',door:'ra',name:'SALÓN DE RA',sub:'TRAGAPERRAS · DADOS · MAYOR O MENOR',crup:'SALÓN DE RA',w:6,x:33,y:40,px:17,py:35,pw:17,
+   line:'«Al otro lado de esta puerta brilla el Salón de Ra: tragaperras, los dados de Set y el mayor o menor de Maat.»'},
+  /* --- Salón de Ra --- */
+  {id:'toAnubis',room:'ra',door:'anubis',name:'SALÓN DE ANUBIS',sub:'VOLVER A LA SALA PRINCIPAL',crup:'SALÓN DE ANUBIS',w:6,x:22,y:45,px:50,py:37,pw:17,
+   line:'«Por aquí se vuelve a la sala principal: póker, blackjack, ruleta, senet y el bazar de Bastet.»'},
+  {id:'tragaperras',room:'ra',game:'tragaperras',buys:[10,25,50,100,'all'],name:'TRAGAPERRAS DE RA',sub:'3 RODILLOS · 5 LÍNEAS',crup:'RA',w:24,x:21,y:79,px:26,py:66,pw:46,
+   line:'«Tres soles en línea y Ra te bendice con su premio mayor. Tira de la palanca.»'},
+  {id:'dados',room:'ra',game:'dados',buys:[10,25,50,100,'all'],name:'LOS DADOS DE SET',sub:'SIC BO · TRES DADOS',crup:'SET',head:'jackal',w:22,x:50,y:84,px:50,py:93,pw:50,
+   line:'«Tres dados, cien maneras de perder… y alguna de ganar. El caos decide, yo solo agito.»'},
+  {id:'mayormenor',room:'ra',game:'mayormenor',buys:[10,25,50,100,'all'],name:'MAYOR O MENOR',sub:'LA BALANZA DE MAAT',crup:'MAAT',head:'cat',w:24,x:79,y:79,px:74,py:66,pw:46,
+   line:'«¿Mayor o menor? La verdad está en la siguiente carta. Cobra a tiempo: la avaricia también se pesa.»'}];
+const ORDERS={anubis:['senet','bazar','ruleta','poker','blackjack','toRa'],ra:['toAnubis','tragaperras','dados','mayormenor']};
 /* Ilustraciones de crupieres disponibles en juegos/casino/ (se irán añadiendo) */
-const ART={bazar:'bastet.webp',blackjack:'anubis.webp',ruleta:'thot.webp',senet:'jonsu.webp'};
+const ART={bazar:'bastet.webp',blackjack:'anubis.webp',ruleta:'thot.webp',senet:'jonsu.webp',dados:'set.webp',mayormenor:'maat.webp'};
 
 /* Siluetas provisionales de crupier (traje con chaleco y pajarita) hasta tener las ilustraciones */
 const HEADS={
@@ -125,6 +136,31 @@ const CSS=`
 .cs-ptr{position:absolute;z-index:6;left:50%;top:-2.6cqw;transform:translateX(-50%);font-family:var(--f-glyph);font-size:2.4cqw;color:var(--gold-hi);text-shadow:0 0 1cqw rgba(245,200,66,.8);opacity:0;transition:opacity .15s}
 .cs-st.sel .cs-ptr{opacity:1;animation:csBob .7s ease-in-out infinite}
 @keyframes csBob{50%{transform:translate(-50%,-.5cqw)}}
+/* Puertas entre salas */
+.cs-door{position:relative;z-index:2;width:100%;aspect-ratio:.62;border-radius:50% 50% 0 0/26% 26% 0 0;background:radial-gradient(ellipse at 50% 70%,rgba(245,170,70,.55),rgba(120,60,20,.35) 45%,#0A0A08 80%);box-shadow:0 0 0 .35cqw #0A0A08,0 0 0 .75cqw #C9A227,0 0 0 1cqw #0A0A08,0 0 3cqw rgba(245,200,66,.35);display:grid;place-items:center;overflow:hidden}
+.cs-door[data-to="anubis"]{background:radial-gradient(ellipse at 50% 70%,rgba(80,120,200,.5),rgba(20,40,90,.4) 45%,#0A0A08 80%)}
+.cs-door b{display:block;width:62%;filter:drop-shadow(0 0 .8cqw rgba(245,200,66,.9));animation:csDoor 1.6s ease-in-out infinite}.cs-door b svg{display:block;width:100%}
+.cs-sign{width:max-content}.cs-scene.room-ra .cs-sign .word{margin:0 .3em 0 .1em}
+@keyframes csDoor{50%{transform:translateY(-8%);opacity:.75}}
+.cs-st.door .cs-plate b{font-size:1.15cqw}.cs-st.door .cs-plate small{display:none}
+/* Mesas del Salón de Ra */
+.cs-slots{position:relative;z-index:2;width:100%;display:flex;justify-content:center;gap:4%;align-items:flex-end}
+.cs-slot{position:relative;width:29%;aspect-ratio:.62;background:linear-gradient(#3a2610,#140c05);border:.25cqw solid #C9A227;border-radius:1.2cqw 1.2cqw .4cqw .4cqw;box-shadow:0 0 0 .25cqw #0A0A08,0 1cqw 1.2cqw rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;padding:12% 8% 8%;box-sizing:border-box;gap:8%}
+.cs-slot::before{content:"";width:46%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FFD27A,#F06A3C 50%,#9C2B18);box-shadow:0 0 0 .2cqw #C9A227,0 0 1.4cqw rgba(240,106,60,.8);animation:slPulseM 2.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes slPulseM{50%{box-shadow:0 0 0 .2cqw #C9A227,0 0 2.6cqw rgba(240,106,60,1)}}
+.cs-slot .rl{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:4%;background:#F4EFE3;padding:6%;box-sizing:border-box;box-shadow:inset 0 0 0 .15cqw #0A0A08}
+.cs-slot .rl i{aspect-ratio:1;background:url("juegos/logros/iconos.webp") 0 0/800% 500% no-repeat}
+.cs-slot .lv{position:absolute;right:-14%;top:30%;width:8%;height:30%;background:linear-gradient(90deg,#7A5C1E,#F5C842,#7A5C1E)}
+.cs-slot .lv::after{content:"";position:absolute;left:-60%;top:-20%;width:220%;aspect-ratio:1;border-radius:50%;background:#C2412D;box-shadow:0 0 0 .15cqw #0A0A08}
+.cs-dice{position:relative;z-index:1;display:flex;gap:.7cqw;transform:translateY(10%)}
+.cs-dice i{width:2.4cqw;aspect-ratio:1;border-radius:22%;background:linear-gradient(145deg,#FBF6EA,#E3D7BC);box-shadow:0 .25cqw 0 #7A5C1E;transform:rotate(var(--r));display:grid;place-items:center;font-style:normal;font:400 1.5cqw/1 var(--f-cond);color:#0A0A08}
+.cs-scene.room-ra .cs-bg{display:none!important}
+.cs-sunglow{display:none;position:absolute;left:50%;top:27%;width:30cqw;height:30cqw;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,200,90,.35),rgba(255,140,40,.1) 45%,transparent 68%);mix-blend-mode:screen;pointer-events:none;animation:csFlick 3.4s ease-in-out infinite}
+.cs-scene.room-ra .cs-sunglow{display:block}
+.cs-scene.fade{animation:csRoom .5s ease}
+@keyframes csRoom{0%{filter:brightness(1)}40%{filter:brightness(0) blur(2px)}100%{filter:brightness(1)}}
+.cs-st[data-room]:not(.here){display:none}
+.cs-st[data-id="dados"] .cs-crup.img,.cs-st[data-id="mayormenor"] .cs-crup.img{width:52%}
 /* Vertical (móvil) */
 @container (max-aspect-ratio:1/1){
   .cs-st{left:calc(var(--px)*1%);top:calc(var(--py)*1%);width:calc(var(--pw)*1cqw)}
@@ -141,6 +177,8 @@ const CSS=`
   .cs-booth.has-img .cs-crup{width:30%}
   .cs-crup.img{width:44%;margin-bottom:-13%}
   .cs-st[data-id="ruleta"] .cs-crup.img,.cs-st[data-id="senet"] .cs-crup.img{width:42%}
+  .cs-st.door .cs-plate b{font-size:2.4cqw}.cs-dice i{width:5cqw;font-size:3cqw}.cs-sunglow{top:22%;width:70cqw;height:70cqw}
+  .cs-st[data-id="dados"] .cs-crup.img,.cs-st[data-id="mayormenor"] .cs-crup.img{width:44%}
 }
 
 /* Fondo ilustrado (si carga, sustituye a la sala dibujada con código) */
@@ -237,7 +275,7 @@ function mount(stage,host){
     ${[[17,16],[39,22],[61,22],[83,16]].map(([x,h])=>'<div class="cs-lamp" style="left:'+x+'%;--h:'+h+'%"></div><div class="cs-glow" style="left:'+x+'%;top:'+(h+2)+'%"></div>').join('')}
     <div class="cs-floor"></div><div class="cs-ht" style="left:-6%;top:6%"></div><div class="cs-ht" style="right:-8%;bottom:-6%"></div>
     <i class="cs-bg h" style="left:18.5%;top:11%;width:13cqw;height:13cqw;--d:0s"></i><i class="cs-bg h" style="left:29.5%;top:18%;width:10cqw;height:10cqw;--d:1.3s"></i><i class="cs-bg h" style="left:70%;top:18%;width:10cqw;height:10cqw;--d:0.7s"></i><i class="cs-bg h" style="left:81.5%;top:11%;width:13cqw;height:13cqw;--d:2s"></i><i class="cs-bg h" style="left:27%;top:31%;width:6cqw;height:6cqw;--d:0.4s"></i><i class="cs-bg h" style="left:36.5%;top:31%;width:6cqw;height:6cqw;--d:1.8s"></i><i class="cs-bg h" style="left:63.5%;top:31%;width:6cqw;height:6cqw;--d:1.1s"></i><i class="cs-bg h" style="left:73%;top:31%;width:6cqw;height:6cqw;--d:2.4s"></i><i class="cs-bg v" style="left:10%;top:12%;width:26cqw;height:26cqw;--d:0s"></i><i class="cs-bg v" style="left:90%;top:12%;width:26cqw;height:26cqw;--d:1.5s"></i><i class="cs-bg v" style="left:4%;top:20%;width:13cqw;height:13cqw;--d:0.6s"></i><i class="cs-bg v" style="left:23%;top:20%;width:13cqw;height:13cqw;--d:2.1s"></i><i class="cs-bg v" style="left:77%;top:20%;width:13cqw;height:13cqw;--d:1s"></i><i class="cs-bg v" style="left:96%;top:20%;width:13cqw;height:13cqw;--d:2.6s"></i>
-    <div class="cs-sign" aria-hidden="true"><span class="word" id="cs-title"></span><small>DE ANUBIS</small></div>
+    <i class="cs-sunglow"></i><div class="cs-sign" aria-hidden="true"><span class="word" id="cs-title"></span><small id="cs-signsub">DE ANUBIS</small></div>
     <div id="cs-st"></div><div class="cs-shade"></div></div></div>
     <div class="cs-hud"><button class="esc" type="button" id="cs-back"></button><span class="ankh-count" id="cs-wallet"></span></div>
     <div class="cs-hint" id="cs-hint"></div>
@@ -246,9 +284,11 @@ function mount(stage,host){
   const $=s=>root.querySelector(s);
   host.collage($('#cs-title'),TX.title);
   /* Fondo ilustrado: se aplica cuando han cargado las dos versiones (horizontal y vertical) */
-  {const sc=$('#cs-scene'),bh=host.base+'casino/sala-h.webp',bv=host.base+'casino/sala-v.webp';let n=0;
-   const ok=()=>{if(++n===2){sc.style.setProperty('--bgh','url("'+bh+'")');sc.style.setProperty('--bgv','url("'+bv+'")');sc.classList.add('has-bg')}};
-   [bh,bv].forEach(u=>{const im=new Image();im.onload=ok;im.src=u})}
+  const BGS={anubis:['sala-h.webp','sala-v.webp'],ra:['ra-h.webp','ra-v.webp']},bgOk={};
+  function applyBg(){const sc=$('#cs-scene'),b=BGS[room];if(!bgOk[room]){sc.classList.remove('has-bg');
+      let n=0;b.forEach(f=>{const im=new Image();im.onload=()=>{if(++n===2){bgOk[room]=true;if(BGS[room]===b)applyBg()}};im.src=host.base+'casino/'+f});return}
+    sc.style.setProperty('--bgh','url("'+host.base+'casino/'+b[0]+'")');sc.style.setProperty('--bgv','url("'+host.base+'casino/'+b[1]+'")');sc.classList.add('has-bg')}
+  let room='anubis',ORDER=ORDERS.anubis;
   $('#cs-back').textContent=touch?TX.backTouch:TX.back;$('#cs-back').addEventListener('click',()=>host.back());
   $('#cs-hint').textContent=touch?TX.hintTouch:TX.hintKeys;
   C.feltVars($('#cs-scene'),host.equip.felt);
@@ -262,16 +302,21 @@ function mount(stage,host){
     else if(s.id==='blackjack')inner=crup+'<span class="cs-tab"><span class="cs-felt half"></span><span class="cs-mini" data-cards="2"></span></span>';
     else if(s.id==='ruleta')inner=crup+'<span class="cs-tab"><span class="cs-felt"></span><span class="cs-wheel">'+miniWheel('')+'</span></span>';
     else if(s.id==='senet')inner=crup+'<span class="cs-tab"><span class="cs-senet">'+Array.from({length:30},(_,i)=>'<i>'+(i===14?'𓋹':i===25?'𓄤':i===29?'𓇳':'')+'</i>').join('')+'</span></span>';
+    else if(s.door)inner='<span class="cs-door" data-to="'+s.door+'"><b><svg viewBox="0 0 40 40" aria-hidden="true">'+(s.door==='ra'?'<circle cx="20" cy="20" r="8" fill="#F5C842" stroke="#0A0A08" stroke-width="2"/>'+Array.from({length:8},(_,i)=>'<path d="M20 4v6" stroke="#F5C842" stroke-width="3" stroke-linecap="round" transform="rotate('+i*45+' 20 20)"/>').join(''):'<path d="M20 6 9 20h7v14h8V20h7z" fill="#F5C842" stroke="#0A0A08" stroke-width="2" stroke-linejoin="round"/>')+'</svg></b></span>';
+    else if(s.id==='tragaperras'){const ic=n=>'background-position:'+((n%8)/7*100).toFixed(2)+'% '+(Math.floor(n/8)/4*100).toFixed(2)+'%';
+      inner='<span class="cs-slots">'+[[15,37,15],[12,15,22],[37,37,39]].map((r,i)=>'<span class="cs-slot" style="--d:-'+(i*.8)+'s"><span class="rl">'+r.map(n=>'<i style="'+ic(n)+'"></i>').join('')+'</span><span class="lv"></span></span>').join('')+'</span>'}
+    else if(s.id==='dados')inner=crup+'<span class="cs-tab"><span class="cs-felt half"></span><span class="cs-dice"><i style="--r:-12deg">5</i><i style="--r:9deg">3</i><i style="--r:-4deg">6</i></span></span>';
+    else if(s.id==='mayormenor')inner=crup+'<span class="cs-tab"><span class="cs-felt half"></span><span class="cs-mini" data-cards="2"></span></span>';
     else if(s.id==='bazar')inner='<span class="cs-booth"><span class="cs-awn"></span><span class="cs-shelf" data-shelf="1"></span>'+crup+'<span class="cs-counter"></span></span>';
     return '<span class="cs-ptr" aria-hidden="true">𓋹</span>'+inner+(s.sealed?'<span class="cs-lock">'+TX.soon+'</span>':'')+'<span class="cs-plate"><b>'+esc(s.name)+'</b><small>'+esc(s.sub)+'</small></span>'}
-  STATIONS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='cs-st'+(s.sealed?' sealed':'');b.dataset.id=s.id;
+  STATIONS.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='cs-st'+(s.sealed?' sealed':'')+(s.door?' door':'');b.dataset.id=s.id;b.dataset.room=s.room||'anubis';
     ['x','y','px','py','w','pw'].forEach(k=>b.style.setProperty('--'+k,s[k]));b.innerHTML=stationHTML(s);b.setAttribute('aria-label',s.name+' · '+s.sub+(s.sealed?' · '+TX.soon:''));
     b.addEventListener('mouseenter',()=>{if(!touch)select(s.id,true)});
     b.addEventListener('click',()=>{if(touch&&sel!==s.id){select(s.id,true);return}select(s.id,false);activate()});
     stEl.append(b);els[s.id]=b});
   function decorate(){/* cartas y estanterías con la estética equipada */
     root.querySelectorAll('[data-cards]').forEach(m=>{m.textContent='';const n=+m.dataset.cards;const deck=C.deck(1);
-      for(let i=0;i<n;i++){const up=!(m.closest('[data-id="blackjack"]')&&i===1);const el=C.cardEl(deck[i],up);m.append(el)}});
+      for(let i=0;i<n;i++){const up=!((m.closest('[data-id="blackjack"]')||m.closest('[data-id="mayormenor"]'))&&i===1);const el=C.cardEl(deck[i],up);m.append(el)}});
     root.querySelectorAll('[data-shelf]').forEach(m=>{m.textContent='';['lapis','papiro','sol','oro'].forEach(k=>{const d=document.createElement('div');d.className='tc-card';
       d.innerHTML='<div class="tc-in"><div class="tc-f tc-back">'+C.BACKS[k].svg+'</div></div>';m.append(d)})});
     C.feltVars($('#cs-scene'),host.equip.felt)}
@@ -287,10 +332,15 @@ function mount(stage,host){
   function select(id,sound){if(sel===id)return;sel=id;Object.entries(els).forEach(([k,b])=>b.classList.toggle('sel',k===id));if(sound)api.sfx.tick();
     const s=stationById(id);dlg.hidden=false;$('#cs-who').textContent=s.crup;$('#cs-sub').textContent=s.name+' · '+s.sub;
     const say=$('#cs-say');say.innerHTML='<span class="tw">'+esc(s.line)+'</span>';
-    if(s.sealed){go.disabled=true;go.textContent=TX.soon}else{go.disabled=false;go.innerHTML=esc(s.shop?TX.bazar:TX.enter)+' ▸<kbd>ENTER</kbd>'}
+    if(s.sealed){go.disabled=true;go.textContent=TX.soon}else{go.disabled=false;go.innerHTML=(s.door?esc(TX.goRoom):esc(s.shop?TX.bazar:TX.enter)+' ▸')+'<kbd>ENTER</kbd>'}
     root.style.setProperty('--dlg',dlg.offsetHeight+'px')}
   go.addEventListener('click',()=>activate());
-  function activate(){const s=stationById(sel);if(!s)return;if(s.sealed){api.sfx.back();return}api.sfx.confirm();if(s.shop)openShop();else openBuy(s)}
+  function activate(){const s=stationById(sel);if(!s)return;if(s.sealed){api.sfx.back();return}api.sfx.confirm();if(s.door){setRoom(s.door,true);return}if(s.shop)openShop();else openBuy(s)}
+  function setRoom(r,anim){room=r;ORDER=ORDERS[r];const sc=$('#cs-scene');sc.classList.toggle('room-ra',r==='ra');
+    if(anim){sc.classList.remove('fade');void sc.offsetWidth;sc.classList.add('fade');api.sfx.whoosh&&api.sfx.whoosh()}
+    const paint=()=>{Object.values(els).forEach(b=>b.classList.toggle('here',b.dataset.room===r));host.collage($('#cs-title'),r==='ra'?TX.titleRa:TX.title);$('#cs-signsub').textContent=r==='ra'?TX.signRa:TX.signA;applyBg();
+      sel=null;Object.values(els).forEach(b=>b.classList.remove('sel'));dlg.hidden=true;if(!touch||anim)select(r==='ra'?'tragaperras':'blackjack',false)};
+    if(anim)setTimeout(paint,200);else paint()}
   function moveSel(d){const i=ORDER.indexOf(sel);const n=i<0?(d>0?0:ORDER.length-1):(i+d+ORDER.length)%ORDER.length;select(ORDER[n],true);els[ORDER[n]].focus({preventScroll:true})}
 
   /* --- Modales --- */
@@ -357,10 +407,10 @@ function mount(stage,host){
 
   /* --- Cartera y regalo de la casa --- */
   function paintWallet(){$('#cs-wallet').innerHTML='<i>𓋹</i>'+fmt(host.ankhs)+' '+TX.ankhs}
-  function refresh(){paintWallet();decorate();closeModal(false);
-    if(host.giftAvailable()){const n=host.takeGift();paintWallet();setTimeout(()=>{C.banner(root,api,TX.giftTitle,'+'+n+' 𓋹 ANKHS',true);S.chip(3)},500);
+  function refresh(){paintWallet();decorate();closeModal(false);if(!room||!$('#cs-scene').querySelector('.cs-st.here'))setRoom(room||'anubis',false);
+    if(host.giftAvailable()){if(room!=='anubis')setRoom('anubis',false);const n=host.takeGift();paintWallet();setTimeout(()=>{C.banner(root,api,TX.giftTitle,'+'+n+' 𓋹 ANKHS',true);S.chip(3)},500);
       select('blackjack',false);$('#cs-who').textContent='ANUBIS';$('#cs-say').innerHTML='<span class="tw">'+esc(TX.giftLine)+'</span>'}
-    else if(!sel&&!touch)select('blackjack',false)}
+    else if(!sel&&!touch)select(room==='ra'?'tragaperras':'blackjack',false)}
   refresh();
 
   return{refresh,

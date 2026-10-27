@@ -338,6 +338,46 @@ button{font:inherit;color:inherit}
 .tcover.rl .whs svg{display:block;width:100%;animation:whSpin 16s linear infinite;will-change:transform}
 .tcover.rl .wh{position:absolute;left:14%;top:10%;width:40%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#0A0A08 0 20%,#C9A227 20% 23%,#2a2010 23% 60%,#C9A227 60% 62%,transparent 62%),repeating-conic-gradient(#0A0A08 0 9.73deg,#A8361C 9.73deg 19.46deg);box-shadow:0 0 0 4px #C9A227,0 8px 18px rgba(0,0,0,.6);animation:whSpin 16s linear infinite}
 .tcover.rl .rn{position:absolute;width:11%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:400 clamp(12px,1.4vw,18px)/1 var(--f-cond);color:var(--ivory);box-shadow:0 0 0 2px var(--gold)}
+.tcover.pyr{background:#02070d url("juegos/carrera/desierto.webp") 50% 70%/170% auto no-repeat}
+.tcover.pyr .bk{position:absolute;left:50%;height:9%;background:linear-gradient(#D1AE72,#9C7744);box-shadow:inset 0 2px 0 rgba(255,240,200,.35),inset 0 -2px 0 rgba(0,0,0,.3),0 0 0 1px rgba(60,40,15,.6);transform:translateX(-50%)}
+.tcover.pyr .bk.g{background:linear-gradient(#F5C842,#C9A227)}
+.tcover.pyr .mv{animation:pyrMv 2.4s ease-in-out infinite alternate;box-shadow:inset 0 2px 0 rgba(255,240,200,.35),0 0 10px rgba(245,200,66,.7)}
+@keyframes pyrMv{from{transform:translateX(-105%)}to{transform:translateX(5%)}}
+.tcover.pyr .gl{position:absolute;left:0;right:0;bottom:12%;height:2px;background:var(--gold)}
+.tcover.pyr .sand{position:absolute;left:0;right:0;bottom:0;height:12%;background:linear-gradient(#2a2014,#0e0a06)}
+.tcover.hat{background:radial-gradient(ellipse at 50% 18%,rgba(201,120,40,.35),transparent 60%),#06050a}
+.tcover.hat .sun{position:absolute;left:50%;top:9%;width:15%;aspect-ratio:1;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 38% 34%,#F06A3C,#9C2B18);box-shadow:0 0 0 2px #F5C842,0 0 18px rgba(240,106,60,.7);animation:hatSun .54s ease-in-out infinite alternate}
+.tcover.hat .horns{position:absolute;left:50%;top:5%;width:32%;aspect-ratio:2.2;transform:translateX(-50%);border:3px solid #C9A227;border-top:0;border-radius:0 0 50% 50%/0 0 100% 100%;transform:translateX(-50%) rotate(180deg)}
+@keyframes hatSun{to{box-shadow:0 0 0 2px #F5C842,0 0 30px rgba(240,106,60,.95)}}
+.tcover.hat .ln{position:absolute;top:0;bottom:0;width:13%;border-left:1px solid rgba(201,162,39,.25);background:linear-gradient(transparent,rgba(20,16,10,.85))}
+.tcover.hat .rc{position:absolute;bottom:13%;width:7.5%;aspect-ratio:1;border-radius:50%;background:#0A0A08;box-shadow:0 0 0 2px var(--c);transform:translateX(-50%)}
+.tcover.hat .nt{position:absolute;width:5.5%;aspect-ratio:1;background:var(--c);transform:translateX(-50%) rotate(45deg);box-shadow:0 0 0 2px #0A0A08,0 0 10px rgba(245,200,66,.6);animation:hatNt 1.6s linear infinite;animation-delay:var(--d)}
+@keyframes hatNt{from{top:-10%}to{top:84%}}
+.tcover.hat .dancer{position:absolute;left:3%;bottom:2%;height:94%;aspect-ratio:218/415;background:url("juegos/hathor/hathor.webp") 33.333% 0/400% 100% no-repeat;filter:drop-shadow(0 0 8px rgba(245,200,66,.35));animation:hatDance 1.07s steps(1) infinite}
+@keyframes hatDance{50%{background-position:66.666% 0}}
+.tcover.hat .dancer.r{left:auto;right:3%;animation-delay:-.535s}
+.tcover.hat .jl{position:absolute;left:24%;right:24%;bottom:17%;height:2px;background:#F5C842}
+.tcover.lab{background:#050403}
+.tcover.lab .mz{position:absolute;inset:-6% -2%;display:grid;grid-template-columns:repeat(17,1fr);grid-template-rows:repeat(10,1fr)}
+.tcover.lab .mz i{background:#120e09}.tcover.lab .mz i.w{background:#2a2116;box-shadow:inset 0 -3px 0 #16110b,inset 0 -4px 0 rgba(201,162,39,.4)}
+.tcover.lab .dk{position:absolute;inset:0;background:radial-gradient(circle at 38% 56%,transparent 0 9%,rgba(5,4,3,.6) 18%,rgba(5,4,3,.96) 30%)}
+.tcover.lab .hero{position:absolute;left:38%;top:56%;width:6%;aspect-ratio:1;border-radius:50%;background:#17130f;box-shadow:0 0 0 2px #C9A227,0 0 16px rgba(240,140,50,.8);transform:translate(-50%,-50%)}
+.tcover.lab .key{position:absolute;left:73%;top:30%;font-size:clamp(16px,2vw,26px);color:#F5C842;text-shadow:0 0 10px rgba(245,200,66,.9);transform:rotate(-20deg)}
+.tcover.lab .eye{position:absolute;width:1.2%;aspect-ratio:1;border-radius:50%;background:#ff3b2a;box-shadow:0 0 6px #ff3b2a,9px 0 0 #ff3b2a,9px 0 6px #ff3b2a;animation:labEye 2s steps(1) infinite}
+@keyframes labEye{90%{opacity:0}}
+.tcover.sl{background:radial-gradient(ellipse at 50% 30%,#3a1d0c,#1a0d06 55%,#070403);display:grid;place-items:center}
+.tcover.sl .mach{position:relative;width:34%;aspect-ratio:1.25;margin-top:9%;background:linear-gradient(#2a1c0c,#140c05);border:3px solid #C9A227;border-radius:10px;box-shadow:0 0 0 3px #0A0A08,0 8px 16px rgba(0,0,0,.6);display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:8% 6%}
+.tcover.sl .mach i{background:#F4EFE3 url("juegos/logros/iconos.webp") 0 0/800% 500% no-repeat;background-origin:content-box;padding:12%;box-shadow:inset 0 0 0 2px #0A0A08;border-radius:2px}
+.tcover.sl .sun{position:absolute;left:50%;top:6%;width:13%;aspect-ratio:1;border-radius:50%;transform:translateX(-50%);background:radial-gradient(circle at 38% 34%,#FFD27A,#F06A3C 45%,#9C2B18 80%);box-shadow:0 0 0 2px #C9A227,0 0 20px rgba(240,106,60,.7)}
+.tcover.sl .wing{position:absolute;top:10%;width:16%;height:6%;background:#C9A227;clip-path:polygon(0 50%,100% 0,100% 100%)}
+.tcover.dd{display:flex;align-items:center;justify-content:center;gap:4%}
+.tcover.dd .die{width:14%;aspect-ratio:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:1.6%;box-sizing:border-box;background:linear-gradient(145deg,#FBF6EA,#E3D7BC);border-radius:18%;box-shadow:0 4px 0 #7A5C1E,0 8px 12px rgba(0,0,0,.5);transform:rotate(var(--r))}
+.tcover.dd .die i{border-radius:50%;width:100%;height:100%;transform:scale(.68)}.tcover.dd .die i.on{background:#0A0A08}.tcover.dd .die.red i.on{background:#A8361C}
+.tcover.dd .sumb{position:absolute;right:8%;top:10%;font:400 clamp(18px,2.6vw,34px)/1 var(--f-cond);color:var(--ink);background:var(--gold-hi);padding:4px 10px 2px;transform:skewX(-10deg);box-shadow:3px 3px 0 var(--ivory)}
+.tcover.mm .arr{position:absolute;font:400 clamp(20px,3vw,40px)/1 var(--f-cond);color:var(--gold-hi);text-shadow:0 2px 0 #000;animation:mmArr 1.2s ease-in-out infinite alternate}
+.tcover.mm .arr.d{color:var(--ivory);animation-delay:.6s}
+@keyframes mmArr{to{transform:translateY(-12%)}}
+.tcover.mm .mult{position:absolute;right:9%;bottom:16%;font:400 clamp(16px,2.2vw,28px)/1 var(--f-cond);color:var(--ink);background:var(--gold-hi);padding:4px 10px 2px;transform:skewX(-10deg);box-shadow:3px 3px 0 var(--ivory)}
 .tcover.sn{display:grid;place-items:center;background:radial-gradient(circle at 70% 20%,rgba(201,206,214,.18),transparent 55%),var(--coal)}
 .tcover.sn .snb{width:78%;aspect-ratio:10/3.1;display:grid;grid-template-columns:repeat(10,1fr);gap:2px;padding:5px;background:#3a2a14;box-shadow:0 0 0 2px var(--ivory),5px 5px 0 rgba(201,162,39,.85);transform:perspective(500px) rotateX(18deg)}
 .tcover.sn .snb i{background:#E6D7B3;box-shadow:inset 0 0 0 1px #0A0A08;display:grid;place-items:center;font-style:normal;font-family:var(--f-glyph);font-size:clamp(9px,1vw,14px);color:var(--ink)}
@@ -1036,6 +1076,16 @@ const CONTENT={
       {id:'jc-first',gr:'juicio',t:'b',name:'Juez del Duat',desc:'Termina un juicio de las almas.',glyph:'𓁢',reward:15},
       {id:'jc-lines',gr:'juicio',t:'s',name:'Ojo de halcón',desc:'Señala 5 líneas exactas con fallo en un mismo juicio.',glyph:'𓂀',reward:40},
       {id:'jc-perfect',gr:'juicio',t:'g',name:'Balanza perfecta',desc:'Acierta las 12 almas de un juicio sin fallar ninguna.',glyph:'𓆄',reward:80},
+      {id:'pyr-20',gr:'piramide',t:'b',ic:'run-2000',name:'Arquitecto real',desc:'Levanta una pirámide de 20 pisos.',glyph:'𓉴',reward:15},
+      {id:'pyr-streak',gr:'piramide',t:'s',ic:'bj-streak',name:'Mano firme',desc:'Encadena 10 encajes perfectos seguidos.',glyph:'𓌳',reward:35},
+      {id:'pyr-50',gr:'piramide',t:'g',ic:'run-3000',name:'Obra del faraón',desc:'Levanta una pirámide de 50 pisos.',glyph:'𓇳',reward:90},
+      {id:'hat-first',gr:'hathor',t:'b',ic:'sn-perfect',name:'Primer baile',desc:'Termina una danza de Hathor.',glyph:'𓌉',reward:10},
+      {id:'hat-a',gr:'hathor',t:'s',ic:'run-1000',name:'Pies ligeros',desc:'Consigue rango A o mejor en la danza.',glyph:'𓂻',reward:35},
+      {id:'hat-fc',gr:'hathor',t:'g',ic:'mem-combo',name:'Sin perder el paso',desc:'Termina una danza sin fallar ninguna nota.',glyph:'𓍢',reward:70},
+      {id:'hat-s',gr:'hathor',t:'g',ic:'ach-all',name:'Favorito de Hathor',desc:'Consigue rango S en la danza.',glyph:'𓁥',reward:90},
+      {id:'lab-first',gr:'laberinto',t:'b',ic:'cs-first',name:'Salida del Duat',desc:'Escapa de tu primer laberinto.',glyph:'𓉐',reward:15},
+      {id:'lab-5',gr:'laberinto',t:'s',ic:'run-500',name:'Guía de almas',desc:'Escapa de 5 laberintos en una misma partida.',glyph:'𓃥',reward:40},
+      {id:'lab-10',gr:'laberinto',t:'g',ic:'jc-first',name:'Señor del Duat',desc:'Escapa de 10 laberintos en una misma partida.',glyph:'𓋾',reward:90},
       {id:'pk-pot',gr:'poker',t:'b',name:'Primer bote',desc:'Gana un bote en la mesa de los dioses.',glyph:'𓆋',reward:10},
       {id:'pk-flush',gr:'poker',t:'s',name:'Mano divina',desc:'Gana un bote con color o una jugada mejor.',glyph:'𓅝',reward:30},
       {id:'pk-quads',gr:'poker',t:'g',name:'Cuatro dioses',desc:'Gana un bote con póker o una jugada mejor.',glyph:'𓊪',reward:70},
@@ -1049,6 +1099,12 @@ const CONTENT={
       {id:'rl-zero',gr:'ruleta',t:'s',name:'El cero dorado',desc:'Gana una apuesta en la que salga el cero.',glyph:'𓊽',reward:30},
       {id:'rl-big',gr:'ruleta',t:'g',name:'Noche de suerte',desc:'Gana 500 fichas o más en una sola tirada.',glyph:'𓆣',reward:60},
       {id:'rl-double',gr:'ruleta',t:'p',hidden:true,name:'Favorito de Thot',desc:'Acierta un pleno dos tiradas seguidas.',glyph:'𓁟',reward:180},
+      {id:'sl-mask',gr:'tragaperras',t:'s',ic:'cs-rich',name:'Máscara dorada',desc:'Consigue tres máscaras (o tres soles) en una línea de la tragaperras.',glyph:'𓋞',reward:30},
+      {id:'sl-ra',gr:'tragaperras',t:'p',hidden:true,ic:'run-3000',name:'Bendición de Ra',desc:'Consigue tres discos de Ra en una línea.',glyph:'𓇳',reward:200},
+      {id:'dc-big',gr:'dados',t:'s',ic:'rl-big',name:'Set sonríe',desc:'Gana 500 fichas o más en una sola tirada de dados.',glyph:'𓃩',reward:30},
+      {id:'dc-triple',gr:'dados',t:'g',ic:'rl-double',name:'El caos te elige',desc:'Acierta un triple concreto en los dados de Set.',glyph:'𓆗',reward:90},
+      {id:'mm-5',gr:'mayormenor',t:'s',ic:'jc-lines',name:'Ojo de Maat',desc:'Acierta 5 cartas seguidas en Mayor o menor.',glyph:'𓂀',reward:30},
+      {id:'mm-10',gr:'mayormenor',t:'g',ic:'jc-perfect',name:'Pluma de la verdad',desc:'Acierta 10 cartas seguidas en Mayor o menor.',glyph:'𓆄',reward:90},
       {id:'sn-win',gr:'senet',t:'s',name:'Revancha negada',desc:'Gana una partida de senet a Jonsu.',glyph:'𓇹',reward:25},
       {id:'sn-perfect',gr:'senet',t:'g',name:'Eclipse total',desc:'Gana al senet sin que Jonsu saque ninguna pieza.',glyph:'𓇯',reward:80},
       {id:'cs-first',gr:'casino',t:'b',name:'Bienvenido al casino',desc:'Juega una mesa con ankhs en el casino.',glyph:'𓉐',reward:10},
@@ -1056,10 +1112,10 @@ const CONTENT={
       {id:'cs-profit',gr:'casino',t:'g',name:'Te levantas ganando',desc:'Sal de una mesa del casino con 100 ankhs o más de beneficio.',glyph:'𓎛',reward:60},
       {id:'cs-rich',gr:'casino',t:'p',name:'Tesoro del faraón',desc:'Reúne 1.000 ankhs a la vez.',glyph:'𓋞',reward:150},
       {id:'shop-backs',gr:'casino',t:'p',name:'Coleccionista',desc:'Consigue todos los reversos del bazar.',glyph:'𓆓',reward:150}],
-    achGroups:{gen:'TEMPLO',memoria:'MEMORIA DE JEROGLÍFICOS',carrera:'LA CARRERA DEL CHACAL',juicio:'EL JUICIO DE LAS ALMAS',poker:'LA MESA DE LOS DIOSES',blackjack:'BLACKJACK DE ANUBIS',ruleta:'LA RUEDA DE THOT',senet:'EL SENET DE JONSU',casino:'CASINO Y BAZAR'},
+    achGroups:{gen:'TEMPLO',memoria:'MEMORIA DE JEROGLÍFICOS',carrera:'LA CARRERA DEL CHACAL',juicio:'EL JUICIO DE LAS ALMAS',piramide:'EL CONSTRUCTOR DE PIRÁMIDES',hathor:'LA DANZA DE HATHOR',laberinto:'EL LABERINTO DEL DUAT',poker:'LA MESA DE LOS DIOSES',blackjack:'BLACKJACK DE ANUBIS',ruleta:'LA RUEDA DE THOT',senet:'EL SENET DE JONSU',tragaperras:'TRAGAPERRAS DE RA',dados:'LOS DADOS DE SET',mayormenor:'MAYOR O MENOR DE MAAT',casino:'CASINO Y BAZAR'},
     achTiers:{b:'BRONCE',s:'PLATA',g:'ORO',p:'PLATINO'},achSecret:'Logro secreto',achSecretDesc:'Sigue jugando: se revela al conseguirlo.',
     tag:'MINIJUEGO',practiceTag:'PRÁCTICA',trainHead:'SALA DE ENTRENAMIENTO',trainSub:'Las mesas del casino con fichas gratis: practica sin jugarte ankhs',casinoTag:'CASINO',casinoWord:'CASINO',casinoKick:'ZONA DE APUESTAS · ABIERTO TODA LA NOCHE',
-    casinoBand:'PÓKER ✦ BLACKJACK ✦ RULETA ✦ SENET ✦ BAZAR DE BASTET ✦ ',casinoGames:[{n:'PÓKER'},{n:'BLACKJACK'},{n:'RULETA'},{n:'SENET'}],wallet:'TU CARTERA',enterCasino:'ENTRAR AL CASINO ▸',
+    casinoBand:'PÓKER ✦ BLACKJACK ✦ RULETA ✦ SENET ✦ TRAGAPERRAS ✦ DADOS ✦ MAYOR O MENOR ✦ BAZAR DE BASTET ✦ ',casinoGames:[{n:'PÓKER'},{n:'BLACKJACK'},{n:'RULETA'},{n:'SENET'},{n:'TRAGAPERRAS'},{n:'DADOS'},{n:'MAYOR O MENOR'}],wallet:'TU CARTERA',enterCasino:'ENTRAR AL CASINO ▸',
     recovered:'Tus fichas de la última mesa ya son ankhs otra vez: +{n} 𓋹',
     sealed:'SELLADO',soon:'SE ABRE PRÓXIMAMENTE',record:'RÉCORD',play:'JUGAR ▸',ankhLabel:'ANKHS',
     exit:'ESC · SALIR',exitTouch:'SALIR',loading:'ABRIENDO LA SALA…',loadError:'NO SE HA PODIDO CARGAR EL JUEGO',
@@ -1072,6 +1128,12 @@ const CONTENT={
        short:'Corre de noche entre las ruinas: salta escarabajos, cobras, sarcófagos y columnas caídas, esquiva al halcón de Horus y recoge todos los ankhs que puedas.'},
       {id:'juicio',name:'EL JUICIO DE LAS ALMAS',unit:'pts',controls:'Ratón, toque o teclado (L · F · ↑ ↓)',deps:['cartas'],
        short:'Pesa el corazón de cada alma: ¿código limpio o código con fallos? Decide antes de que se incline la balanza.'},
+      {id:'piramide',name:'EL CONSTRUCTOR DE PIRÁMIDES',unit:'pisos',controls:'Toque, clic o Espacio para soltar',
+       short:'Suelta cada bloque justo encima del anterior: lo que sobresale se corta y cae. Encadena encajes perfectos para levantar la pirámide más alta.'},
+      {id:'hathor',name:'LA DANZA DE HATHOR',unit:'pts',controls:'← ↓ ↑ → o D F J K · toque en móvil',
+       short:'Juego de ritmo al son de la música de Hathor: pulsa cada nota justo cuando toque la línea dorada y encadena combos hasta el rango S.'},
+      {id:'laberinto',name:'EL LABERINTO DEL DUAT',unit:'pts',controls:'Flechas, WASD o deslizar',
+       short:'Un laberinto nuevo cada nivel, solo con la luz de tu antorcha. Encuentra la llave de Anubis y escapa sin que te atrapen las momias.'},
       {id:'poker',name:'LA MESA DE LOS DIOSES',unit:'fichas',controls:'Ratón, toque o teclado (F · C · R · A)',deps:['cartas'],practice:true,
        short:'Póker Texas Hold\'em contra Sobek, Bastet y Thot. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
       {id:'blackjack',name:'BLACKJACK DE ANUBIS',unit:'fichas',controls:'Ratón, toque o teclado (H · S · D · V)',deps:['cartas'],practice:true,
@@ -1079,7 +1141,13 @@ const CONTENT={
       {id:'ruleta',name:'LA RUEDA DE THOT',unit:'fichas',controls:'Ratón o toque · Enter para girar',deps:['cartas'],practice:true,
        short:'Ruleta europea de un solo cero con Thot de crupier: pleno, docenas, columnas, rojo o negro. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
       {id:'senet',name:'EL SENET DE JONSU',unit:'fichas',controls:'Ratón, toque o teclado · Enter para lanzar',deps:['cartas'],practice:true,
-       short:'El juego de mesa de los faraones contra el dios de la Luna: lanza las tablillas, salta casillas sagradas y saca tus piezas antes que Jonsu. Modo práctica con fichas gratis.'}
+       short:'El juego de mesa de los faraones contra el dios de la Luna: lanza las tablillas, salta casillas sagradas y saca tus piezas antes que Jonsu. Modo práctica con fichas gratis.'},
+      {id:'tragaperras',name:'TRAGAPERRAS DE RA',unit:'fichas',controls:'Ratón, toque o teclado · Enter para tirar',deps:['cartas'],practice:true,
+       short:'Tres rodillos, cinco líneas y el disco de Ra como comodín: tres soles dan el premio mayor. Modo práctica con fichas gratis.'},
+      {id:'dados',name:'LOS DADOS DE SET',unit:'fichas',controls:'Ratón o toque · Enter para tirar',deps:['cartas'],practice:true,
+       short:'Sic bo con tres dados: apuesta a pequeño o grande, a la suma exacta, a dobles o al triple que paga 180 a 1. Modo práctica con fichas gratis.'},
+      {id:'mayormenor',name:'MAYOR O MENOR DE MAAT',unit:'fichas',controls:'Ratón, toque o teclado (↑ ↓ S C)',deps:['cartas'],practice:true,
+       short:'¿La siguiente carta será mayor o menor? Cada acierto multiplica tu bote; cobra a tiempo o piérdelo todo. Modo práctica con fichas gratis.'}
     ],
     results:{title:'FIN DE LA PRUEBA',newRecord:'¡NUEVO RÉCORD!',best:'RÉCORD',ankhs:'ANKHS GANADOS',retry:'REINTENTAR',exit:'SALIR',practice:'MODO PRÁCTICA',practiceNote:'SIN ANKHS',
       casinoTitle:'TE LEVANTAS DE LA MESA',casinoWin:'¡SALES GANANDO!',buyIn:'ENTRADA',cashOut:'COBRAS',balance:'BALANCE',toCasino:'VOLVER AL CASINO'}
@@ -1407,7 +1475,7 @@ const TEMPLE=(function(){
     const got=ACH.filter(x=>data.ach[x.id]).length;if(got>=Math.ceil(ACH.length/2))unlock('ach-half');if(ACH.every(x=>x.id==='ach-all'||data.ach[x.id]))unlock('ach-all')}
   const ICO=['all','night','ach-half','ach-all','mem-first','mem-2000','mem-combo','mem-fast','mem-perfect','run-500','run-row','run-1000','run-shield','run-ankhs','run-2000','run-3000','jc-first','jc-lines','jc-perfect','pk-pot','pk-flush','pk-quads','pk-champ','bj-bj','bj-double','bj-five','bj-streak','bj-2000','rl-pleno','rl-zero','rl-big','rl-double','sn-win','sn-perfect','cs-first','shop-first','cs-profit','cs-rich','shop-backs','ankh'];
   const icon=id=>{let k=ICO.indexOf(id);if(k<0)k=ICO.length-1;return '<i class="am-ic" style="background-position:'+((k%8)/7*100).toFixed(3)+'% '+(Math.floor(k/8)/4*100).toFixed(3)+'%"></i>'};
-  const medal=(a,on)=>'<span class="am-medal t-'+a.t+(on?' on':'')+'">'+(a.id?(a.hidden&&!on?'<i>?</i>':icon(a.id)):'')+'</span>';
+  const medal=(a,on)=>'<span class="am-medal t-'+a.t+(on?' on':'')+'">'+(a.id?(a.hidden&&!on?'<i>?</i>':icon(a.ic||a.id)):'')+'</span>';
   function nightOwl(){const h=new Date().getHours();if(h>=2&&h<5)unlock('night')}
   function nextAch(){if(achBusy||!achQ.length)return;achBusy=true;const a=achQ.shift(),el=$('#achv');
     el.className='achv t-'+a.t;el.innerHTML=medal(a,true)+'<span class="achv-t"><small>'+esc(T.achUnlocked)+' · '+esc(T.achTiers[a.t])+'</small><b>'+esc(a.name)+'</b><em>'+esc(a.desc)+'</em></span><span class="achv-r"><i>𓋹</i>+'+a.reward+'</span>';
@@ -1465,6 +1533,18 @@ const TEMPLE=(function(){
     if(g.id==='senet'){let sq='';for(let i=0;i<30;i++){const sp={14:'𓋹',25:'𓄤',26:'𓈗',29:'𓇳'}[i];sq+='<i class="'+(sp?(i===26?'w':'g'):'')+'">'+(sp||'')+'</i>'}
       return '<div class="tcover sn" aria-hidden="true"><div class="snb">'+sq+'</div><span class="cn" style="left:23%;top:30%"></span><span class="cn" style="left:47%;top:51%"></span><span class="spl" style="left:35%;top:30%"></span><span class="spl" style="left:65%;top:72%"></span><div class="stk"><b></b><b class="d"></b><b></b><b></b></div></div>'}
     if(g.id==='ruleta')return '<div class="tcover felt rl" aria-hidden="true"><i class="rail"></i><span class="whs">'+miniWheel('')+'</span><span class="rn" style="left:62%;top:20%;background:#A8361C">17</span><span class="rn" style="left:70%;top:34%;background:#0A0A08">8</span><span class="rn" style="left:61%;top:48%;background:#B8901F">0</span><i class="ch" style="left:76%;bottom:14%"></i><i class="ch b" style="left:80%;bottom:20%"></i></div>';
+    if(g.id==='piramide'){const rows=[[78,0],[66,1],[56,0],[46,0],[38,1],[30,0]];
+      return '<div class="tcover pyr" aria-hidden="true"><div class="sand"></div><i class="gl"></i>'+rows.map(([w,gd],i)=>'<i class="bk'+(gd?' g':'')+'" style="width:'+w*.6+'%;bottom:'+(12+i*9)+'%"></i>').join('')+'<i class="bk mv" style="width:'+30*.6+'%;bottom:'+(12+6*9+4)+'%;left:50%"></i></div>'}
+    if(g.id==='hathor'){const L=[['#2456B8',30],['#C9A227',43],['#F4EFE3',57],['#C2412D',70]];
+      return '<div class="tcover hat" aria-hidden="true"><i class="horns"></i><i class="sun"></i><i class="dancer"></i><i class="dancer r"></i>'+L.map(([c,x])=>'<i class="ln" style="left:'+(x-6.5)+'%"></i>').join('')+'<i class="jl"></i>'+L.map(([c,x])=>'<i class="rc" style="left:'+x+'%;--c:'+c+'"></i>').join('')+
+        L.map(([c,x],i)=>'<i class="nt" style="left:'+x+'%;--c:'+c+';--d:-'+(i*.47).toFixed(2)+'s"></i>').join('')+'</div>'}
+    if(g.id==='laberinto'){const M=['11111111111111111','10001000100000001','10101011101111101','10100010001000001','10111110111011111','10000000100010001','11101111101110101','10001000001000101','10111011111011101','11111111111111111'];
+      return '<div class="tcover lab" aria-hidden="true"><div class="mz">'+M.join('').split('').map(c=>'<i'+(c==='1'?' class="w"':'')+'></i>').join('')+'</div><div class="dk"></div><i class="hero"></i><span class="key">⚷</span><i class="eye" style="left:58%;top:40%"></i><i class="eye" style="left:22%;top:26%;animation-delay:-1s"></i></div>'}
+    if(g.id==='tragaperras'){const ic=n=>'background-position:'+((n%8)/7*100).toFixed(2)+'% '+(Math.floor(n/8)/4*100).toFixed(2)+'%';
+      return '<div class="tcover sl" aria-hidden="true"><i class="wing" style="left:27%"></i><i class="wing" style="right:27%;transform:scaleX(-1)"></i><i class="sun"></i><div class="mach">'+[15,15,15,37,12,22].map(n=>'<i style="'+ic(n)+'"></i>').join('')+'</div></div>'}
+    if(g.id==='dados'){const P={1:[4],3:[0,4,8],5:[0,2,4,6,8],4:[0,2,6,8]};const die=(n,r)=>'<span class="die'+(n===1||n===4?' red':'')+'" style="--r:'+r+'deg">'+Array.from({length:9},(_,i)=>'<i'+(P[n].includes(i)?' class="on"':'')+'></i>').join('')+'</span>';
+      return '<div class="tcover felt dd" aria-hidden="true"><i class="rail"></i>'+die(5,-12)+die(3,8)+die(4,-4)+'<b class="sumb">12</b><i class="ch" style="left:8%;bottom:12%"></i><i class="ch b" style="left:13%;bottom:18%"></i></div>'}
+    if(g.id==='mayormenor')return '<div class="tcover felt mm" aria-hidden="true"><i class="rail"></i><span class="mc" data-r="7" style="left:31%;top:20%;--rt:-8deg">𓋹</span><span class="mc fc" data-r="?" style="left:50%;top:18%;--rt:6deg">𓆄</span><b class="arr" style="left:69%;top:22%">▲</b><b class="arr d" style="left:69%;top:44%">▼</b><b class="mult">×1,94</b></div>';
     if(g.id==='juicio')return '<div class="tcover jc" aria-hidden="true"><img class="aj" src="juegos/juicio/anubis-juez.webp" alt="" decoding="async" loading="lazy"><div class="sc">'+SCALE+'</div><img class="am" src="juegos/juicio/ammit.webp" alt="" decoding="async" loading="lazy"><span class="cd">if (a == b)</span></div>';
     return '<div class="tcover judge" aria-hidden="true">'+SCALE+'</div>'}
   function casinoBanner(g){const crew=[['jonsu','s'],['thot','s'],['anubis','a'],['bastet','s']];
@@ -1510,7 +1590,8 @@ const TEMPLE=(function(){
     $('#arena-help').hidden=true;$('#help').hidden=true;helpImpl=null;
     load(id).then(impl=>{if(app.dataset.screen!=='arena')return;ld.hidden=true;stopGame();applyCos();helpImpl=impl;$('#arena-help').hidden=!impl.help;$('#arena-help').textContent=touchUI()?'?':T.helpBtn;$('#arena-help').setAttribute('aria-label',T.helpTitle);
       const cApi=casino?{chips:data.session.chips,buy:casino.buy,rate:RATE,save:c=>{if(data.session){data.session.chips=Math.max(0,Math.floor(c));save()}}}:null;
-      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,collage,casino:cApi,ach:unlock,duck:()=>music.duck(),t:k=>(impl.texts&&impl.texts[k])||k,
+      current=impl.create($('#arena-stage'),{base:'juegos/',reduced,sfx,tone,noise,collage,casino:cApi,ach:unlock,duck:()=>music.duck(),
+        audio:()=>{const a=audio();return a?{ac:a,out:master}:null},music:{stop:()=>music.stop(),start:()=>{if(started&&music.enabled&&!muted)music.start()}},t:k=>(impl.texts&&impl.texts[k])||k,
         setScore:txt=>{$('#arena-score').innerHTML=esc(txt).replace(/𓋹/g,'<i class="g">𓋹</i>')},finish:r=>casino?casinoResults(g,r):showResults(g,r)});current._id=id})
       .catch(()=>{ld.querySelector('span').textContent=T.loadError;if(casino)settle(data.session?data.session.chips:0)})}
   function stopGame(){if(current){try{current.stop()}catch(e){}current=null}}
