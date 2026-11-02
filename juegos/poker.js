@@ -62,7 +62,7 @@ function equityR(hole,board,ranges,iters){const used=new Set(hole.concat(board).
   return win/iters}
 
 const CSS=`
-.pk-area{position:absolute;left:10px;right:10px;top:68px;bottom:calc(92px + var(--ab));container-type:size}
+.pk-area{position:absolute;left:10px;right:10px;top:68px;bottom:max(calc(92px + var(--ab)),calc(var(--bar,0px) + 24px));container-type:size}
 .pk-table{left:50%;top:50%;width:min(86cqw,172cqh);aspect-ratio:2.05/1;transform:translate(-50%,-52%);border-radius:999px;--cw:clamp(38px,min(8.6cqw,15cqh),78px)}
 .pk-arc{position:absolute;left:18%;right:18%;top:58%;aspect-ratio:1000/180;pointer-events:none}
 .pk-arc svg{width:100%;height:100%}
@@ -111,7 +111,7 @@ const CSS=`
 .pk-bet{position:absolute;z-index:2;display:flex;align-items:center;gap:5px;transform:translate(-50%,-50%);--chw:clamp(18px,2.2cqw,24px)}
 .pk-bet span{font:400 14px/1 var(--f-cond);letter-spacing:.05em;color:var(--ivory);text-shadow:0 1px 2px #000}
 .pk-bet.b0{left:50%;top:69%}.pk-bet.b1{left:21%;top:50%}.pk-bet.b2{left:50%;top:27%}.pk-bet.b3{left:79%;top:50%}
-.pk-raise{position:absolute;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(96px + var(--ab));z-index:6;display:flex;align-items:center;gap:6px;background:rgba(10,10,8,.92);border:1px solid var(--gold);padding:7px 8px;transform:skewX(-8deg);box-shadow:5px 5px 0 rgba(201,162,39,.4)}
+.pk-raise{position:absolute;right:max(14px,env(safe-area-inset-right,0px));bottom:max(calc(96px + var(--ab)),calc(var(--bar,0px) + 28px));z-index:6;display:flex;align-items:center;gap:6px;background:rgba(10,10,8,.92);border:1px solid var(--gold);padding:7px 8px;transform:skewX(-8deg);box-shadow:5px 5px 0 rgba(201,162,39,.4)}
 .pk-raise[hidden]{display:none}
 .pk-raise button{border:0;cursor:pointer;font:400 15px/1 var(--f-cond);letter-spacing:.08em;background:transparent;color:var(--ivory);box-shadow:inset 0 0 0 1.5px rgba(244,239,227,.5);padding:6px 9px 5px}
 .pk-raise button:hover,.pk-raise button:focus-visible{background:var(--gold-hi);color:var(--ink);box-shadow:none}
@@ -135,7 +135,7 @@ const CSS=`
   .pk-eq{left:calc(100% + 8px);min-width:0;padding:6px 8px 7px}
   .pk-bet.b0{top:71%}.pk-bet.b1{left:22%;top:40%}.pk-bet.b2{top:23%}.pk-bet.b3{left:78%;top:40%}
 }
-@media (max-width:700px){.pk-area{bottom:calc(150px + var(--ab))}.pk-raise{left:50%;right:auto;bottom:calc(104px + var(--ab));transform:translateX(-50%) skewX(-8deg)}}
+@media (max-width:700px){.pk-area{bottom:max(calc(150px + var(--ab)),calc(var(--bar,0px) + 82px))}.pk-raise{left:50%;right:auto;bottom:max(calc(104px + var(--ab)),calc(var(--bar,0px) + 36px));transform:translateX(-50%) skewX(-8deg)}}
 `;
 const HTML=`<div class="pk-area"><div class="pk-table tc-felt">
   <div class="pk-arc" aria-hidden="true"><svg viewBox="0 0 1000 180"><path id="pkArc" d="M80 10Q500 210 920 10" fill="none"/>

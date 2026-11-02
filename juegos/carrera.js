@@ -319,7 +319,11 @@ function create(stage,api){
   };
 }
 
-window.TEMPLO.register('carrera',{create,texts:{
+window.TEMPLO.register('carrera',{create,help:[
+  {t:'OBJETIVO',p:'Corre todo lo que puedas por el desierto sin chocar. Los metros recorridos son tu récord; además de los ankhs que recojas, cada 250 m te dan uno de bonus.'},
+  {t:'SALTAR',p:'Espacio, ↑ o toque. Si mantienes pulsado, el salto es más alto: lo necesitarás para el sarcófago y la columna caída. Si chilla el halcón, ¡no saltes!: vuela a ras de cabeza.'},
+  {t:'AYUDAS',p:'El rombo «!» del borde avisa del obstáculo que viene. Cada 400 m hay un respiro con una fila de ankhs (cógela entera: +2). El ojo de Horus te protege de un golpe.'},
+  {t:'VELOCIDAD',p:'La carrera acelera poco a poco y los obstáculos nuevos se presentan con un cartel la primera vez que aparecen. Más allá de los 1.200 m empieza a amanecer.'}],texts:{
   readyTitle:'LA CARRERA DEL CHACAL',readyKey:'PULSA ESPACIO PARA EMPEZAR',readyTouch:'TOCA PARA EMPEZAR',
   tip:'Mantén pulsado para saltar más alto · El «!» del borde avisa de lo que viene',
   breakTitle:'{m} M · RESPIRA',breakSub:'Coge la fila entera: +2 ankhs',rowTitle:'¡FILA COMPLETA! +2',

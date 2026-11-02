@@ -78,7 +78,10 @@ function create(stage,api){
   build();
   return{restart(){build()},stop(){clearInterval(timer);removeEventListener('keydown',kd);wrap.remove()}};
 }
-window.TEMPLO.register('memoria',{create,texts:{
+window.TEMPLO.register('memoria',{create,help:[
+  {t:'OBJETIVO',p:'Encuentra las 8 parejas de jeroglíficos. Destapa dos cartas: si son iguales se quedan boca arriba; si no, vuelven a darse la vuelta.'},
+  {t:'PUNTOS',p:'Cada pareja da 100 puntos multiplicados por tu racha: la segunda seguida vale 200, la tercera 300… Fallar reinicia la racha. Al terminar, cuanto antes acabes, más bonus de tiempo.'},
+  {t:'CONTROLES',p:'Ratón o toque sobre las cartas. Con teclado: flechas o WASD para moverte y Enter o Espacio para destapar.'}],texts:{
   aria:'Tablero de 16 cartas',cardHidden:'Carta boca abajo',cardShown:'Carta con el jeroglífico {g}',
   detail:'{m} movimientos · {t} · {b} de bonus por tiempo'}});
 })();

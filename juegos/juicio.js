@@ -78,7 +78,7 @@ const FEATHER='<path d="M7.4 23.4C5.3 15.6 5.9 7.4 11.5 2.3c2.9-2.5 8.4-2.2 8.6.
 const HEART='<path d="M12 21C5 16 2 12.2 2 8.4 2 5.4 4.4 3 7.3 3c2 0 3.6 1 4.7 2.6C13.1 4 14.7 3 16.7 3 19.6 3 22 5.4 22 8.4c0 3.8-3 7.6-10 12.6z" fill="#A8361C" stroke="#0A0A08" stroke-width="1.6"/><path d="M6.2 6.4c-1.3.6-2 1.8-2 3" stroke="#F4EFE3" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".7"/>';
 
 const CSS=`
-.jc-wrap{position:absolute;left:0;right:0;top:64px;bottom:calc(86px + var(--ab));container-type:size}
+.jc-wrap{position:absolute;left:0;right:0;top:64px;bottom:max(calc(86px + var(--ab)),calc(var(--bar,0px) + 18px));container-type:size}
 .jc-deco{position:absolute;inset:-64px 0 0;pointer-events:none;background:repeating-linear-gradient(118deg,transparent 0 38px,rgba(122,92,30,.12) 38px 40px)}
 .jc-deco::before{content:"";position:absolute;left:30%;top:-10%;width:40%;height:90%;background:radial-gradient(ellipse at 50% 30%,rgba(245,200,66,.14),transparent 65%)}
 .jc-main{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.9fr) minmax(0,.62fr);gap:clamp(10px,1.6cqw,24px);padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));align-items:end}

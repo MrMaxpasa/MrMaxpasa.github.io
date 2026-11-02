@@ -236,6 +236,9 @@ function acts(root,api){
     const low=k.toLowerCase();const hit=list.find(a=>a.key&&(a.key===low||(a.keys&&a.keys.includes(low))));
     if(hit&&!hit.el.disabled&&!hit.el.hidden){e.preventDefault();api.sfx.confirm();hit.on();return true}return false}
   function hide(h){bar.hidden=h;bar.style.visibility=h?'hidden':''}
+  /* --bar: la altura máxima que ha tenido la barra (si en móvil ocupa dos o tres filas, las mesas se apartan y no se tapan) */
+  let barMax=0,lastW=0;const meas=()=>{const w=root.clientWidth;if(w!==lastW){lastW=w;barMax=0}const h=bar.offsetHeight;if(h>barMax){barMax=h;root.style.setProperty('--bar',h+'px')}};
+  if(window.ResizeObserver){const ro=new ResizeObserver(meas);ro.observe(bar);ro.observe(root)}
   return{set,key,hide,bar}}
 
 let cssDone=false;

@@ -73,7 +73,7 @@ function create(stage,api){
     for(let i=0;i<nm&&i<mc.length;i++)mummies.push({x:mc[i][0],y:mc[i][1],px:mc[i][0],py:mc[i][1],dir:null,prog:0,speed:Math.min(4.3,2.2+level*.22),chase:0,ph:Math.random()*6});
     torch=1;lvTime=0;camX=player.x;camY=player.y;hud();say(T('level').replace('{n}',level),level===1?T('levelTip1'):T('levelTip'))}
   function reset(){level=0;score=0;lives=3;coins=0;state='ready';time=0;flash=0;hurt=0;parts=[];newLevel();msg.hidden=false;pop.classList.remove('on')}
-  function hud(){api.setScore(T('lvl')+' '+level+' · '+score.toLocaleString('es-ES')+' pts · '+'♥'.repeat(Math.max(0,lives)))}
+  function hud(){api.setScore(T('lvl')+' '+level+' · '+score.toLocaleString('es-ES')+' · '+'♥'.repeat(Math.max(0,lives)))}
   const open=(x,y)=>grid[y]&&grid[y][x]===0&&!(items.some(i=>i.k==='door'&&i.x===x&&i.y===y)&&!doorOpen&&false);
 
   /* ---------- movimiento ---------- */
@@ -205,7 +205,7 @@ window.TEMPLO.register('laberinto',{create,help:[
   {t:'PUNTOS',p:'Ankhs del suelo, la llave, el aceite y cada salida suman. Escapar rápido y con mucha antorcha da más bonus.'}],texts:{
   readyTitle:'EL LABERINTO DEL DUAT',readyKey:'PULSA UNA FLECHA PARA EMPEZAR',readyTouch:'DESLIZA PARA EMPEZAR',
   tipKey:'Flechas o WASD · coge la llave y busca la puerta',tipTouch:'Desliza o usa la cruceta · coge la llave y busca la puerta',
-  level:'NIVEL {n}',levelTip1:'Busca la llave dorada antes de que se apague la antorcha',levelTip:'El laberinto crece y las momias despiertan',lvl:'NIVEL',
+  level:'NIVEL {n}',levelTip1:'Busca la llave dorada antes de que se apague la antorcha',levelTip:'El laberinto crece y las momias despiertan',lvl:'NV',
   key:'¡LA LLAVE DE ANUBIS!',keySub:'La puerta brilla: síguela',locked:'PUERTA SELLADA',lockedSub:'Necesitas la llave',oil:'+ ACEITE',
   caught:'¡TE HA ATRAPADO!',caughtSub:'Vuelves al inicio del nivel',dark:'LA ANTORCHA SE APAGA',escaped:'¡HAS ESCAPADO!',escapedSub:'Bonus de salida: +{b}',
   torch:'ANTORCHA',hasKey:'LLAVE ✓',

@@ -365,6 +365,12 @@ button{font:inherit;color:inherit}
 .tcover.lab .key{position:absolute;left:73%;top:30%;font-size:clamp(16px,2vw,26px);color:#F5C842;text-shadow:0 0 10px rgba(245,200,66,.9);transform:rotate(-20deg)}
 .tcover.lab .eye{position:absolute;width:1.2%;aspect-ratio:1;border-radius:50%;background:#ff3b2a;box-shadow:0 0 6px #ff3b2a,9px 0 0 #ff3b2a,9px 0 6px #ff3b2a;animation:labEye 2s steps(1) infinite}
 @keyframes labEye{90%{opacity:0}}
+.tcover.chs{background:radial-gradient(ellipse at 70% 30%,rgba(201,162,39,.18),transparent 60%),#0d0a07;perspective:600px}
+.tcover.chs .brd{position:absolute;left:-6%;right:22%;bottom:-38%;height:110%;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(5,1fr);transform:rotateX(52deg);transform-origin:50% 100%;box-shadow:0 0 0 3px #C9A227,0 0 0 6px #0A0A08}
+.tcover.chs .brd i{background:#E8DAB5}.tcover.chs .brd i.d{background:#A9834D}
+.tcover.chs .th{position:absolute;right:2%;bottom:0;height:96%;filter:drop-shadow(0 0 10px rgba(245,200,66,.3))}
+.tcover.chs .pc{position:absolute;width:15%;filter:drop-shadow(0 4px 3px rgba(0,0,0,.5))}.tcover.chs .pc svg{display:block;width:100%}
+.tcover.chs .pc.k{left:16%;bottom:16%;width:18%}.tcover.chs .pc.q{left:40%;bottom:30%;width:14%}.tcover.chs .pc.n{left:58%;bottom:10%;width:17%}
 .tcover.sl{background:radial-gradient(ellipse at 50% 30%,#3a1d0c,#1a0d06 55%,#070403);display:grid;place-items:center}
 .tcover.sl .mach{position:relative;width:34%;aspect-ratio:1.25;margin-top:9%;background:linear-gradient(#2a1c0c,#140c05);border:3px solid #C9A227;border-radius:10px;box-shadow:0 0 0 3px #0A0A08,0 8px 16px rgba(0,0,0,.6);display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:8% 6%}
 .tcover.sl .mach i{background:#F4EFE3 url("juegos/logros/iconos.webp") 0 0/800% 500% no-repeat;background-origin:content-box;padding:12%;box-shadow:inset 0 0 0 2px #0A0A08;border-radius:2px}
@@ -1086,6 +1092,11 @@ const CONTENT={
       {id:'lab-first',gr:'laberinto',t:'b',ic:'cs-first',name:'Salida del Duat',desc:'Escapa de tu primer laberinto.',glyph:'𓉐',reward:15},
       {id:'lab-5',gr:'laberinto',t:'s',ic:'run-500',name:'Guía de almas',desc:'Escapa de 5 laberintos en una misma partida.',glyph:'𓃥',reward:40},
       {id:'lab-10',gr:'laberinto',t:'g',ic:'jc-first',name:'Señor del Duat',desc:'Escapa de 10 laberintos en una misma partida.',glyph:'𓋾',reward:90},
+      {id:'ajz-first',gr:'ajedrez',t:'b',ic:'jc-first',name:'Alumno de Thot',desc:'Termina una partida de ajedrez.',glyph:'𓁟',reward:10},
+      {id:'ajz-win',gr:'ajedrez',t:'b',ic:'pk-pot',name:'Primer jaque mate',desc:'Gana una partida de ajedrez en cualquier dificultad.',glyph:'𓋹',reward:15},
+      {id:'ajz-normal',gr:'ajedrez',t:'s',ic:'pk-champ',name:'Estratega del Nilo',desc:'Gana al ajedrez en dificultad Normal.',glyph:'𓌀',reward:40},
+      {id:'ajz-hard',gr:'ajedrez',t:'g',ic:'ach-all',name:'Más sabio que Thot',desc:'Gana al ajedrez en dificultad Difícil.',glyph:'𓅞',reward:100},
+      {id:'ajz-perfect',gr:'ajedrez',t:'p',hidden:true,ic:'cs-rich',name:'Mate del faraón',desc:'Gana en Difícil en 30 jugadas o menos sin perder la dama.',glyph:'𓇳',reward:200},
       {id:'pk-pot',gr:'poker',t:'b',name:'Primer bote',desc:'Gana un bote en la mesa de los dioses.',glyph:'𓆋',reward:10},
       {id:'pk-flush',gr:'poker',t:'s',name:'Mano divina',desc:'Gana un bote con color o una jugada mejor.',glyph:'𓅝',reward:30},
       {id:'pk-quads',gr:'poker',t:'g',name:'Cuatro dioses',desc:'Gana un bote con póker o una jugada mejor.',glyph:'𓊪',reward:70},
@@ -1112,7 +1123,7 @@ const CONTENT={
       {id:'cs-profit',gr:'casino',t:'g',name:'Te levantas ganando',desc:'Sal de una mesa del casino con 100 ankhs o más de beneficio.',glyph:'𓎛',reward:60},
       {id:'cs-rich',gr:'casino',t:'p',name:'Tesoro del faraón',desc:'Reúne 1.000 ankhs a la vez.',glyph:'𓋞',reward:150},
       {id:'shop-backs',gr:'casino',t:'p',name:'Coleccionista',desc:'Consigue todos los reversos del bazar.',glyph:'𓆓',reward:150}],
-    achGroups:{gen:'TEMPLO',memoria:'MEMORIA DE JEROGLÍFICOS',carrera:'LA CARRERA DEL CHACAL',juicio:'EL JUICIO DE LAS ALMAS',piramide:'EL CONSTRUCTOR DE PIRÁMIDES',hathor:'LA DANZA DE HATHOR',laberinto:'EL LABERINTO DEL DUAT',poker:'LA MESA DE LOS DIOSES',blackjack:'BLACKJACK DE ANUBIS',ruleta:'LA RUEDA DE THOT',senet:'EL SENET DE JONSU',tragaperras:'TRAGAPERRAS DE RA',dados:'LOS DADOS DE SET',mayormenor:'MAYOR O MENOR DE MAAT',casino:'CASINO Y BAZAR'},
+    achGroups:{gen:'TEMPLO',memoria:'MEMORIA DE JEROGLÍFICOS',carrera:'LA CARRERA DEL CHACAL',juicio:'EL JUICIO DE LAS ALMAS',piramide:'EL CONSTRUCTOR DE PIRÁMIDES',hathor:'LA DANZA DE HATHOR',laberinto:'EL LABERINTO DEL DUAT',ajedrez:'EL AJEDREZ DE THOT',poker:'LA MESA DE LOS DIOSES',blackjack:'BLACKJACK DE ANUBIS',ruleta:'LA RUEDA DE THOT',senet:'EL SENET DE JONSU',tragaperras:'TRAGAPERRAS DE RA',dados:'LOS DADOS DE SET',mayormenor:'MAYOR O MENOR DE MAAT',casino:'CASINO Y BAZAR'},
     achTiers:{b:'BRONCE',s:'PLATA',g:'ORO',p:'PLATINO'},achSecret:'Logro secreto',achSecretDesc:'Sigue jugando: se revela al conseguirlo.',
     tag:'MINIJUEGO',practiceTag:'PRÁCTICA',trainHead:'SALA DE ENTRENAMIENTO',trainSub:'Las mesas del casino con fichas gratis: practica sin jugarte ankhs',casinoTag:'CASINO',casinoWord:'CASINO',casinoKick:'ZONA DE APUESTAS · ABIERTO TODA LA NOCHE',
     casinoBand:'PÓKER ✦ BLACKJACK ✦ RULETA ✦ SENET ✦ TRAGAPERRAS ✦ DADOS ✦ MAYOR O MENOR ✦ BAZAR DE BASTET ✦ ',casinoGames:[{n:'PÓKER'},{n:'BLACKJACK'},{n:'RULETA'},{n:'SENET'},{n:'TRAGAPERRAS'},{n:'DADOS'},{n:'MAYOR O MENOR'}],wallet:'TU CARTERA',enterCasino:'ENTRAR AL CASINO ▸',
@@ -1134,6 +1145,8 @@ const CONTENT={
        short:'Juego de ritmo al son de la música de Hathor: pulsa cada nota justo cuando toque la línea dorada y encadena combos hasta el rango S.'},
       {id:'laberinto',name:'EL LABERINTO DEL DUAT',unit:'pts',controls:'Flechas, WASD o deslizar',
        short:'Un laberinto nuevo cada nivel, solo con la luz de tu antorcha. Encuentra la llave de Anubis y escapa sin que te atrapen las momias.'},
+      {id:'ajedrez',name:'EL AJEDREZ DE THOT',unit:'pts',controls:'Ratón, toque o flechas + Enter',deps:['cartas'],
+       short:'Ajedrez completo contra Thot, el dios de la sabiduría, con tres dificultades: Fácil, Normal y Difícil. Enroque, al paso, promoción y tablas.'},
       {id:'poker',name:'LA MESA DE LOS DIOSES',unit:'fichas',controls:'Ratón, toque o teclado (F · C · R · A)',deps:['cartas'],practice:true,
        short:'Póker Texas Hold\'em contra Sobek, Bastet y Thot. Modo práctica con fichas gratis: para jugarte ankhs, entra al casino.'},
       {id:'blackjack',name:'BLACKJACK DE ANUBIS',unit:'fichas',controls:'Ratón, toque o teclado (H · S · D · V)',deps:['cartas'],practice:true,
@@ -1522,6 +1535,10 @@ const TEMPLE=(function(){
     s+='<circle cx="200" cy="200" r="140" fill="none" stroke="#0A0A08" stroke-width="4"/><circle cx="200" cy="200" r="120" fill="#16120c" stroke="#0A0A08" stroke-width="5"/><circle cx="200" cy="200" r="114" fill="none" stroke="#C9A227" stroke-width="3"/>';
     for(let k=0;k<4;k++)s+='<g transform="rotate('+(k*90+st/2)+' 200 200)"><path d="M200 200V98" stroke="#0A0A08" stroke-width="12" stroke-linecap="round"/><path d="M200 200V98" stroke="#C9A227" stroke-width="6" stroke-linecap="round"/><circle cx="200" cy="98" r="9" fill="#F5C842" stroke="#0A0A08" stroke-width="3"/></g>';
     return s+'<circle cx="200" cy="200" r="40" fill="#F5C842" stroke="#0A0A08" stroke-width="5"/><circle cx="200" cy="200" r="31" fill="#0A0A08"/><text x="200" y="214" text-anchor="middle" font-size="38" fill="#F5C842" style="font-family:var(--f-glyph)">&#x13080;</text></g></svg>'}
+  function CHESS_PC(k){const W={k:['#F4EFE3','<path d="M29 74l9-31h24l9 31z"/><circle cx="50" cy="38" r="7.5"/><path d="M41 34l2-13c0-7 4-10 7-10s7 3 7 10l2 13z"/>','<ellipse cx="50" cy="55" rx="3.2" ry="4" stroke="#B8901F" stroke-width="2.4" fill="none"/><path d="M50 59v10M44.5 62h11" stroke="#B8901F" stroke-width="2.6"/>'],
+      q:['#1d1813','<path d="M31 74l9-27h20l9 27z"/><circle cx="50" cy="40" r="8"/>','<path d="M33 31c0-13 8-20 17-20s17 7 17 20" stroke="#D4AF37" stroke-width="4" fill="none"/><circle cx="50" cy="22" r="7.5" fill="#C2412D" stroke="#0A0A08" stroke-width="2"/>'],
+      n:['#F4EFE3','<path d="M64 74c-3-8-2-15 2-21-6 1-13 0-19-3l-11 3c-3 1-5-2-3-4l12-12 3-17 7 11 5-14 4 16c7 6 10 15 9 25-1 6-3 11-5 16z"/>','<circle cx="52" cy="37" r="2.6" fill="#B8901F"/>']}[k];
+    return '<svg viewBox="0 0 100 100"><g fill="'+W[0]+'" stroke="#0A0A08" stroke-width="3" stroke-linejoin="round"><path d="M21 91h58a4.5 4.5 0 0 0 0-9H21a4.5 4.5 0 0 0 0 9z"/><path d="M27 82h46l-5-8H32z"/>'+W[1]+'</g>'+W[2]+'</svg>'}
   function cover(g){
     if(g.casino)return '<div class="tcover casino" aria-hidden="true"><i class="col" style="left:7%"></i><i class="col" style="right:7%"></i><div class="mq"><b>CASINO</b><small>DE ANUBIS</small></div>'+
       '<span class="mc" data-r="A" style="left:20%;top:52%;--rt:-14deg">𓋹</span><span class="mc fc" data-r="K" style="left:28%;top:48%;--rt:4deg">𓁢</span><i class="ch" style="right:24%;bottom:14%"></i><i class="ch b" style="right:19%;bottom:20%"></i><i class="ch" style="right:27%;bottom:24%"></i><i class="wh"></i></div>';
@@ -1540,6 +1557,8 @@ const TEMPLE=(function(){
         L.map(([c,x],i)=>'<i class="nt" style="left:'+x+'%;--c:'+c+';--d:-'+(i*.47).toFixed(2)+'s"></i>').join('')+'</div>'}
     if(g.id==='laberinto'){const M=['11111111111111111','10001000100000001','10101011101111101','10100010001000001','10111110111011111','10000000100010001','11101111101110101','10001000001000101','10111011111011101','11111111111111111'];
       return '<div class="tcover lab" aria-hidden="true"><div class="mz">'+M.join('').split('').map(c=>'<i'+(c==='1'?' class="w"':'')+'></i>').join('')+'</div><div class="dk"></div><i class="hero"></i><span class="key">⚷</span><i class="eye" style="left:58%;top:40%"></i><i class="eye" style="left:22%;top:26%;animation-delay:-1s"></i></div>'}
+    if(g.id==='ajedrez'){let sq='';const P={2:'♞',13:'♟',19:'♙',27:'♛',36:'♕',44:'♘',50:'♙',58:'♔'};for(let i=0;i<40;i++){const r=Math.floor(i/8),c=i%8;sq+='<i class="'+((r+c)%2?'d':'')+'"></i>'}
+      return '<div class="tcover chs" aria-hidden="true"><div class="brd">'+sq+'</div><img class="th" src="juegos/casino/thot.webp" alt="" loading="lazy" decoding="async"><span class="pc k">'+CHESS_PC('k')+'</span><span class="pc q">'+CHESS_PC('q')+'</span><span class="pc n">'+CHESS_PC('n')+'</span></div>'}
     if(g.id==='tragaperras'){const ic=n=>'background-position:'+((n%8)/7*100).toFixed(2)+'% '+(Math.floor(n/8)/4*100).toFixed(2)+'%';
       return '<div class="tcover sl" aria-hidden="true"><i class="wing" style="left:27%"></i><i class="wing" style="right:27%;transform:scaleX(-1)"></i><i class="sun"></i><div class="mach">'+[15,15,15,37,12,22].map(n=>'<i style="'+ic(n)+'"></i>').join('')+'</div></div>'}
     if(g.id==='dados'){const P={1:[4],3:[0,4,8],5:[0,2,4,6,8],4:[0,2,6,8]};const die=(n,r)=>'<span class="die'+(n===1||n===4?' red':'')+'" style="--r:'+r+'deg">'+Array.from({length:9},(_,i)=>'<i'+(P[n].includes(i)?' class="on"':'')+'></i>').join('')+'</span>';

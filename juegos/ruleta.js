@@ -34,7 +34,7 @@ function buildBets(){const B={};const range=(a,b)=>Array.from({length:b-a+1},(_,
   return B}
 
 const CSS=`
-.rl-wrap{position:absolute;left:0;right:0;top:64px;bottom:calc(86px + var(--ab));container-type:size}
+.rl-wrap{position:absolute;left:0;right:0;top:64px;bottom:max(calc(86px + var(--ab)),calc(var(--bar,0px) + 18px));container-type:size}
 .rl-deco{position:absolute;inset:-64px 0 0;pointer-events:none;background:repeating-linear-gradient(118deg,transparent 0 38px,rgba(122,92,30,.13) 38px 40px)}
 .rl-deco::before{content:"";position:absolute;left:-6%;top:6%;width:50%;height:80%;transform:skewX(-14deg);background:radial-gradient(circle,rgba(201,162,39,.16) 1.1px,transparent 1.7px) 0 0/9px 9px;
   -webkit-mask-image:linear-gradient(160deg,#000 10%,transparent 78%);mask-image:linear-gradient(160deg,#000 10%,transparent 78%)}
@@ -113,7 +113,7 @@ const CSS=`
   .rl-bar{gap:8px}.rl-chipbtn .tc-chip{--chw:38px}
   .rl-felt{min-height:0;display:flex;box-shadow:5px 5px 0 rgba(201,162,39,.85)}
   .rl-tab{grid-template-columns:.8fr .8fr repeat(3,minmax(0,1fr));grid-template-rows:repeat(14,minmax(0,1fr));aspect-ratio:auto;height:100%;width:100%;gap:2px}
-  .rl-c{grid-column:var(--vc)/span var(--vcs);grid-row:var(--vr)/span var(--vrs);font-size:clamp(13px,4.2cqw,19px)}
+  .rl-c{grid-column:var(--vc)/span var(--vcs);grid-row:var(--vr)/span var(--vrs);font-size:clamp(10px,min(4.2cqw,2.7cqh),19px)}
   .rl-c.g{flex-direction:row;gap:6px}
   .rl-c.o{flex-direction:column}
   .rl-c.o .word{--fs:clamp(11px,3.3cqw,14px)}
@@ -124,6 +124,11 @@ const CSS=`
   .rl-z.bu{width:22%;height:2.9%}.rl-z.bw{width:13%;height:4.6%}.rl-z.pt{width:15%;height:3.4%}
   .rl-stake,.rl-z .rl-stake{--chw:22px}
   .rl-info{order:5;min-height:0}.rl-legend{display:none}
+}
+@container (max-aspect-ratio:1/1) and (max-height:500px){
+  .rl-wheelbox{width:min(26cqw,20cqh)}.rl-thot{width:min(15cqw,13cqh)}.rl-say{font-size:11px;padding:6px 9px}
+  .rl-left{margin-bottom:18px}.rl-hist i{width:15px;height:15px;font-size:9px}.rl-bar .rl-chipbtn .tc-chip{--chw:32px}
+  .rl-c{font-size:clamp(9px,min(4cqw,2.5cqh),16px)}
 }
 `;
 const CSS_TOUCH_V=`@container (max-aspect-ratio:1/1){.rl-z.bu{width:30%;height:3.6%}.rl-z.bw{width:18%;height:5.6%}.rl-z.pt{width:20%;height:4.4%}}`;

@@ -27,13 +27,13 @@ function linePay(a,b,c){const t=[a,b,c];
 const CSS=`
 .sl-room{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#3a1d0c 0%,#1a0d06 45%,#070403 100%)}
 .sl-room::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(201,162,39,.05) 0 2px,transparent 2px 60px);pointer-events:none}
-.sl-mach{position:absolute;left:50%;top:max(62px,8%);bottom:calc(100px + var(--ab));transform:translateX(-50%);aspect-ratio:.82;max-width:94%;display:flex;flex-direction:column;align-items:center;container-type:size}
+.sl-mach{position:absolute;left:50%;top:max(62px,8%);bottom:max(calc(100px + var(--ab)),calc(var(--bar,0px) + 32px));transform:translateX(-50%);aspect-ratio:.82;max-width:94%;display:flex;flex-direction:column;align-items:center;container-type:size}
 .sl-top{position:relative;width:70%;aspect-ratio:3/1.15;display:grid;place-items:center;margin-bottom:-2cqh}
 .sl-sun{position:absolute;width:40%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 34%,#FFD27A,#F06A3C 45%,#9C2B18 80%);box-shadow:0 0 0 .8cqh #C9A227,0 0 0 1.4cqh #0A0A08,0 0 6cqh rgba(240,106,60,.55);animation:slPulse 2.6s ease-in-out infinite}
 .sl-wings{position:absolute;inset:18% 0 26%;background:linear-gradient(90deg,transparent 0 2%,#C9A227 2% 40%,transparent 40% 60%,#C9A227 60% 98%,transparent 98%);clip-path:polygon(0 30%,40% 0,40% 100%,0 70%,100% 30%,60% 0,60% 100%,100% 70%);opacity:.9}
 @keyframes slPulse{50%{box-shadow:0 0 0 .8cqh #C9A227,0 0 0 1.4cqh #0A0A08,0 0 9cqh rgba(240,106,60,.8)}}
 .sl-title{position:relative;z-index:2;font:400 3.6cqh/1 var(--f-cond);letter-spacing:.14em;color:var(--ivory);background:var(--ink);border:.25cqh solid var(--gold-hi);padding:.8cqh 2cqh .5cqh;transform:skewX(-8deg) translateY(110%);box-shadow:.6cqh .6cqh 0 var(--gold)}
-.sl-body{position:relative;width:100%;flex:1;min-height:0;background:linear-gradient(180deg,#2a1c0c,#140c05);border:.5cqh solid #C9A227;border-radius:3cqh 3cqh 1.5cqh 1.5cqh;box-shadow:0 0 0 .6cqh #0A0A08,inset 0 0 0 .5cqh rgba(0,0,0,.6),0 3cqh 5cqh rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;padding:4cqh 4% 2.5cqh;box-sizing:border-box;gap:2cqh}
+.sl-body{position:relative;width:100%;flex:1;min-height:0;background:linear-gradient(180deg,#2a1c0c,#140c05);border:.5cqh solid #C9A227;border-radius:3cqh 3cqh 1.5cqh 1.5cqh;box-shadow:0 0 0 .6cqh #0A0A08,inset 0 0 0 .5cqh rgba(0,0,0,.6),0 3cqh 5cqh rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4cqh 4% 2.5cqh;box-sizing:border-box;gap:2cqh}
 .sl-lights{position:absolute;inset:1.4cqh;border-radius:2cqh;pointer-events:none;background:radial-gradient(circle,#F5C842 0 .45cqh,transparent .55cqh) 0 0/4.2cqh 4.2cqh;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:.9cqh;opacity:.55}
 .sl-mach.spin .sl-lights,.sl-mach.win .sl-lights{animation:slLights .35s steps(2) infinite}
 @keyframes slLights{50%{opacity:1;filter:brightness(1.6)}}
@@ -61,7 +61,7 @@ const CSS=`
 .sl-lever::before{content:"";position:absolute;left:35%;top:6%;width:30%;bottom:0;background:linear-gradient(90deg,#7A5C1E,#F5C842,#7A5C1E);border-radius:1cqh;transform-origin:50% 100%;transition:transform .25s}
 .sl-lever::after{content:"";position:absolute;left:-30%;top:-6%;width:160%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a6a,#C2412D 60%,#6b1a10);box-shadow:0 0 0 .3cqh #0A0A08;transition:transform .25s}
 .sl-mach.pull .sl-lever::before{transform:scaleY(-.2)}.sl-mach.pull .sl-lever::after{transform:translateY(560%)}
-@media (max-aspect-ratio:3/4){.sl-mach{top:64px;bottom:calc(118px + var(--ab));aspect-ratio:.72}.sl-lever{display:none}.sl-pay{grid-template-columns:repeat(2,1fr)}}
+@media (max-aspect-ratio:3/4){.sl-mach{top:64px;bottom:max(calc(118px + var(--ab)),calc(var(--bar,0px) + 50px));aspect-ratio:.72}.sl-lever{display:none}.sl-pay{grid-template-columns:repeat(2,1fr)}}
 `;
 
 function create(stage,api){

@@ -15,7 +15,7 @@ const CONE='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="35"
 const SPOOL='<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="35" rx="13" ry="3.5" fill="rgba(0,0,0,.45)"/><path d="M8 9c0-3 24-3 24 0v2c0 2-6 3-7 6v6c1 3 7 4 7 6v3c0 3-24 3-24 0v-3c0-2 6-3 7-6v-6c-1-3-7-4-7-6z" fill="#C9CED6" stroke="#0A0A08" stroke-width="2.4" stroke-linejoin="round"/><ellipse cx="20" cy="9" rx="12" ry="2.6" fill="#EEF1F5" stroke="#0A0A08" stroke-width="1.6"/><path d="M14 17h12M14 23h12" stroke="#7E8794" stroke-width="1.4"/></svg>';
 
 const CSS=`
-.sn-wrap{position:absolute;left:0;right:0;top:64px;bottom:calc(86px + var(--ab));container-type:size}
+.sn-wrap{position:absolute;left:0;right:0;top:64px;bottom:max(calc(86px + var(--ab)),calc(var(--bar,0px) + 18px));container-type:size}
 .sn-deco{position:absolute;inset:-64px 0 0;pointer-events:none;background:repeating-linear-gradient(118deg,transparent 0 38px,rgba(122,92,30,.12) 38px 40px)}
 .sn-deco::after{content:"";position:absolute;right:-4%;top:-6%;width:46%;height:70%;transform:skewX(-14deg);background:radial-gradient(circle,rgba(201,206,214,.16) 1.1px,transparent 1.7px) 0 0/9px 9px;-webkit-mask-image:linear-gradient(200deg,#000 10%,transparent 78%);mask-image:linear-gradient(200deg,#000 10%,transparent 78%)}
 .sn-main{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,2fr);gap:clamp(12px,2cqw,30px);padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));align-items:center}

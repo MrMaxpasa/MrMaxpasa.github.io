@@ -4,7 +4,7 @@
 'use strict';
 const MIN=10;
 const CSS=`
-.bj-table{left:50%;top:76px;bottom:calc(94px + var(--ab));width:min(94%,1120px);transform:translateX(-50%);border-radius:22px 22px 50% 50%/22px 22px 40% 40%;--cw:clamp(48px,min(15vw,11.5vh),104px)}
+.bj-table{left:50%;top:76px;bottom:max(calc(94px + var(--ab)),calc(var(--bar,0px) + 26px));width:min(94%,1120px);transform:translateX(-50%);border-radius:22px 22px 50% 50%/22px 22px 40% 40%;--cw:clamp(48px,min(15vw,11.5vh),104px)}
 .bj-rack{position:absolute;left:50%;top:-2px;transform:translateX(-50%);display:flex;gap:3px;padding:4px 8px 5px;background:#0A0A08;border:1px solid #7A5C1E;border-top:0;border-radius:0 0 8px 8px}
 .bj-rack i{display:block;width:clamp(16px,2.2vw,26px);height:8px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--c) 0 3px,rgba(0,0,0,.35) 3px 4px);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35)}
 .bj-shoe{position:absolute;right:6%;top:7%;width:calc(var(--cw)*.78);aspect-ratio:5/7;transform:rotate(8deg)}
@@ -49,7 +49,7 @@ const CSS=`
 .bj-hint{position:absolute;left:0;right:0;bottom:calc(4.5% + clamp(40px,5.2vw,56px) + 26px);text-align:center;font:700 11px/1 var(--f-ui);letter-spacing:.3em;color:rgba(244,239,227,.6)}
 .bj-hint[hidden]{display:none}
 @media (hover:none) and (pointer:coarse){.bj-chipbtn kbd{display:none}}
-@media (max-aspect-ratio:3/4){.bj-table{top:70px;bottom:calc(112px + var(--ab));width:94%;--cw:clamp(52px,min(19vw,11vh),96px);border-radius:20px 20px 46% 46%/20px 20px 22% 22%}.bj-arcbox{top:31%;left:4%;right:4%}.bj-hands{top:45%}.bj-shoe{right:5%;top:5%}.bj-discard{left:5%;top:6%}}
+@media (max-aspect-ratio:3/4){.bj-table{top:70px;bottom:max(calc(112px + var(--ab)),calc(var(--bar,0px) + 44px));width:94%;--cw:clamp(52px,min(19vw,11vh),96px);border-radius:20px 20px 46% 46%/20px 20px 22% 22%}.bj-arcbox{top:31%;left:4%;right:4%}.bj-hands{top:45%}.bj-shoe{right:5%;top:5%}.bj-discard{left:5%;top:6%}}
 `;
 const HTML=`<div class="bj-table tc-felt">
   <div class="bj-rack" aria-hidden="true"><i style="--c:#F4EFE3"></i><i style="--c:#2456B8"></i><i style="--c:#C9A227"></i><i style="--c:#0A0A08"></i><i style="--c:#14705C"></i><i style="--c:#C9A227"></i><i style="--c:#2456B8"></i><i style="--c:#F4EFE3"></i></div>

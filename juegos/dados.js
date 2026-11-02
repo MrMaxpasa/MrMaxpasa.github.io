@@ -19,7 +19,7 @@ const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 function dieHTML(n,cls){return '<span class="dd-die '+(cls||'')+'" data-n="'+n+'">'+Array.from({length:9},(_,i)=>'<i'+(PIPS[n].includes(i)?' class="on"':'')+'></i>').join('')+'</span>'}
 
 const CSS=`
-.dd-table{left:50%;top:70px;bottom:calc(150px + var(--ab));width:min(96%,1180px);transform:translateX(-50%);border-radius:24px;display:flex;flex-direction:column;align-items:center;padding:14px 2.2% 16px;box-sizing:border-box;gap:12px}
+.dd-table{left:50%;top:70px;bottom:max(calc(150px + var(--ab)),calc(var(--bar,0px) + 82px));width:min(96%,1180px);transform:translateX(-50%);border-radius:24px;display:flex;flex-direction:column;align-items:center;padding:14px 2.2% 16px;box-sizing:border-box;gap:12px}
 .dd-top{display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,40px);width:100%}
 .dd-cup{position:relative;display:flex;gap:clamp(8px,1.4vw,16px);padding:12px 18px;background:radial-gradient(ellipse,#1b1206 0%,#0a0703 70%);border:2px solid #C9A227;border-radius:50%/40%;box-shadow:inset 0 0 20px rgba(0,0,0,.8),0 6px 18px rgba(0,0,0,.5)}
 .dd-die{--s:clamp(38px,5.4vw,62px);width:var(--s);height:var(--s);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:calc(var(--s)*.12);box-sizing:border-box;background:linear-gradient(145deg,#FBF6EA,#E3D7BC);border-radius:18%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18),0 4px 0 #7A5C1E,0 6px 10px rgba(0,0,0,.5)}
@@ -33,7 +33,7 @@ const CSS=`
 .dd-res b{font:400 clamp(30px,4vw,48px)/1 var(--f-cond);color:var(--ivory);letter-spacing:.04em}
 .dd-res span{font:700 10px/1 var(--f-ui);letter-spacing:.3em;color:rgba(244,239,227,.6)}
 .dd-res em{font:400 15px/1 var(--f-cond);font-style:normal;letter-spacing:.1em;color:var(--gold-hi)}
-.dd-board{width:100%;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:center;gap:6px;scrollbar-width:thin}
+.dd-board{width:100%;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;justify-content:safe center;gap:6px;scrollbar-width:thin}
 .dd-row{display:grid;gap:6px}
 .dd-row.a{grid-template-columns:1.25fr 2.4fr 1.25fr}.dd-row.six{grid-template-columns:repeat(6,1fr)}.dd-row.sums{grid-template-columns:repeat(14,1fr)}
 .dd-trip{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:auto auto;gap:6px}
@@ -47,14 +47,14 @@ const CSS=`
 @keyframes ddWin{50%{background:rgba(245,200,66,.7)}}
 .dd-cell .tc-stack{position:absolute;right:3px;top:3px;--chw:clamp(18px,2vw,26px);pointer-events:none}
 .dd-cell .amt{position:absolute;left:3px;top:3px;font:400 12px/1 var(--f-cond);background:var(--ivory);color:var(--ink);padding:2px 4px 1px;pointer-events:none}
-.dd-chips{position:absolute;left:50%;bottom:calc(70px + var(--ab));transform:translateX(-50%);display:flex;gap:clamp(8px,1.6vw,16px);align-items:center;z-index:4}
+.dd-chips{position:absolute;left:50%;bottom:max(calc(70px + var(--ab)),calc(var(--bar,0px) + 10px));transform:translateX(-50%);display:flex;gap:clamp(8px,1.6vw,16px);align-items:center;z-index:4}
 .dd-chipbtn{border:0;padding:0;background:none;cursor:pointer;border-radius:50%;position:relative;transition:transform .15s}
 .dd-chipbtn .tc-chip{--chw:clamp(38px,4.6vw,52px)}
 .dd-chipbtn.sel{transform:translateY(-8px);filter:drop-shadow(0 0 8px rgba(245,200,66,.8))}
 .dd-chipbtn[disabled]{opacity:.3;cursor:default}
 .dd-chipbtn kbd{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);font:700 9px/1 var(--f-ui);color:var(--gold)}
 @media (hover:none) and (pointer:coarse){.dd-chipbtn kbd{display:none}}
-@media (max-aspect-ratio:1/1){.dd-table{top:64px;bottom:calc(160px + var(--ab));padding:10px 3% 12px}.dd-row.sums{grid-template-columns:repeat(7,1fr)}.dd-row.a{grid-template-columns:1fr 1fr}.dd-row.a .dd-trip{grid-column:1/-1;order:3}.dd-cell{min-height:40px}.dd-cell.big-c{min-height:52px}.dd-res{min-width:80px}}
+@media (max-aspect-ratio:1/1){.dd-table{top:64px;bottom:max(calc(160px + var(--ab)),calc(var(--bar,0px) + 92px));padding:10px 3% 12px}.dd-row.sums{grid-template-columns:repeat(7,1fr)}.dd-row.a{grid-template-columns:1fr 1fr}.dd-row.a .dd-trip{grid-column:1/-1;order:3}.dd-cell{min-height:40px}.dd-cell.big-c{min-height:52px}.dd-res{min-width:80px}}
 `;
 
 function create(stage,api){

@@ -7,7 +7,7 @@
 const CHIPS=[10,25,100,500],EDGE=.97,SKIPS=3;
 function cryptoShuffle(a){for(let i=a.length-1;i>0;i--){const u=new Uint32Array(1);crypto.getRandomValues(u);const j=u[0]%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 const CSS=`
-.mm-table{left:50%;top:76px;bottom:calc(150px + var(--ab));width:min(94%,1000px);transform:translateX(-50%);border-radius:22px 22px 50% 50%/22px 22px 36% 36%;--cw:clamp(70px,min(16vw,15vh),132px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2vh,20px);padding:16px 3%;box-sizing:border-box}
+.mm-table{left:50%;top:76px;bottom:max(calc(150px + var(--ab)),calc(var(--bar,0px) + 82px));width:min(94%,1000px);transform:translateX(-50%);border-radius:22px 22px 50% 50%/22px 22px 36% 36%;--cw:clamp(70px,min(16vw,15vh),132px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2vh,20px);padding:16px 3%;box-sizing:border-box}
 .mm-crup{position:absolute;left:50%;top:1.5%;height:33%;transform:translateX(-50%);pointer-events:none;-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent);filter:drop-shadow(0 0 12px rgba(245,200,66,.25))}
 .mm-table.has-crup{justify-content:flex-end;padding-top:calc(33% * .6)}
 .mm-table.has-crup .mm-who{display:none}
@@ -27,7 +27,7 @@ const CSS=`
 .mm-steps .tc-card.ok{box-shadow:0 0 0 2px #F5C842}
 .mm-odds{display:flex;gap:18px;font:600 12px/1.3 var(--f-ui);letter-spacing:.06em;color:rgba(244,239,227,.7)}
 .mm-odds b{color:var(--gold-hi);font-weight:700}
-.mm-chips{position:absolute;left:50%;bottom:calc(70px + var(--ab));transform:translateX(-50%);display:flex;gap:clamp(8px,1.6vw,16px);align-items:center;z-index:4}
+.mm-chips{position:absolute;left:50%;bottom:max(calc(70px + var(--ab)),calc(var(--bar,0px) + 10px));transform:translateX(-50%);display:flex;gap:clamp(8px,1.6vw,16px);align-items:center;z-index:4}
 .mm-chips[hidden]{display:none}
 .mm-chipbtn{border:0;padding:0;background:none;cursor:pointer;border-radius:50%;position:relative;transition:transform .15s}
 .mm-chipbtn .tc-chip{--chw:clamp(38px,4.6vw,52px)}
@@ -35,7 +35,7 @@ const CSS=`
 .mm-chipbtn[disabled]{opacity:.3;cursor:default;transform:none}
 .mm-chipbtn kbd{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);font:700 9px/1 var(--f-ui);color:var(--gold)}
 @media (hover:none) and (pointer:coarse){.mm-chipbtn kbd{display:none}}
-@media (max-aspect-ratio:3/4){.mm-table{top:66px;bottom:calc(170px + var(--ab));--cw:clamp(70px,24vw,120px);border-radius:20px 20px 46% 46%/20px 20px 20% 20%}.mm-pot{min-width:90px}}
+@media (max-aspect-ratio:3/4){.mm-table{top:66px;bottom:max(calc(170px + var(--ab)),calc(var(--bar,0px) + 102px));--cw:clamp(70px,24vw,120px);border-radius:20px 20px 46% 46%/20px 20px 20% 20%}.mm-pot{min-width:90px}}
 `;
 
 function create(stage,api){
