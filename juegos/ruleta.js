@@ -139,7 +139,7 @@ function create(stage,api){
   const root=C.mount(stage,CSS+(touch?CSS_TOUCH_V:''));
   const BETS=buildBets();
   const fmt=n=>Number(n).toLocaleString('es-ES');
-  const short=n=>n>=10000?Math.round(n/1000)+'K':n>=1000?(n/1000).toFixed(1).replace('.0','')+'K':String(n);
+  const short=n=>n>=1e9?+(n/1e9).toFixed(1)+'B':n>=1e6?+(n/1e6).toFixed(1)+'M':n>=10000?Math.round(n/1000)+'K':n>=1000?(n/1000).toFixed(1).replace('.0','')+'K':String(n);
   root.insertAdjacentHTML('beforeend',`<div class="rl-wrap"><div class="rl-deco"></div><div class="rl-dim" id="rl-dim"></div><div class="rl-main">
     <div class="rl-left"><div class="rl-wheelbox" id="rl-wb"></div><div class="rl-thot" id="rl-thot" aria-hidden="true"></div><div class="rl-say" id="rl-say" role="status"></div><div class="rl-hist" id="rl-hist" aria-label="${T('histAria')}"></div></div>
     <div class="rl-right"><div class="rl-bar" id="rl-bar"></div><div class="rl-felt"><span class="rl-tag">${T('tag')}</span><div class="rl-tab" id="rl-tab" role="group" aria-label="${T('tableAria')}"><div class="rl-zones" id="rl-zones"></div></div></div>
@@ -216,13 +216,18 @@ function create(stage,api){
   const persist=committed=>{if(api.casino&&!done)api.casino.save(chips+(committed?0:tableTotal()))};
   function hud(){api.setScore(fmt(chips)+' '+T('unit'));const t=$('#rl-total');if(t)t.innerHTML='<small>'+T('onTable')+'</small>'+fmt(tableTotal())}
   function talk(txt){say.textContent=txt;say.style.animation='none';void say.offsetWidth;say.style.animation=''}
-  function renderBar(){bar.textContent='';CHIPS.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='rl-chipbtn'+(v===chip?' on':'');
-      b.append(C.chipEl(v));b.setAttribute('aria-label',T('pickChip').replace('{v}',v));b.setAttribute('aria-pressed',String(v===chip));b.disabled=phase!=='bet';
+  let chipVals=CHIPS;
+  /* fichas según todo tu saldo (en mano + en la mesa) y ficha TODO para apostar lo que te queda */
+  function renderBar(){bar.textContent='';chipVals=C.chipSet(chips+tableTotal(),5,MIN);if(chip!=='all'&&!chipVals.includes(chip))chip=chipVals.filter(v=>v<=chips).pop()||chipVals[0];
+    chipVals.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='rl-chipbtn'+(v===chip?' on':'');
+      b.append(C.chipEl(v));b.setAttribute('aria-label',T('pickChip').replace('{v}',fmt(v)));b.setAttribute('aria-pressed',String(v===chip));b.disabled=phase!=='bet';
       b.addEventListener('click',()=>{chip=v;S.chip(1);renderBar()});bar.append(b)});
+    {const b=document.createElement('button');b.type='button';b.className='rl-chipbtn'+(chip==='all'?' on':'');b.append(C.allInEl(T('allInChip')));b.setAttribute('aria-label',T('allIn'));
+      b.setAttribute('aria-pressed',String(chip==='all'));b.disabled=phase!=='bet';b.addEventListener('click',()=>{chip='all';S.chip(1);renderBar()});bar.append(b)}
     const t=document.createElement('span');t.className='rl-total';t.id='rl-total';bar.append(t);hud()}
   function paintStake(id){const el=cells[id];el.querySelectorAll(':scope > .rl-stake').forEach(x=>x.remove());const v=bets[id]||0;if(!v)return;
-    const w=document.createElement('span');w.className='rl-stake';const ch=C.chipEl(v>=500?500:v>=100?100:v>=25?25:v>=10?10:5);ch.textContent=short(v);w.append(ch);el.append(w)}
-  function place(id){if(phase!=='bet')return;let v=chip;if(chips<v){if(chips>=MIN)v=chips-chips%MIN;else{api.sfx.back();talk(T('noChips'));return}}
+    const w=document.createElement('span');w.className='rl-stake';const ch=C.chipEl(C.chipFor(v));ch.textContent=short(v);ch.classList.toggle('lg',short(v).length>3);w.append(ch);el.append(w)}
+  function place(id){if(phase!=='bet')return;let v=chip==='all'?chips-chips%MIN:chip;if(chips<v||!v){if(chips>=MIN)v=chips-chips%MIN;else{api.sfx.back();talk(T('noChips'));return}}
     chips-=v;bets[id]=(bets[id]||0)+v;undo.push([id,v]);paintStake(id);S.chip(1);persist(false);hud();acts();
     if(touch){/* en táctil, enseña un momento qué cubre la apuesta */Object.keys(cells).forEach(k=>k!==id&&cover(k,false));cover(id,true);clearTimeout(flashT);flashT=setTimeout(()=>cover(id,false),1300)}}
   function removeFrom(id){if(phase!=='bet'||!bets[id])return;for(let i=undo.length-1;i>=0;i--){if(undo[i][0]===id){const [,v]=undo.splice(i,1)[0];bets[id]-=v;chips+=v;if(!bets[id])delete bets[id];break}}
@@ -275,7 +280,7 @@ function create(stage,api){
   function end(reason){if(done)return;if(phase==='bet')clearBets(true);done=true;gen++;phase='end';barA.set([]);
     api.finish({score:chips,chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{s}',st.spins).replace('{h}',st.hits).replace('{b}',fmt(st.best)).replace('{m}',fmt(st.max))})}
 
-  const kd=e=>{if(done)return;if(barA.key(e))return;if(phase==='bet'){const i='12345'.indexOf(e.key);if(i>=0){e.preventDefault();chip=CHIPS[i];S.chip(1);renderBar()}}};
+  const kd=e=>{if(done)return;if(barA.key(e))return;if(phase==='bet'){const i='12345'.indexOf(e.key);if(i>=0){e.preventDefault();chip=chipVals[i];S.chip(1);renderBar()}else if(e.key==='t'||e.key==='T'){e.preventDefault();chip='all';S.chip(1);renderBar()}}};
   addEventListener('keydown',kd);
 
   function start(){gen++;done=false;chips=START;bets={};undo=[];lastBets=null;chip=10;phase='bet';st={spins:0,hits:0,best:0,max:START};
@@ -287,7 +292,7 @@ function create(stage,api){
 }
 window.TEMPLO.register('ruleta',{create,help:[
   {t:'OBJETIVO',p:'Adivinar dónde caerá la bola. Es una ruleta europea: 37 casillas (del 0 al 36) y un solo cero.'},
-  {t:'CÓMO APOSTAR',p:'Elige una ficha y toca el tapete. Puedes apostar en un número, en el borde entre dos, en el cruce de cuatro, en el borde exterior de una fila o en las apuestas de fuera. Al pasar por encima verás qué números cubre y cuánto paga. Con el botón derecho quitas una ficha.'},
+  {t:'CÓMO APOSTAR',p:'Elige una ficha y toca el tapete. Puedes apostar en un número, en el borde entre dos, en el cruce de cuatro, en el borde exterior de una fila o en las apuestas de fuera. Al pasar por encima verás qué números cubre y cuánto paga. Con el botón derecho quitas una ficha. Las fichas crecen con tu saldo y la ficha TODO apuesta todo lo que te queda.'},
   {t:'APUESTAS Y PAGOS',p:'Pleno (1 número) 35:1 · Caballo (2) 17:1 · Transversal (3) 11:1 · Cuadro (4) 8:1 · Seisena (6) 5:1 · Docena y columna (12) 2:1 · Rojo/negro, par/impar, 1-18/19-36 (18) 1:1.'},
   {t:'EL CERO',p:'Si sale el cero, pierden las apuestas sencillas (rojo/negro, par/impar, 1-18/19-36). Ganan las que incluyan el 0.'},
   {t:'BOTONES',p:'GIRAR lanza la bola. DESHACER quita la última ficha. BORRAR quita todas. REPETIR vuelve a poner la apuesta de la tirada anterior.'},
@@ -300,6 +305,6 @@ window.TEMPLO.register('ruleta',{create,help:[
   sayRes:'«{n}, {c}.»',sayBig:'«¡{n}! Eso no estaba en mis cálculos…»',
   noChips:'«No te quedan fichas para esa apuesta.»',noRepeat:'«No te llegan las fichas para repetir la apuesta.»',
   broke:'Te has quedado sin fichas',left:'Te retiras de la mesa',
-  pickChip:'Ficha de {v}',betAria:'Apostar a {b}, paga {p} a 1',tableAria:'Tapete de la ruleta',histAria:'Últimos números',
+  allIn:'Ficha TODO: apuesta todas las fichas que te quedan en la casilla que toques',allInChip:'TODO',pickChip:'Ficha de {v}',betAria:'Apostar a {b}, paga {p} a 1',tableAria:'Tapete de la ruleta',histAria:'Últimos números',
   detail:'{s} tiradas · {h} con premio · mejor premio {b} · máximo {m} fichas'}});
 })();

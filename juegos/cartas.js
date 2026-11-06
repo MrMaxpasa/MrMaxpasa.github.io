@@ -118,6 +118,16 @@ const CSS=`
 .tc-chip[data-v="100"]{--c:#C9A227;--e:#0A0A08}
 .tc-chip[data-v="500"]{--c:#0A0A08;--e:#F5C842}
 .tc-chip[data-v="1000"]{--c:#14705C;--e:#F4EFE3}
+.tc-chip[data-v="5000"]{--c:#6b2f8a;--e:#F4EFE3}
+.tc-chip[data-v="25000"]{--c:#D9771E;--e:#0A0A08}
+.tc-chip[data-v="100000"]{--c:#0E2457;--e:#F5C842}
+.tc-chip[data-v="500000"]{--c:#7A1F14;--e:#F5C842}
+.tc-chip[data-v="1000000"]{--c:#F5C842;--e:#7A1F14}
+.tc-chip[data-v="5000000"]{--c:#14705C;--e:#F5C842}
+.tc-chip[data-v="25000000"]{--c:#2456B8;--e:#F5C842}
+.tc-chip[data-v="100000000"],.tc-chip[data-v="500000000"],.tc-chip[data-v="1000000000"]{--c:#0A0A08;--e:#E8DAB5}
+.tc-chip.lg{font-size:calc(var(--chw,34px)*.26)}
+.tc-chip.allin{background:radial-gradient(circle,#0A0A08 0 47%,#F5C842 47% 52%,transparent 52%),repeating-conic-gradient(#C2412D 0 22.5deg,#F5C842 22.5deg 45deg);color:#F5C842;font-size:calc(var(--chw,34px)*.24);letter-spacing:.04em;box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),0 2px 0 rgba(0,0,0,.45),0 0 10px rgba(245,200,66,.45)}
 .tc-stack{position:relative;display:flex;flex-direction:column-reverse;align-items:center}
 .tc-stack .tc-chip{margin-top:calc(var(--chw,34px)*-.84)}
 .tc-stack .tc-chip:last-child{margin-top:0}
@@ -172,8 +182,14 @@ function cardEl(c,up){const el=document.createElement('div');el.className='tc-ca
   el.innerHTML='<div class="tc-in"><div class="tc-f tc-back">'+BACKS[cos.back].svg+'</div><div class="tc-f tc-front">'+(c?frontSVG(c):'')+'</div></div>';
   el.setAttribute('role','img');el.setAttribute('aria-label',up&&c?cardName(c):'carta boca abajo');el._c=c;return el}
 function reveal(el,c){if(c&&!el._c){el._c=c;el.querySelector('.tc-front').innerHTML=frontSVG(c)}el.classList.add('up');if(el._c)el.setAttribute('aria-label',cardName(el._c))}
-function chipEl(v){const d=document.createElement('div');d.className='tc-chip';d.dataset.v=v;d.textContent=v>=1000?(v/1000)+'K':v;return d}
-function chipBreak(n){const out=[];[1000,500,100,25,10,5].forEach(v=>{let k=Math.floor(n/v);if(out.length+k>8)k=Math.min(k,Math.max(1,8-out.length));for(let i=0;i<k&&out.length<8;i++){out.push(v);n-=v}});return out}
+/* fichas: escalera de valores; cada mesa enseña las más altas que permite tu saldo y una ficha TODO (all in) */
+const LADDER=[5,10,25,100,500,1e3,5e3,25e3,1e5,5e5,1e6,5e6,25e6,1e8,5e8,1e9];
+function chipLabel(v){return v>=1e9?(v/1e9)+'B':v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':String(v)}
+function chipFor(v){let c=LADDER[0];for(const x of LADDER)if(x<=v)c=x;return c}
+function chipSet(chips,n,min){const L=LADDER.filter(v=>v>=(min||5));let hi=L.findIndex(v=>v>chips);if(hi<0)hi=L.length;const end=Math.max(n,hi);return L.slice(Math.max(0,end-n),end)}
+function chipEl(v){const d=document.createElement('div');d.className='tc-chip';d.dataset.v=v;const t=chipLabel(v);d.textContent=t;if(t.length>3)d.classList.add('lg');return d}
+function allInEl(label){const d=document.createElement('div');d.className='tc-chip allin';d.textContent=label||'TODO';return d}
+function chipBreak(n){const out=[];LADDER.slice().reverse().forEach(v=>{let k=Math.floor(n/v);if(out.length+k>8)k=Math.min(k,Math.max(1,8-out.length));for(let i=0;i<k&&out.length<8;i++){out.push(v);n-=v}});return out}
 function stackEl(n){const s=document.createElement('div');s.className='tc-stack';chipBreak(n).forEach(v=>s.append(chipEl(v)));return s}
 /* Vuelo desde un origen (FLIP) */
 function flyIn(el,fromEl,delay,reduced){if(reduced||!fromEl){return}
@@ -246,5 +262,5 @@ function mount(stage,extraCss){const root=document.createElement('div');root.cla
   const st=document.createElement('style');st.textContent=CSS+(extraCss||'');root.append(st);
   root.insertAdjacentHTML('beforeend',DEFS);stage.append(root);return root}
 
-L.cartas={BACKS,FELTS,setCos,feltVars,DEFS,get cos(){return Object.assign({},cos)},SUITS,RANKS,deck,shuffle,cardEl,reveal,cardName,chipEl,stackEl,chipBreak,flyIn,flyOut,wait,sounds,banner,acts,mount,suitSVG,frontSVG};
+L.cartas={BACKS,FELTS,setCos,feltVars,DEFS,get cos(){return Object.assign({},cos)},SUITS,RANKS,deck,shuffle,cardEl,reveal,cardName,chipEl,stackEl,chipBreak,chipLabel,chipFor,chipSet,allInEl,LADDER,flyIn,flyOut,wait,sounds,banner,acts,mount,suitSVG,frontSVG};
 })();

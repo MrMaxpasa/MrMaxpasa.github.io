@@ -101,9 +101,13 @@ function create(stage,api){
     if(hands[0].bet<MIN)hands[0].bet=0;paintBet(hands[0]);bet=hands[0].bet;
     if(chips<MIN){return end(T('broke'))}
     chipsEl.hidden=false;hint.hidden=false;hint.textContent=T('betHint');renderChips();betActs();hud()}
-  function renderChips(){chipsEl.textContent='';[10,25,100,500].forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='bj-chipbtn';
-    b.setAttribute('aria-label',T('addChip').replace('{v}',v));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
-    b.disabled=bet+v>chips;b.addEventListener('click',()=>addBet(v));chipsEl.append(b)})}
+  let chipVals=[10,25,100,500,1000];
+  function renderChips(){chipsEl.textContent='';chipVals=C.chipSet(chips,5,10);chipVals.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='bj-chipbtn';
+    b.setAttribute('aria-label',T('addChip').replace('{v}',fmt(v)));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
+    b.disabled=bet+v>chips;b.addEventListener('click',()=>addBet(v));chipsEl.append(b)});
+    const a=document.createElement('button');a.type='button';a.className='bj-chipbtn';a.setAttribute('aria-label',T('allIn'));a.append(C.allInEl(T('allInChip')));const k=document.createElement('kbd');k.textContent='T';a.append(k);
+    a.disabled=bet>=chips;a.addEventListener('click',allIn);chipsEl.append(a)}
+  function allIn(){if(phase!=='bet'||bet>=chips)return;bet=chips;hands[0].bet=bet;paintBet(hands[0]);S.chip(4);renderChips();betActs()}
   function addBet(v){if(phase!=='bet'||bet+v>chips)return;bet+=v;hands[0].bet=bet;paintBet(hands[0]);S.chip(1);renderChips();betActs()}
   function clearBet(){if(phase!=='bet')return;bet=0;hands[0].bet=0;paintBet(hands[0]);S.chip(2);renderChips();betActs()}
   function betActs(){bar.set([
@@ -186,7 +190,7 @@ function create(stage,api){
     api.finish({score:chips,chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{h}',st.hands).replace('{w}',st.won).replace('{b}',st.bj).replace('{m}',fmt(st.max))})}
 
   const kd=e=>{if(done||phase==='end')return;if(bar.key(e))return;
-    if(phase==='bet'){const n='1234'.indexOf(e.key);if(n>=0){e.preventDefault();addBet([10,25,100,500][n])}}};
+    if(phase==='bet'){const n='12345'.indexOf(e.key);if(n>=0){e.preventDefault();addBet(chipVals[n])}else if(e.key==='t'||e.key==='T'){e.preventDefault();allIn()}}};
   addEventListener('keydown',kd);
 
   function start(){gen++;done=false;chips=START;lastBet=50;st={hands:0,won:0,bj:0,max:START};newShoe();dcEl.textContent='';dvEl.hidden=true;root.querySelectorAll('.tc-banner').forEach(x=>x.remove());betPhase()}
@@ -195,13 +199,13 @@ function create(stage,api){
 }
 window.TEMPLO.register('blackjack',{create,help:[
   {t:'OBJETIVO',p:'Acercarte a 21 más que Anubis sin pasarte. Las figuras valen 10 y el as vale 1 u 11, lo que más te convenga.'},
-  {t:'LA MANO',p:'Eliges tu apuesta y recibes dos cartas boca arriba. La banca recibe una boca arriba y otra boca abajo, que solo destapa cuando terminas.'},
+  {t:'LA MANO',p:'Eliges tu apuesta (las fichas crecen con tu saldo y la ficha TODO lo apuesta todo) y recibes dos cartas boca arriba. La banca recibe una boca arriba y otra boca abajo, que solo destapa cuando terminas.'},
   {t:'TUS ACCIONES',p:'PEDIR: otra carta. PLANTARSE: te quedas como estás. DOBLAR: doblas la apuesta y recibes una sola carta más. DIVIDIR: con dos cartas del mismo valor, las separas en dos manos con la misma apuesta cada una.'},
   {t:'LA BANCA',p:'Anubis pide carta hasta tener 17 o más y entonces se planta. Si se pasa de 21, ganan todas tus manos que sigan en juego.'},
   {t:'PAGOS',p:'Ganar paga 1 a 1. Blackjack (as + figura o 10 con las dos primeras cartas) paga 3 a 2. Empate: recuperas la apuesta. Si la banca tiene blackjack, solo pierdes la apuesta inicial: lo doblado o dividido se te devuelve.'}],texts:{
   unit:'fichas',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',hit:'PEDIR',stand:'PLANTARSE',double:'DOBLAR',split:'DIVIDIR',
   bust:'TE PASAS',dOver:'SE PASA',refund:'DEVUELTA',dealerBJ:'¡BLACKJACK DE LA BANCA!',push:'EMPATE',pushBig:'EMPATE',youWin:'¡GANAS!',dealerBust:'¡LA BANCA SE PASA!',houseWins:'GANA LA BANCA',busted:'TE HAS PASADO',
-  betHint:'ELIGE TU APUESTA Y REPARTE',addChip:'Añadir {v} fichas a la apuesta',
+  betHint:'ELIGE TU APUESTA Y REPARTE',allIn:'Apostar todas tus fichas',allInChip:'TODO',addChip:'Añadir {v} fichas a la apuesta',
   broke:'Te has quedado sin fichas',left:'Te retiras de la mesa',
   detail:'{h} manos · {w} ganadas · {b} blackjacks · máximo {m} fichas'}});
 })();

@@ -169,8 +169,11 @@ function create(stage,api){
     if(bet>chips||!bet)bet=Math.min(chips,Math.max(MIN,bet||25));
     resv.textContent='';rest.textContent=T('betHint');turnEl.textContent='';turnEl.className='sn-turn';
     renderBet();bar.set([{label:T('play'),key:'enter',keyLabel:'ENTER',keys:[' '],on:startMatch,disabled:bet<MIN||bet>chips},{label:T('leave'),key:'l',on:()=>end(T('left')),alt:true}]);hud()}
-  function renderBet(){betEl.hidden=false;betEl.textContent='';[10,25,100,500].forEach(v=>{const b=document.createElement('button');b.type='button';b.className='sn-chip';b.append(C.chipEl(v));
-      b.setAttribute('aria-label',T('addChip').replace('{v}',v));b.disabled=bet+v>chips;b.addEventListener('click',()=>{if(bet+v<=chips){bet+=v;S.chip(1);renderBet();betPhaseActs()}});betEl.append(b)});
+  let chipVals=[10,25,100,500,1000];
+  function allIn(){if(bet>=chips)return;bet=chips;S.chip(4);renderBet();betPhaseActs()}
+  function renderBet(){betEl.hidden=false;betEl.textContent='';chipVals=C.chipSet(chips,5,10);chipVals.forEach(v=>{const b=document.createElement('button');b.type='button';b.className='sn-chip';b.append(C.chipEl(v));
+      b.setAttribute('aria-label',T('addChip').replace('{v}',fmt(v)));b.disabled=bet+v>chips;b.addEventListener('click',()=>{if(bet+v<=chips){bet+=v;S.chip(1);renderBet();betPhaseActs()}});betEl.append(b)});
+    {const a=document.createElement('button');a.type='button';a.className='sn-chip';a.append(C.allInEl(T('allInChip')));a.setAttribute('aria-label',T('allIn'));a.disabled=bet>=chips;a.addEventListener('click',allIn);betEl.append(a)}
     const c=document.createElement('button');c.type='button';c.className='sn-chip';c.innerHTML='<span class="sn-betv"><small>'+T('bet')+'</small>'+fmt(bet)+'</span>';c.title=T('clearBet');
     c.addEventListener('click',()=>{bet=0;S.chip(2);renderBet();betPhaseActs()});betEl.append(c)}
   function betPhaseActs(){bar.set([{label:T('play'),key:'enter',keyLabel:'ENTER',keys:[' '],on:startMatch,disabled:bet<MIN||bet>chips},{label:T('leave'),key:'l',on:()=>end(T('left')),alt:true}])}
@@ -239,7 +242,7 @@ function create(stage,api){
   const kd=e=>{if(done)return;
     if(phase==='choose'&&(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='ArrowDown')){e.preventDefault();const d=(e.key==='ArrowRight'||e.key==='ArrowDown')?1:-1;selIdx=selIdx<0?0:(selIdx+d+moves.length)%moves.length;paintSel();return}
     if(bar.key(e))return;
-    if(phase==='bet'){const n='1234'.indexOf(e.key);if(n>=0){const v=[10,25,100,500][n];if(bet+v<=chips){e.preventDefault();bet+=v;S.chip(1);renderBet();betPhaseActs()}}}};
+    if(phase==='bet'){const n='12345'.indexOf(e.key);if(n>=0){const v=chipVals[n];if(bet+v<=chips){e.preventDefault();bet+=v;S.chip(1);renderBet();betPhaseActs()}}else if(e.key==='t'||e.key==='T'){e.preventDefault();allIn()}}};
   addEventListener('keydown',kd);
 
   function start(){gen++;done=false;chips=START;bet=25;st={matches:0,won:0,max:START};firstP='p';pieces=null;piecesEl.textContent='';paintOffEmpty();talk(T('welcome'));betPhase()}
@@ -257,7 +260,7 @@ window.TEMPLO.register('senet',{create,help:[
 texts:{
   unit:'fichas',you:'TÚ',tag:'TABLERO DE SENET',boardAria:'Tablero de senet',sqAria:'Casilla {n}',yourPiece:'Tu pieza en la casilla',hisPiece:'Pieza de Jonsu en la casilla',
   sp_renace:'casa del renacer',sp_belleza:'casa de la belleza',sp_agua:'casa del agua',sp_tres:'sales con un 3',sp_dos:'sales con un 2',sp_sol:'sales con un 1',
-  play:'JUGAR PARTIDA',leave:'RETIRARSE',throw:'LANZAR',move:'MOVER',forfeit:'RENDIRSE',bet:'APUESTA',addChip:'Añadir {v} fichas a la apuesta',clearBet:'Quitar la apuesta',
+  play:'JUGAR PARTIDA',leave:'RETIRARSE',throw:'LANZAR',move:'MOVER',forfeit:'RENDIRSE',bet:'APUESTA',addChip:'Añadir {v} fichas a la apuesta',clearBet:'Quitar la apuesta',allIn:'Apostar todas tus fichas',allInChip:'TODO',
   betHint:'ELIGE TU APUESTA Y EMPIEZA',throwHint:'LANZA LAS TABLILLAS',pickHint:'ELIGE QUÉ PIEZA MUEVES',toHint:'VA A LA CASILLA {n}',bearHint:'¡SALE DEL TABLERO!',again:'¡VUELVES A TIRAR!',noMoves:'SIN MOVIMIENTOS',
   yourTurn:'TU TURNO',hisTurn:'TURNO DE JONSU',matchStart:'¡QUE EMPIECE EL SENET!',matchSub:'APUESTA {b} FICHAS',
   youWin:'¡GANAS LA PARTIDA!',perfect:'¡ECLIPSE TOTAL!',hisWin:'JONSU SE TOMA LA REVANCHA',forfeitT:'TE RINDES',

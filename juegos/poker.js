@@ -242,7 +242,7 @@ function create(stage,api){
       {label:currentBet?T('raise'):T('bet'),sub:fmt(raiseTo),key:'r',keys:['s'],on:()=>act({t:'raise',to:raiseTo}),disabled:!canRaise||raiseTo>=maxTo},
       {label:T('allin'),sub:fmt(maxTo),key:'a',on:()=>act({t:'raise',to:maxTo}),disabled:!canRaise}])}
     function upd(){rv.textContent=fmt(raiseTo);setActs()}
-    raiseEl._step=d=>{const pot=potTotal();if(d==='+')raiseTo=Math.min(maxTo,raiseTo+bb);else if(d==='-')raiseTo=Math.max(minTo,raiseTo-bb);
+    raiseEl._step=d=>{const pot=potTotal(),stp=Math.max(bb,Math.round((maxTo-minTo)/25/5)*5);if(d==='+')raiseTo=Math.min(maxTo,raiseTo+stp);else if(d==='-')raiseTo=Math.max(minTo,raiseTo-stp);
       else{const f=d==='half'?.5:1;raiseTo=Math.max(minTo,Math.min(maxTo,currentBet+Math.round((pot+toCall)*f/5)*5))}S.tick();upd()};
     raiseEl.hidden=!canRaise||minTo>=maxTo;upd();turn(me);S.turn()})}
   function act(a){if(!pendingAct)return;const r=pendingAct;pendingAct=null;raiseEl.hidden=true;bar.set([]);r(a)}

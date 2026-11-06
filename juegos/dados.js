@@ -78,11 +78,16 @@ function create(stage,api){
   const staked=()=>Object.values(bets).reduce((a,b)=>a+b,0);
   function hud(){api.setScore(fmt(chips)+' '+T('unit')+(staked()?' · '+T('onTable')+' '+fmt(staked()):''))}
   function paintCell(id){const c=cells[id];c.querySelectorAll('.tc-stack,.amt').forEach(x=>x.remove());const v=bets[id];if(!v)return;
-    const s=C.stackEl(v);c.append(s);const a=document.createElement('span');a.className='amt';a.textContent=fmt(v);c.append(a)}
-  function renderChips(){chipsEl.textContent='';CHIPS.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='dd-chipbtn'+(v===chipV?' sel':'');
-    b.setAttribute('aria-label',T('pickChip').replace('{v}',v));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
-    b.disabled=v>chips;b.addEventListener('click',()=>{chipV=v;S.chip(1);renderChips()});chipsEl.append(b)})}
-  function place(id){if(phase!=='bet')return;if(chipV>chips){S.lose();return}chips-=chipV;bets[id]=(bets[id]||0)+chipV;hist.push([id,chipV]);paintCell(id);S.chip(1);
+    const s=C.stackEl(v);c.append(s);const a=document.createElement('span');a.className='amt';a.textContent=v>=1e6?+(v/1e6).toFixed(1)+'M':v>=1e4?Math.round(v/1e3)+'K':fmt(v);c.append(a)}
+  let chipVals=CHIPS;
+  /* el juego de fichas se calcula sobre todo tu saldo (en mano + en la mesa) para que no cambie mientras apuestas */
+  function renderChips(){chipsEl.textContent='';chipVals=C.chipSet(chips+staked(),5,10);if(chipV!=='all'&&!chipVals.includes(chipV))chipV=chipVals.filter(v=>v<=chips).pop()||chipVals[0];
+    chipVals.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='dd-chipbtn'+(v===chipV?' sel':'');
+    b.setAttribute('aria-label',T('pickChip').replace('{v}',fmt(v)));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
+    b.disabled=v>chips;b.addEventListener('click',()=>{chipV=v;S.chip(1);renderChips()});chipsEl.append(b)});
+    const a=document.createElement('button');a.type='button';a.className='dd-chipbtn'+(chipV==='all'?' sel':'');a.setAttribute('aria-label',T('allIn'));a.append(C.allInEl(T('allInChip')));
+    const k=document.createElement('kbd');k.textContent='T';a.append(k);a.disabled=chips<CHIPS[0];a.addEventListener('click',()=>{chipV='all';S.chip(1);renderChips()});chipsEl.append(a)}
+  function place(id){if(phase!=='bet')return;const v=chipV==='all'?chips:chipV;if(!v||v>chips){S.lose();return}chips-=v;bets[id]=(bets[id]||0)+v;hist.push([id,v]);paintCell(id);S.chip(1);
     root.querySelectorAll('.dd-cell.win').forEach(c=>c.classList.remove('win'));hud();renderChips();acts()}
   function removeBet(id){if(phase!=='bet'||!bets[id])return;chips+=bets[id];delete bets[id];hist=hist.filter(h=>h[0]!==id);paintCell(id);S.chip(2);hud();renderChips();acts()}
   function undo(){const h=hist.pop();if(!h||phase!=='bet')return;bets[h[0]]-=h[1];chips+=h[1];if(bets[h[0]]<=0)delete bets[h[0]];paintCell(h[0]);S.chip(1);hud();renderChips();acts()}
@@ -117,21 +122,21 @@ function create(stage,api){
     if(chips<CHIPS[0]){end(T('broke'));return}acts()}
   function end(reason){if(done)return;done=true;gen++;chips+=staked();bets={};bar.set([]);chipsEl.hidden=true;
     api.finish({score:chips,chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{r}',st.rolls).replace('{w}',st.won).replace('{m}',fmt(st.max))})}
-  const kd=e=>{if(done)return;if(bar.key(e))return;if(phase==='bet'){const n='1234'.indexOf(e.key);if(n>=0&&CHIPS[n]<=chips){e.preventDefault();chipV=CHIPS[n];S.chip(1);renderChips()}}};
+  const kd=e=>{if(done)return;if(bar.key(e))return;if(phase==='bet'){const n='12345'.indexOf(e.key);if(n>=0&&chipVals[n]<=chips){e.preventDefault();chipV=chipVals[n];S.chip(1);renderChips()}else if((e.key==='t'||e.key==='T')&&chips>=CHIPS[0]){e.preventDefault();chipV='all';S.chip(1);renderChips()}}};
   addEventListener('keydown',kd);
   function start(){gen++;done=false;chips=START;bets={};lastBets={};hist=[];phase='bet';chipV=CHIPS[0];st={rolls:0,won:0,max:START};Object.keys(cells).forEach(paintCell);chipsEl.hidden=false;hud();renderChips();acts()}
   start();
   return{restart:start,cashout:()=>chips+staked(),stop(){gen++;done=true;removeEventListener('keydown',kd);root.remove()}};
 }
 window.TEMPLO.register('dados',{create,help:[
-  {t:'CÓMO SE JUEGA',p:'Elige una ficha, toca las casillas donde quieras apostar (puedes apostar en varias) y pulsa TIRAR. Set agita tres dados y se pagan todas las casillas que acierten. Clic derecho en una casilla retira su apuesta.'},
+  {t:'CÓMO SE JUEGA',p:'Elige una ficha, toca las casillas donde quieras apostar (puedes apostar en varias) y pulsa TIRAR. Set agita tres dados y se pagan todas las casillas que acierten. Clic derecho en una casilla retira su apuesta. Las fichas crecen con tu saldo y la ficha TODO pone en la casilla todo lo que te queda.'},
   {t:'PEQUEÑO Y GRANDE',p:'Pequeño gana si la suma está entre 4 y 10; Grande, entre 11 y 17. Pagan 1 a 1, pero pierden si sale un triple (tres dados iguales).'},
   {t:'SUMAS',p:'Acierta la suma exacta de los tres dados. Cuanto menos probable, más paga: de 6 a 1 (sumas del centro) hasta 60 a 1 (4 o 17).'},
   {t:'DOBLES Y TRIPLES',p:'Doble: al menos dos dados con ese número (10 a 1). Triple concreto: los tres iguales a ese número (180 a 1). Cualquier triple: los tres iguales, sea cual sea el número (30 a 1).'},
   {t:'NÚMEROS',p:'Apuesta a un número del 1 al 6: paga 1 a 1 si sale en un dado, 2 a 1 si sale en dos y 3 a 1 si sale en los tres.'},
   {t:'JUEGO LIMPIO',p:'Los dados salen del generador criptográfico del navegador. Son los pagos de la mesa clásica: la ventaja de la casa va del 2,8 % (Pequeño y Grande) a cerca del 19 % (dobles y las sumas 9 y 12).'}],texts:{
   unit:'fichas',total:'SUMA',small:'PEQUEÑO',big:'GRANDE',triple:'TRIPLE',anyTriple:'CUALQUIER TRIPLE',double:'DOBLE',number:'NÚMERO',tripleWord:'¡TRIPLE!',
-  roll:'TIRAR',undo:'DESHACER',clear:'BORRAR',repeat:'REPETIR',leave:'RETIRARSE',pickChip:'Elegir ficha de {v}',onTable:'en mesa',
+  roll:'TIRAR',undo:'DESHACER',clear:'BORRAR',repeat:'REPETIR',leave:'RETIRARSE',pickChip:'Elegir ficha de {v}',allIn:'Ficha TODO: apuesta todas las fichas que te quedan en la casilla que toques',allInChip:'TODO',onTable:'en mesa',
   win:'¡GANAS!',push:'RECUPERAS',lose:'SET SE LO LLEVA',broke:'Te has quedado sin fichas',left:'Te retiras de la mesa',
   detail:'{r} tiradas · {w} ganadoras · máximo {m} fichas'}});
 })();

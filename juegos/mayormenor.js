@@ -57,9 +57,13 @@ function create(stage,api){
   function paintOdds(){if(phase!=='play'){oddsEl.textContent='';return}const o=odds();
     oddsEl.innerHTML='<span>'+T('higher')+': <b>'+Math.round(o.hi*100)+' %</b></span><span>'+T('lower')+': <b>'+Math.round(o.lo*100)+' %</b></span><span>'+T('tie')+': <b>'+Math.round((1-o.hi-o.lo)*100)+' %</b></span>'}
   function paintPot(){potEl.textContent=fmt(phase==='bet'?bet:pot);stepEl.textContent=phase==='play'?T('steps').replace('{n}',steps)+(skips<SKIPS?' · '+T('skipsLeft').replace('{n}',skips):''):'';leftEl.textContent=deck?T('left').replace('{n}',deck.length):''}
-  function renderChips(){chipsEl.textContent='';CHIPS.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='mm-chipbtn';
-    b.setAttribute('aria-label',T('addChip').replace('{v}',v));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
-    b.disabled=bet+v>chips;b.addEventListener('click',()=>addBet(v));chipsEl.append(b)})}
+  let chipVals=CHIPS;
+  function renderChips(){chipsEl.textContent='';chipVals=C.chipSet(chips,5,10);chipVals.forEach((v,i)=>{const b=document.createElement('button');b.type='button';b.className='mm-chipbtn';
+    b.setAttribute('aria-label',T('addChip').replace('{v}',fmt(v)));b.append(C.chipEl(v));const k=document.createElement('kbd');k.textContent=i+1;b.append(k);
+    b.disabled=bet+v>chips;b.addEventListener('click',()=>addBet(v));chipsEl.append(b)});
+    const a=document.createElement('button');a.type='button';a.className='mm-chipbtn';a.setAttribute('aria-label',T('allIn'));a.append(C.allInEl(T('allInChip')));const k=document.createElement('kbd');k.textContent='T';a.append(k);
+    a.disabled=bet>=chips;a.addEventListener('click',allIn);chipsEl.append(a)}
+  function allIn(){if(phase!=='bet'||bet>=chips)return;bet=chips;S.chip(4);renderChips();paintPot();acts()}
   function addBet(v){if(phase!=='bet'||bet+v>chips)return;bet+=v;S.chip(1);renderChips();paintPot();acts()}
   function clearBet(){if(phase!=='bet')return;bet=0;S.chip(2);renderChips();paintPot();acts()}
   function acts(){if(phase==='bet'){bar.set([
@@ -91,7 +95,7 @@ function create(stage,api){
     oddsEl.textContent='';chipsEl.hidden=false;if(chips<CHIPS[0]){end(T('broke'));return}renderChips();paintPot();acts();hud()}
   function end(reason){if(done)return;done=true;gen++;bar.set([]);chipsEl.hidden=true;
     api.finish({score:chips,chips,unit:T('unit'),ankhs:0,detail:reason+' · '+T('detail').replace('{r}',st.rounds).replace('{c}',st.cashed).replace('{b}',st.best).replace('{m}',fmt(st.max))})}
-  const kd=e=>{if(done)return;if(bar.key(e))return;if(phase==='bet'){const n='1234'.indexOf(e.key);if(n>=0){e.preventDefault();addBet(CHIPS[n])}}};
+  const kd=e=>{if(done)return;if(bar.key(e))return;if(phase==='bet'){const n='12345'.indexOf(e.key);if(n>=0){e.preventDefault();addBet(chipVals[n])}else if(e.key==='t'||e.key==='T'){e.preventDefault();allIn()}}};
   addEventListener('keydown',kd);
   function start(){gen++;done=false;chips=START;st={rounds:0,cashed:0,best:0,max:START};deck=null;cur=null;phase='bet';bet=Math.min(lastBet,chips);if(bet<CHIPS[0])bet=0;
     curEl.querySelectorAll('.tc-card').forEach(x=>x.remove());stepsEl.textContent='';chipsEl.hidden=false;renderChips();paintPot();paintOdds();acts();hud()}
@@ -105,7 +109,7 @@ window.TEMPLO.register('mayormenor',{create,help:[
   {t:'MULTIPLICADORES',p:'Cada botón muestra cuánto multiplica tu bote. Se calcula con las cartas que quedan en la baraja: lo poco probable paga mucho y lo casi seguro paga poco.'},
   {t:'JUEGO LIMPIO',p:'Cada ronda empieza con una baraja de 52 cartas barajada con el generador criptográfico del navegador. La casa se queda un 3 % en cada predicción.'}],texts:{
   unit:'fichas',dealer:'LA BANCA',current:'CARTA ACTUAL',pot:'BOTE',steps:'{n} aciertos',skipsLeft:'{n} saltos',left:'QUEDAN {n}',
-  higher:'MAYOR',lower:'MENOR',tie:'EMPATE',skip:'SALTAR',cash:'COBRAR',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',addChip:'Añadir {v} fichas a la apuesta',
+  higher:'MAYOR',lower:'MENOR',tie:'EMPATE',skip:'SALTAR',cash:'COBRAR',deal:'REPARTIR',clear:'BORRAR',leave:'RETIRARSE',addChip:'Añadir {v} fichas a la apuesta',allIn:'Apostar todas tus fichas',allInChip:'TODO',
   wrong:'¡MAAT GANA!',tieLose:'EMPATE: GANA MAAT',cashed:'¡COBRAS!',broke:'Te has quedado sin fichas',leftTable:'Te retiras de la mesa',
   detail:'{r} rondas · {c} cobradas · mejor racha {b} aciertos · máximo {m} fichas'}});
 })();

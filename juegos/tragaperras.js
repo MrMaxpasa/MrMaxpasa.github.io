@@ -9,7 +9,7 @@ const SYM={sun:{i:15,n:'DISCO DE RA'},mask:{i:37,n:'MÁSCARA'},eye:{i:12,n:'OJO 
 const W={sun:2,mask:2,eye:3,crown:3,cat:4,scep:5,pyr:5,ankh:6};
 const PAY={sun:250,mask:70,eye:28,crown:16,cat:10,scep:6,pyr:4,ankh:3},TWO_ANKH=2,ONE_ANKH=1;
 const LINES=[[1,1,1],[0,0,0],[2,2,2],[0,1,2],[2,1,0]];
-const BETS=[1,2,5,10,25];
+const BETS=[1,2,5,10,25,50,100,250,500,1e3,2500,5e3,1e4,25e3,5e4,1e5,25e4,5e5,1e6,25e5,5e6,1e7,25e6,5e7,1e8];
 function rand(n){const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}
 function strip(seed){const s=[];for(const k in W)for(let i=0;i<W[k];i++)s.push(k);
   /* orden fijo distinto por rodillo (barajado determinista) */
@@ -87,7 +87,10 @@ function create(stage,api){
     {label:T('spin'),key:'enter',keyLabel:'ENTER',on:spin,disabled:spinning||total>chips},
     {label:'−',sub:T('betLess'),key:'arrowdown',keys:['-'],keyLabel:'↓',on:()=>setBet(-1),disabled:spinning||betI===0,alt:true},
     {label:'+',sub:T('betMore'),key:'arrowup',keys:['+'],keyLabel:'↑',on:()=>setBet(1),disabled:spinning||betI===BETS.length-1||BETS[betI+1]*5>chips,alt:true},
+    {label:T('max'),key:'m',on:maxBet,disabled:spinning||betI===maxI(),alt:true},
     {label:T('leave'),key:'r',on:()=>end(T('left')),disabled:spinning,alt:true}])}
+  function maxI(){let i=0;while(i<BETS.length-1&&BETS[i+1]*5<=chips)i++;return i}
+  function maxBet(){betI=maxI();S.chip(4);hud();acts()}
   function setBet(d){betI=Math.max(0,Math.min(BETS.length-1,betI+d));S.chip(1);hud();acts()}
   async function spin(){const total=BETS[betI]*5;if(spinning||done||total>chips)return;const g=++gen;spinning=true;
     chips-=total;persist();hud();acts();$('#sl-g').textContent='0';
@@ -124,12 +127,12 @@ function create(stage,api){
   return{restart:start,cashout:()=>chips,stop(){gen++;done=true;ro.disconnect();removeEventListener('keydown',kd);root.remove()}};
 }
 window.TEMPLO.register('tragaperras',{create,help:[
-  {t:'CÓMO SE JUEGA',p:'Elige cuánto apuestas por línea y tira de la palanca. Siempre juegas las 5 líneas: las tres filas y las dos diagonales. La apuesta total es 5 veces la apuesta por línea.'},
+  {t:'CÓMO SE JUEGA',p:'Elige cuánto apuestas por línea y tira de la palanca. Siempre juegas las 5 líneas: las tres filas y las dos diagonales. La apuesta total es 5 veces la apuesta por línea. MÁX pone la apuesta más alta que permiten tus fichas.'},
   {t:'PREMIOS',p:'Tres símbolos iguales en una línea pagan lo que indica la tabla multiplicado por tu apuesta por línea. El disco de Ra es comodín: sustituye a cualquier símbolo, y tres discos de Ra son el premio mayor (×250).'},
   {t:'ANKHS',p:'Un ankh en el primer rodillo de una línea te devuelve la apuesta de esa línea, y dos ankhs seguidos desde la izquierda la doblan.'},
   {t:'JUEGO LIMPIO',p:'Cada rodillo tiene 30 posiciones y se detiene al azar con el generador criptográfico del navegador. A largo plazo la máquina devuelve el 95 % de lo apostado: la casa siempre gana un poco.'}],texts:{
   title:'TRAGAPERRAS DE RA',unit:'fichas',chips:'FICHAS',bet:'APUESTA',won:'PREMIO',wild:'COMODÍN',
-  spin:'TIRAR',betLess:'APUESTA',betMore:'APUESTA',leave:'RETIRARSE',
+  spin:'TIRAR',max:'MÁX',betLess:'APUESTA',betMore:'APUESTA',leave:'RETIRARSE',
   jackpot:'¡EL SOL DE RA!',bigWin:'¡GRAN PREMIO!',broke:'Te has quedado sin fichas',left:'Te retiras de la máquina',
   detail:'{s} tiradas · {w} con premio · mayor premio {b} · máximo {m} fichas'}});
 })();
