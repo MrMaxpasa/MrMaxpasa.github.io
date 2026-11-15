@@ -1,10 +1,6 @@
 # Max Padulo · Portfolio
 
-Portfolio personal con estética de menú de videojuego, protagonizado por mi Anubis.
-
 **Web:** https://mrmaxpasa.github.io/
 
-- HTML, CSS y JavaScript sin frameworks ni dependencias.
-- Transiciones animadas, sonidos generados con Web Audio y navegación completa con teclado.
-- Personaje creado con IA y animado en bucle.
-- Textos centralizados en un único objeto `CONTENT`, preparados para añadir más idiomas.
+- `/` Portfolio profesional: HTML, CSS y JavaScript a mano, sin frameworks ni plantillas. Cuatro idiomas (castellano, catalán, inglés y francés) y una demo en vivo del intérprete de lenguaje natural de Diaria.
+- `/anubis/` El Templo de Anubis: portfolio jugable con 14 juegos en JavaScript sin librerías, entre ellos un ajedrez con motor propio.
